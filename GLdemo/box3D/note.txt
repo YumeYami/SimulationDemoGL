@@ -1,0 +1,4 @@
+check collision
+sphere cube
+sphere sphere
+sphere plane
