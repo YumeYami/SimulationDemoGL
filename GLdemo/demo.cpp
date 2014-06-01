@@ -22,6 +22,7 @@ using namespace std;
 //#include <common/controls.cpp>
 #include "controls.hpp"
 #define GRAVITY 0.05f
+#define GLOBAL_FRICTION 0.01f
 
 std::vector<unsigned short> indices;
 std::vector<glm::vec3> indexed_vertices;
