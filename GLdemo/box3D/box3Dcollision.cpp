@@ -8,126 +8,136 @@
 #define begin_z -5
 
 float inline minn(float x, float y){
-	return (x < y ?  x : y) ;
+	return (x < y ? x : y);
 }
-//completed
-void inline checkCollision_SphereCube(Sphere* sph1,Cube* cube2){
-	//if(projectSize(cube2->velocity - sph1->velocity,cube2->position - sph1->position) >= 0) return;
+//
+bool inline outOfBound_rough_check(Rigidbody* rigid1, Rigidbody* rigid2){
+	float dist = length(rigid1->position - rigid2->position);
+	return (dist > rigid1->boundedRadius + rigid2->boundedRadius) ? true : false;
+}
+void inline checkCollision_SphereCube(Sphere* sph1, Cube* cube2){
+	if (outOfBound_rough_check(sph1, cube2)) return;
+	//bounded sphere check
 	//cout<<"check cube\n";
 	for (int i = 0; i < 12; i++)
 	{
 		vec4 start = (cube2->edgeSta[i]);
 		vec4 end = (cube2->edgeEnd[i]);
-		vec4 colPoint =  dist3D_Segment_to_point(start,end,sph1->position);
+		vec4 colPoint = dist3D_Segment_to_point(start, end, sph1->position);
 		if (length(colPoint) <= sph1->radius){
 			//cout<<"collision Cube";
-			colSphere_Cube(sph1,cube2,colPoint);
+			colSphere_Cube(sph1, cube2, colPoint);
 			return;
 		}
 	}
 }
-//completed
-void inline checkCollision_SphereCylinder(Sphere* sph1,Cylinder* cylinder2){
-	if(projectSize(cylinder2->velocity - sph1->velocity,cylinder2->position - sph1->position) >= 0) return;
-	vec4 spherePos = cylinder2->getInverseRatationMatrix()*(sph1->position-cylinder2->position);
-	vec4 cylNormal = vec4(0,1,0,0);
-	float projectDist = projectSize(spherePos,cylNormal);
-	vec4 minDist = projectDist*cylNormal-spherePos;
-	if(length(minDist) >= cylinder2->radius + sph1->radius) return;
-	if(length(minDist) < cylinder2->radius){
-		if(projectDist <= cylinder2->length + sph1->radius) return;
+
+//
+void inline checkCollision_SphereCylinder(Sphere* sph1, Cylinder* cylinder2){
+	if (outOfBound_rough_check(sph1, cylinder2)) return;
+	//bounded sphere check
+	vec4 spherePos = cylinder2->getInverseRatationMatrix()*(sph1->position - cylinder2->position);
+	vec4 cylNormal = vec4(0, 1, 0, 0);
+	float projectDist = projectSize(spherePos, cylNormal);
+	vec4 minDist = projectDist*cylNormal - spherePos;
+	if (length(minDist) >= cylinder2->radius + sph1->radius) return;
+	if (length(minDist) < cylinder2->radius){
+		if (projectDist <= cylinder2->length + sph1->radius) return;
 		else {
 
-			colSphere_Cylinder(sph1,cylinder2,dist3D_Segment_to_point(cylinder2->getBasePoint(),cylinder2->getTopPoint(),sph1->position));
+			colSphere_Cylinder(sph1, cylinder2, dist3D_Segment_to_point(cylinder2->getBasePoint(), cylinder2->getTopPoint(), sph1->position));
 		}
-	} else {
-		if(length(projectDist*cylNormal + vec4(cylinder2->radius,0,0,0) - spherePos) >= sph1->radius) return;
+	}
+	else {
+		if (length(projectDist*cylNormal + vec4(cylinder2->radius, 0, 0, 0) - spherePos) >= sph1->radius) return;
 		else {
-			colSphere_Cylinder(sph1,cylinder2,dist3D_Segment_to_point(cylinder2->getBasePoint(),cylinder2->getTopPoint(),sph1->position));
+			colSphere_Cylinder(sph1, cylinder2, dist3D_Segment_to_point(cylinder2->getBasePoint(), cylinder2->getTopPoint(), sph1->position));
 		}
 	}
 }
-//completed
-void inline checkCollision_SpherePlane(Sphere* sph1,Plane* plane2){
-	if(projectSize(sph1->velocity,plane2->getNormal()) >= 0) return;
+//
+void inline checkCollision_SpherePlane(Sphere* sph1, Plane* plane2){
+	if (outOfBound_rough_check(sph1, plane2)) return;
+	//bounded sphere check
 	vec4 spPos = sph1->position;
 	float radius = sph1->radius;
 	vec4 centerVec = spPos - plane2->position;
-	vec4 height = projectVec(centerVec,plane2->getNormal());
-	if(length(height)<=radius) {
-		colSphere_Plane(sph1,plane2,height);
+	vec4 height = projectVec(centerVec, plane2->getNormal());
+	if (length(height) <= radius) {
+		colSphere_Plane(sph1, plane2, height);
 	}
 
 }
-//completed
+//
 void inline checkCollision_SphereSphere(Sphere* sph1, Sphere* sph2){
-	if(projectSize(sph2->velocity - sph1->velocity,sph2->position - sph1->position) >= 0) return;
+	if (outOfBound_rough_check(sph1, sph2)) return;
+	//bounded sphere check
 	vec4 sphPos = sph1->position;
 	float radius = sph1->radius;
 	vec4 d = sphPos - sph2->position;
 	float distance = length(d);
 	float sumR = radius + sph2->radius;
-	if(distance<=sumR) {
+	if (distance <= sumR) {
 		//onCollision
-		colSphere_Sphere(sph1,sph2);
+		colSphere_Sphere(sph1, sph2);
 	}
 }
 //some bug
-void inline checkCollision_PlaneCube(Plane* plane1,Cube* cube2){
-
-	if(projectSize(cube2->velocity,plane1->getNormal()) >= 0) return;
-
+void inline checkCollision_PlaneCube(Plane* plane1, Cube* cube2){
+	if (outOfBound_rough_check(plane1, cube2)) return;
+	//bounded sphere check
 	for (int i = 0; i < 12; i++)
 	{
 		vec4 start = (cube2->edgeSta[i]);
 		vec4 end = (cube2->edgeEnd[i]);
-		if (dot(start - plane1->position , plane1->getNormal()) <= 0 ) {
-			colCube_Plane(cube2,plane1,start - cube2->position);
+		if (dot(start - plane1->position, plane1->getNormal()) <= 0) {
+			colCube_Plane(cube2, plane1, start - cube2->position);
 			return;
 		}
-		else if (dot(end - plane1->position , plane1->getNormal()) <= 0 ) {
-			colCube_Plane(cube2,plane1,end - cube2->position);
+		else if (dot(end - plane1->position, plane1->getNormal()) <= 0) {
+			colCube_Plane(cube2, plane1, end - cube2->position);
 			return;
 		}
 	}
 }
-//completed
-void inline checkCollision_PlaneCylinder(Plane* plane1,Cylinder* cylinder2){
+//
+void inline checkCollision_PlaneCylinder(Plane* plane1, Cylinder* cylinder2){
+	if (outOfBound_rough_check(plane1, cylinder2)) return;
+	//bounded sphere check
 	vec4 planeNormal = plane1->getNormal();
-	if(projectSize(cylinder2->velocity , planeNormal) >= 0) return;
+	if (projectSize(cylinder2->velocity, planeNormal) >= 0) return;
 	vec4 dist = cylinder2->position - plane1->position;
 	vec4 cylNormal = cylinder2->getNormal();
-	vec4 posheight = projectVec(cylinder2->position - plane1->position , planeNormal);
+	vec4 posheight = projectVec(cylinder2->position - plane1->position, planeNormal);
 	//printVec4("posh",posheight);
-	vec3 temp1 = cross((vec3)planeNormal , (vec3)cylNormal);
-	vec4 lowestPos = vec4(cross(temp1 , (vec3)cylNormal) , 0);
-	vec4 bodyheight = projectVec(cylNormal*(cylinder2->length/2) , planeNormal);
+	vec3 temp1 = cross((vec3)planeNormal, (vec3)cylNormal);
+	vec4 lowestPos = vec4(cross(temp1, (vec3)cylNormal), 0);
+	vec4 bodyheight = projectVec(cylNormal*(cylinder2->length / 2), planeNormal);
 	//printVec4("body ",bodyheight);
-	vec4 baseheight = projectVec(lowestPos,planeNormal);
+	vec4 baseheight = projectVec(lowestPos, planeNormal);
 	//printVec4("base ",baseheight);
-	if( length(bodyheight) + length(baseheight) >= length(posheight)){
+	if (length(bodyheight) + length(baseheight) >= length(posheight)){
 		//cout<<"col plane cylinder\n";
-		vec4 colPoint(0,0,0,0);
+		vec4 colPoint(0, 0, 0, 0);
 
-		colPlane_Cylinder(cylinder2,plane1,lowestPos);
+		colPlane_Cylinder(cylinder2, plane1, lowestPos);
 	}
 }
 //on code
-void inline checkCollision_CubeCube(Cube* sph1,Cube* sph2){
-	/*if(projectSize(cube2->velocity - cube1->velocity,cube2->position - cube1->position) >= 0) return;
-	if(cube1->size+cube2->size <= length(cube2->position-cube1->position) ) return;
-	mat4 inverseRotateCube1 = cube1->getInverseRatationMatrix();
-*/
-	if(projectSize(sph2->velocity - sph1->velocity,sph2->position - sph1->position) >= 0) return;
+void inline checkCollision_CubeCube(Cube* sph1, Cube* sph2){
+	if (outOfBound_rough_check(sph1, sph2)) return;
+	//bounded sphere check
+	if (projectSize(sph2->velocity - sph1->velocity, sph2->position - sph1->position) >= 0) return;
 	vec4 sphPos = sph1->position;
 	float size = sph1->size*1.4f;
 	vec4 d = sphPos - sph2->position;
 	float distance = length(d);
-	float sumR = (size + sph2->size*1.4f)/2;
-	if(distance<=sumR) {
+	float sumR = (size + sph2->size*1.4f) / 2;
+	if (distance <= sumR) {
 		//onCollision
-		colCube_Cube(sph1,sph2,(sph2->position-sph1->position)/2.0f);
-	}else return;
+		colCube_Cube(sph1, sph2, (sph2->position - sph1->position) / 2.0f);
+	}
+	else return;
 
 	//float size = cube1->size;
 	//base is cube1
@@ -263,17 +273,17 @@ void inline checkCollision_CubeCube(Cube* sph1,Cube* sph2){
 	//}
 }
 //
-void inline checkCollision_CubeCylinder(Cube* cyl1,Cylinder* cyl2){
-	if(projectSize(cyl2->velocity - cyl1->velocity,cyl2->position - cyl1->position) >= 0) return;
-	if(projectSize(cyl2->velocity - cyl1->velocity,cyl2->position - cyl1->position) >= 0) return;
+void inline checkCollision_CubeCylinder(Cube* cyl1, Cylinder* cyl2){
+	if (projectSize(cyl2->velocity - cyl1->velocity, cyl2->position - cyl1->position) >= 0) return;
+	if (projectSize(cyl2->velocity - cyl1->velocity, cyl2->position - cyl1->position) >= 0) return;
 	vec4 sphPos = cyl1->position;
 	float radius = cyl1->size;
 	vec4 d = sphPos - cyl2->position;
 	float distance = length(d);
 	float sumR = radius + cyl2->radius;
-	if(distance<=sumR) {
+	if (distance <= sumR) {
 		//onCollision
-		colCube_Cylinder(cyl1,cyl2,(cyl2->position-cyl1->position));
+		colCube_Cylinder(cyl1, cyl2, (cyl2->position - cyl1->position));
 	}
 }
 
@@ -371,23 +381,23 @@ void inline checkCollision_CubeCylinder(Cube* cyl1,Cylinder* cyl2){
 //int separatedByOtherDirections1(vec3 w0,float r0,float h0,vec3 w1,float r1,float h1,vec3 delta){
 //	return 1;
 //}
-void inline checkCollision_CylinderCylinder(Cylinder* cyl1,Cylinder* cyl2){
-	if(projectSize(cyl2->velocity - cyl1->velocity,cyl2->position - cyl1->position) >= 0) return;
-	vec4 minDistSegment = dist3D_Segment_to_Segment(cyl1->getBasePoint(),cyl1->getTopPoint(),cyl2->getBasePoint(),cyl2->getTopPoint());
-	float minDistLine = dist3D_Line_to_Line(cyl1->getBasePoint(),cyl1->getTopPoint(),cyl2->getBasePoint(),cyl2->getTopPoint());
-	if(length(minDistSegment)>= cyl1->radius + cyl2->radius)return;
-	if(minDistLine==length(minDistSegment)){
-		colCylinder_Cylinder(cyl1,cyl2,minDistSegment);
+void inline checkCollision_CylinderCylinder(Cylinder* cyl1, Cylinder* cyl2){
+	if (projectSize(cyl2->velocity - cyl1->velocity, cyl2->position - cyl1->position) >= 0) return;
+	vec4 minDistSegment = dist3D_Segment_to_Segment(cyl1->getBasePoint(), cyl1->getTopPoint(), cyl2->getBasePoint(), cyl2->getTopPoint());
+	float minDistLine = dist3D_Line_to_Line(cyl1->getBasePoint(), cyl1->getTopPoint(), cyl2->getBasePoint(), cyl2->getTopPoint());
+	if (length(minDistSegment) >= cyl1->radius + cyl2->radius)return;
+	if (minDistLine == length(minDistSegment)){
+		colCylinder_Cylinder(cyl1, cyl2, minDistSegment);
 		return;
 	}
 	vec4 sphPos = cyl1->position;
 	float radius = cyl1->size;
 	vec4 d = sphPos - cyl2->position;
 	float distance = length(d);
-	float sumR = (radius + cyl2->radius)/2;
-	if(distance<=sumR) {
+	float sumR = (radius + cyl2->radius) / 2;
+	if (distance <= sumR) {
 		//onCollision
-		colCylinder_Cylinder(cyl1,cyl2,(cyl2->position-cyl1->position));
+		colCylinder_Cylinder(cyl1, cyl2, (cyl2->position - cyl1->position));
 	}
 	/*if(projectSize(cylinder2->getVelocity() - cylinder1->getVelocity(),cylinder2->getPosition() - cylinder1->getPosition()) >= 0) return;
 	vec4 minimumDist = dist3D_Segment_to_Segment(cylinder1->getEndPoint1(),cylinder1->getEndPoint2(),cylinder2->getEndPoint1(),cylinder2->getEndPoint2());
@@ -436,35 +446,35 @@ void inline checkCollision_CylinderCylinder(Cylinder* cyl1,Cylinder* cyl2){
 
 void inline checkCollision(vector<Cube*> cu, vector<Cylinder*> cy, vector<Plane*> pl, vector<Sphere*> sp){
 	//cout <<"size "<<cu.size()<<" "<<cy.size()<<" "<<pl.size()<<" "<<sp.size()<<"\n";
-	for(int i=0;i<sp.size();i++){
+	for (int i = 0; i < sp.size(); i++){
 		Sphere* sp1 = sp.at(i);
 
-		for(int j=0;j<cu.size();j++) checkCollision_SphereCube(sp1,cu.at(j));
-		for(int j=0;j<cy.size();j++) checkCollision_SphereCylinder(sp1,cy.at(j));
-		for(int j=0;j<pl.size();j++) {
-			checkCollision_SpherePlane(sp1,pl.at(j));
+		for (int j = 0; j < cu.size(); j++) checkCollision_SphereCube(sp1, cu.at(j));
+		for (int j = 0; j < cy.size(); j++) checkCollision_SphereCylinder(sp1, cy.at(j));
+		for (int j = 0; j < pl.size(); j++) {
+			checkCollision_SpherePlane(sp1, pl.at(j));
 			//cout<<"check\n";
 		}
-		if(i<sp.size()-1) 
-			for(int j=i+1;j<sp.size();j++) {
-				checkCollision_SphereSphere(sp1,sp.at(j));
-			}
+		if (i < sp.size() - 1)
+		for (int j = i + 1; j < sp.size(); j++) {
+			checkCollision_SphereSphere(sp1, sp.at(j));
+		}
 	}
-	for(int i=0;i<pl.size();i++){
+	for (int i = 0; i < pl.size(); i++){
 		Plane* pl1 = pl.at(i);
-		for(int j=0;j<cu.size();j++) checkCollision_PlaneCube(pl1,cu.at(j));
-		for(int j=0;j<cy.size();j++) checkCollision_PlaneCylinder(pl1,cy.at(j));
+		for (int j = 0; j < cu.size(); j++) checkCollision_PlaneCube(pl1, cu.at(j));
+		for (int j = 0; j < cy.size(); j++) checkCollision_PlaneCylinder(pl1, cy.at(j));
 	}
-	for(int i=0;i<cu.size();i++){
+	for (int i = 0; i < cu.size(); i++){
 		Cube* cu1 = cu.at(i);
-		if(i<cu.size()-1) for(int j=i+1;j<cu.size();j++) checkCollision_CubeCube(cu1,cu.at(j));
-		for(int j=0;j<cy.size();j++) checkCollision_CubeCylinder(cu1,cy.at(j));
+		if (i < cu.size() - 1) for (int j = i + 1; j < cu.size(); j++) checkCollision_CubeCube(cu1, cu.at(j));
+		for (int j = 0; j < cy.size(); j++) checkCollision_CubeCylinder(cu1, cy.at(j));
 	}
-	for(int i=0;i<cy.size();i++){
+	for (int i = 0; i < cy.size(); i++){
 		Cylinder* cy1 = cy.at(i);
-		if(i<cy.size()-1) 
-			for(int j=i+1;j<cy.size();j++)
-				checkCollision_CylinderCylinder(cy1,cy.at(j));
+		if (i < cy.size() - 1)
+		for (int j = i + 1; j < cy.size(); j++)
+			checkCollision_CylinderCylinder(cy1, cy.at(j));
 
 	}
 }
@@ -498,7 +508,7 @@ public:
 		sphere.clear();
 	}
 	void checkCollisionGridCell(){
-		checkCollision(cube,cylinder,plane,sphere);
+		checkCollision(cube, cylinder, plane, sphere);
 	}
 
 };
@@ -510,79 +520,79 @@ public:
 	Grid(){}
 	Grid(vector<Plane*>pl){
 		width = 1;
-		for(int i=0;i<gridSize;i++)
-			for(int j=0;j<gridSize;j++)
-				for(int k=0;k<gridSize;k++)
-					gridcell[i][j][k] = GridCell();
+		for (int i = 0; i < gridSize; i++)
+		for (int j = 0; j < gridSize; j++)
+		for (int k = 0; k < gridSize; k++)
+			gridcell[i][j][k] = GridCell();
 		//gridcell[i][j][k] = GridCell(begin_x+width*i,begin_y+width*j,begin_z+width*k);
 		//hashGrid(cu,cy,sp);
-		for(int i=0;i<pl.size();i++) {
+		for (int i = 0; i < pl.size(); i++) {
 			hashPlane((pl[i]));
 		}
 	};
 
-	void hashGrid(vector<Cube*> cu,vector<Cylinder*> cy,vector<Sphere*> sp){
-		for(int i=0;i<cu.size();i++) hashCube(cu[i]);
-		for(int i=0;i<cy.size();i++) hashCylinder(cy[i]);
-		for(int i=0;i<sp.size();i++) hashSphere(sp[i]);
+	void hashGrid(vector<Cube*> cu, vector<Cylinder*> cy, vector<Sphere*> sp){
+		for (int i = 0; i < cu.size(); i++) hashCube(cu[i]);
+		for (int i = 0; i < cy.size(); i++) hashCylinder(cy[i]);
+		for (int i = 0; i < sp.size(); i++) hashSphere(sp[i]);
 	}
 
 
 	void hashCube(Cube* r){
 
 		vec4 pos = r->position;
-		int a,b,c = 0;
+		int a, b, c = 0;
 		//findIndex(vec3(pos.x,pos.y,pos.z),a,b,c);
 		vector<int> x;
 		vector<int> y;
 		vector<int> z;
-		findGrid(vec3(pos.x,pos.y,pos.z),r->getSkin(),x,y,z);
-		for(int i=0;i<x.size();i++){
-			if(x[i]>=0 && x[i]< gridSize && y[i]>=0 && y[i]< gridSize && z[i]>=0 && z[i]< gridSize)
+		findGrid(vec3(pos.x, pos.y, pos.z), r->getSkin(), x, y, z);
+		for (int i = 0; i < x.size(); i++){
+			if (x[i] >= 0 && x[i] < gridSize && y[i] >= 0 && y[i] < gridSize && z[i] >= 0 && z[i] < gridSize)
 				gridcell[x[i]][y[i]][z[i]].addCubeToGridCell(r);
 		}
 	}
 	void hashCylinder(Cylinder* r){
 		vec4 pos = r->position;
-		int a,b,c = 0;
+		int a, b, c = 0;
 		//findIndex(vec3(pos.x,pos.y,pos.z),a,b,c);
 		vector<int> x;
 		vector<int> y;
 		vector<int> z;
-		findGrid(vec3(pos.x,pos.y,pos.z),r->getSkin(),x,y,z);
-		for(int i=0;i<x.size();i++){
-			if(x[i]>=0 && x[i]< gridSize && y[i]>=0 && y[i]< gridSize && z[i]>=0 && z[i]< gridSize)
+		findGrid(vec3(pos.x, pos.y, pos.z), r->getSkin(), x, y, z);
+		for (int i = 0; i < x.size(); i++){
+			if (x[i] >= 0 && x[i] < gridSize && y[i] >= 0 && y[i] < gridSize && z[i] >= 0 && z[i] < gridSize)
 				gridcell[x[i]][y[i]][z[i]].addCylinderToGridCell(r);
 		}
 	}
 	void hashSphere(Sphere* r){
 		vec4 pos = r->position;
-		int a,b,c = 0;
+		int a, b, c = 0;
 		//findIndex(vec3(pos.x,pos.y,pos.z),a,b,c);
 		vector<int> x;
 		vector<int> y;
 		vector<int> z;
-		findGrid(vec3(pos.x,pos.y,pos.z),r->getSkin(),x,y,z);
-		for(int i=0;i<x.size();i++){
-			if(x[i]>=0 && x[i]< gridSize && y[i]>=0 && y[i]< gridSize && z[i]>=0 && z[i]< gridSize)
+		findGrid(vec3(pos.x, pos.y, pos.z), r->getSkin(), x, y, z);
+		for (int i = 0; i < x.size(); i++){
+			if (x[i] >= 0 && x[i] < gridSize && y[i] >= 0 && y[i] < gridSize && z[i] >= 0 && z[i] < gridSize)
 				gridcell[x[i]][y[i]][z[i]].addSphereToGridCell(r);
 		}
 	}
 	void hashPlane(Plane* r){
 
 		vec4 pos = r->position;
-		int a,b,c = 0;
-		findIndex(vec3(pos.x,pos.y,pos.z),a,b,c);
-		for(int i=0;i<gridSize;i++){
-			for(int j=0;j<gridSize;j++){
-				for(int k=0;k<gridSize;k++){
-					if(r->orientation==vec3(0,0,PI/2)||r->orientation==vec3(0,0,-PI/2)){
+		int a, b, c = 0;
+		findIndex(vec3(pos.x, pos.y, pos.z), a, b, c);
+		for (int i = 0; i < gridSize; i++){
+			for (int j = 0; j < gridSize; j++){
+				for (int k = 0; k < gridSize; k++){
+					if (r->orientation == vec3(0, 0, PI / 2) || r->orientation == vec3(0, 0, -PI / 2)){
 						gridcell[a][j][k].addPlaneToGridCell(r);
 					}
-					if(r->orientation==vec3(PI/2,0,0)||r->orientation==vec3(-PI/2,0,0)){
+					if (r->orientation == vec3(PI / 2, 0, 0) || r->orientation == vec3(-PI / 2, 0, 0)){
 						gridcell[i][j][c].addPlaneToGridCell(r);
 					}
-					if(r->orientation==vec3(0,0,0)||r->orientation==vec3(PI,0,0)){
+					if (r->orientation == vec3(0, 0, 0) || r->orientation == vec3(PI, 0, 0)){
 						//cout<<"plane x = "<<r->orientation.x<<" y = "<<r->orientation.y<<" z = "<<r->orientation.z<<"\n";
 						//cout<<"index x= "<< a<<" y= "<<b<<" z= "<<c<<"\n";
 						gridcell[i][b][k].addPlaneToGridCell(r);
@@ -592,45 +602,45 @@ public:
 		}
 	}
 	void findIndex(vec3 pos, int &i, int &j, int &k){
-		i = (int)(pos.x-begin_x)/width;
-		j = (int)(pos.y-begin_y)/width;
-		k = (int)(pos.z-begin_z)/width;
+		i = (int)(pos.x - begin_x) / width;
+		j = (int)(pos.y - begin_y) / width;
+		k = (int)(pos.z - begin_z) / width;
 	}
 	void clearGridPlane(){
-		for(int i=0;i<gridSize;i++)
-			for(int j=0;j<gridSize;j++)
-				for(int k=0;k<gridSize;k++)
-					gridcell[i][j][k].clearGridCellPlane();
+		for (int i = 0; i < gridSize; i++)
+		for (int j = 0; j < gridSize; j++)
+		for (int k = 0; k < gridSize; k++)
+			gridcell[i][j][k].clearGridCellPlane();
 	}
 	void clearGrid(){
-		for(int i=0;i<gridSize;i++)
-			for(int j=0;j<gridSize;j++)
-				for(int k=0;k<gridSize;k++)
-					gridcell[i][j][k].clearGridCell();
+		for (int i = 0; i < gridSize; i++)
+		for (int j = 0; j < gridSize; j++)
+		for (int k = 0; k < gridSize; k++)
+			gridcell[i][j][k].clearGridCell();
 
 	}
 	void checkCollisionGrid(){
-		for(int i=0;i<gridSize;i++)
-			for(int j=0;j<gridSize;j++)
-				for(int k=0;k<gridSize;k++){
-					gridcell[i][j][k].checkCollisionGridCell();
-				}
+		for (int i = 0; i < gridSize; i++)
+		for (int j = 0; j < gridSize; j++)
+		for (int k = 0; k < gridSize; k++){
+			gridcell[i][j][k].checkCollisionGridCell();
+		}
 	}
 
-	void findGrid(vec3 pos,vec3 skin, vector<int> &x, vector<int> &y, vector<int> &z){
+	void findGrid(vec3 pos, vec3 skin, vector<int> &x, vector<int> &y, vector<int> &z){
 		//x.push_back(a); y.push_back(b); z.push_back(c);
 		//if(pos.x-floor(pos.x)==0.5 && pos.y-floor(pos.y)==0.5 && pos.z-floor(pos.z)==0.5) return;
-		vec3 minPos = vec3(pos.x-skin.x/2.0,pos.y-skin.y/2.0,pos.z-skin.z/2.0);
-		vec3 maxPos = vec3(pos.x+skin.x/2.0,pos.y+skin.y/2.0,pos.z+skin.z/2.0);
-		int minA,minB,minC;
-		int maxA,maxB,maxC;
-		findIndex(minPos,minA,minB,minC);
-		findIndex(maxPos,maxA,maxB,maxC);
-		for(int i=minA;i<=maxA;i++){
-			for(int j=minB;j<=maxB;j++){
-				for(int k=minC;k<=maxC;k++){
-					x.push_back(i); 
-					y.push_back(j); 
+		vec3 minPos = vec3(pos.x - skin.x / 2.0, pos.y - skin.y / 2.0, pos.z - skin.z / 2.0);
+		vec3 maxPos = vec3(pos.x + skin.x / 2.0, pos.y + skin.y / 2.0, pos.z + skin.z / 2.0);
+		int minA, minB, minC;
+		int maxA, maxB, maxC;
+		findIndex(minPos, minA, minB, minC);
+		findIndex(maxPos, maxA, maxB, maxC);
+		for (int i = minA; i <= maxA; i++){
+			for (int j = minB; j <= maxB; j++){
+				for (int k = minC; k <= maxC; k++){
+					x.push_back(i);
+					y.push_back(j);
 					z.push_back(k);
 				}
 			}

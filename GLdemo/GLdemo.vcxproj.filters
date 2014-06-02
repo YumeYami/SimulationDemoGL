@@ -48,14 +48,14 @@
     <ClCompile Include="box3D\Plane.cpp">
       <Filter>box3D</Filter>
     </ClCompile>
-    <ClCompile Include="box3D\RigidBody.cpp">
-      <Filter>box3D</Filter>
-    </ClCompile>
     <ClCompile Include="box3D\Sphere.cpp">
       <Filter>box3D</Filter>
     </ClCompile>
     <ClCompile Include="controls.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="box3D\Rigidbody.cpp">
+      <Filter>box3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -92,7 +92,7 @@
     <ClCompile Include="box3D\Cube.cpp" />
     <ClCompile Include="box3D\Cylinder.cpp" />
     <ClCompile Include="box3D\Plane.cpp" />
-    <ClCompile Include="box3D\RigidBody.cpp" />
+    <ClCompile Include="box3D\Rigidbody.cpp" />
     <ClCompile Include="box3D\Sphere.cpp" />
     <ClCompile Include="controls.cpp" />
     <ClCompile Include="demo.cpp" />
