@@ -59,7 +59,7 @@ public:
 		inertia = vec3(1.0f);
 
 		size = 1;
-		boundedRadius = 0;
+		boundedRadius = 1;
 
 		color = vec4(0, 0, 0, 0);
 		transparent = 0.8f;

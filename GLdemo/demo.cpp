@@ -37,23 +37,22 @@ vector<Plane*> plane;
 
 Grid grid;
 
-void addSphere(){
+void addSphere() {
 	//0->8
 	//-2->6
-	/*vec3 position = vec3(rand()%(gridSize-5)-2,begin_x+gridSize-4,rand()%(gridSize-5)-2);*/
-	//vec3 position = vec3((gridSize - 5) , begin_x + gridSize - 4, (gridSize - 5) );
-	vec3 position = vec3((gridSize - 5) - 2, begin_x + gridSize - 4, (gridSize - 5) - 2);
+	vec3 position = vec3(rand() % (gridSize - 5) - 2, begin_x + gridSize - 4, rand() % (gridSize - 5) - 2);
+	//vec3 position = vec3((gridSize - 5), begin_x + gridSize - 4, (gridSize - 5));
 	vec3 rotation = vec3(0, 0, 1);
-	vec3 velocity = vec3(rand() % 2 / 10.0, -rand() % 2 / 10.0, rand() % 2 / 10.0);
+	vec3 velocity = vec3(rand() % 2 / 2.0, -rand() % 2 / 2.0, rand() % 2 / 2.0);
 	float size = rand() % 6 / 10.0 + 0.5;
 	float mass = 1;
 	vec3 color = vec3(rand() % 11 / 10.0, rand() % 11 / 10.0, rand() % 11 / 10.0);
 	Sphere* sp = new Sphere(position, rotation, velocity, size, mass, color);
 	sphere.push_back(sp);
 }
-void addCube(){
-	//vec3 position = vec3(rand()%(gridSize-5)-2,begin_x+gridSize-4,rand()%(gridSize-5)-2);
-	vec3 position = vec3((gridSize - 5) - 2, begin_x + gridSize - 4, (gridSize - 5) - 2);
+void addCube() {
+	vec3 position = vec3(rand() % (gridSize - 5) - 2, begin_x + gridSize - 4, rand() % (gridSize - 5) - 2);
+	//vec3 position = vec3(0, begin_x + gridSize - 4, 0 );
 	vec3 rotation = vec3(0, 0, 1);
 	vec3 velocity = vec3(rand() % 4 / 15.0, -rand() % 4 / 15.0, rand() % 4 / 15.0);
 	float size = 1;
@@ -63,7 +62,7 @@ void addCube(){
 	cube->angularVelocity = vec3(rand() % 4 / 10.0, -rand() % 4 / 10.0, rand() % 4 / 10.0);
 	c3.push_back(cube);
 }
-void addCylinder(){
+void addCylinder() {
 	vec3 position = vec3(rand() % (gridSize - 5) - 2, begin_x + gridSize - 4, rand() % (gridSize - 5) - 2);
 	vec3 rotation = vec3(rand() % (gridSize - 5) - 2, begin_x + gridSize - 4, rand() % (gridSize - 5) - 2);
 	vec3 velocity = vec3(rand() % 4 / 10.0, -rand() % 4 / 10.0, rand() % 4 / 10.0);
@@ -74,12 +73,12 @@ void addCylinder(){
 	Cylinder *cy = new Cylinder(position, rotation, velocity, radius, length, mass, color);
 	cylinder.push_back(cy);
 }
-void addPlane(){
+void addPlane() {
 	//top,bottom,left,right,front,back
-	vec3 pos[6] = { vec3(1.5, begin_y + gridSize - 1.5, 1.5), vec3(1.5, begin_y + 1.5, 1.5), vec3(begin_x + 1.5, 1.5, 1.5),
-		vec3(begin_x + gridSize - 1.5, 1.5, 1.5), vec3(1.5, 1.5, begin_z + gridSize - 1.5), vec3(1.5, 1.5, begin_z + 1.5) };
-	vec3 rot[6] = { vec3(PI, 0, 0), vec3(0, 0, 0), vec3(0, 0, -PI / 2), vec3(0, 0, PI / 2), vec3(-PI / 2, 0, 0), vec3(PI / 2, 0, 0) };
-	for (int i = 0; i < 6; i++){
+	vec3 pos[6] = {vec3(1.5, begin_y + gridSize - 1.5, 1.5), vec3(1.5, begin_y + 1.5, 1.5), vec3(begin_x + 1.5, 1.5, 1.5),
+		vec3(begin_x + gridSize - 1.5, 1.5, 1.5), vec3(1.5, 1.5, begin_z + gridSize - 1.5), vec3(1.5, 1.5, begin_z + 1.5)};
+	vec3 rot[6] = {vec3(PI, 0, 0), vec3(0, 0, 0), vec3(0, 0, -PI / 2), vec3(0, 0, PI / 2), vec3(-PI / 2, 0, 0), vec3(PI / 2, 0, 0)};
+	for ( int i = 0; i < 6; i++ ) {
 		vec3 position = pos[i];
 		vec3 rotation = rot[i];
 		vec3 velocity = vec3(0, 0, 0);
@@ -90,11 +89,10 @@ void addPlane(){
 		plane.push_back(pl);
 	}
 }
-void transparentPlane(){
+void transparentPlane() {
 	//top,bottom,left,right,front, back
-	for (int i = 0; i < 6; i++)
-	{
-		if (plane[i]->color.a == 0.2f) plane[i]->color.a = 0.8f;
+	for ( int i = 0; i < 6; i++ ) {
+		if ( plane[i]->color.a == 0.2f ) plane[i]->color.a = 0.8f;
 		else plane[i]->color.a = 0.2f;
 
 	}
@@ -122,8 +120,7 @@ int update = 1;
 int playFrame = 1;
 int playOneFrame = 0;
 int enGravity = 0;
-class PickingRay
-{
+class PickingRay {
 	vec3 clickPosInWorld;
 	vec3 direction;
 
@@ -132,8 +129,7 @@ class PickingRay
 	* and writes it back to the provided vector.
 	*/
 public:
-	void intersectionWithXyPlane(vec3 worldPos)
-	{
+	void intersectionWithXyPlane(vec3 worldPos) {
 		float s = -clickPosInWorld.z / direction.z;
 		worldPos[0] = clickPosInWorld.x + direction.x*s;
 		worldPos[1] = clickPosInWorld.y + direction.y*s;
@@ -168,7 +164,7 @@ pickingRay.getDirection().set(pickingRay.getClickPosInWorld());
 pickingRay.getDirection().sub(position);
 }
 */
-void pick(int mouse_x, int mouse_y){
+void pick(int mouse_x, int mouse_y) {
 	float x = (2.0f * mouse_x) / width - 1.0f;
 	float y = 1.0f - (2.0f * mouse_y) / height;
 	float z = 1.0f;
@@ -181,58 +177,58 @@ void pick(int mouse_x, int mouse_y){
 	ray_wor = normalize(ray_wor);
 	//cout<<"ray x= "<<ray_wor.x<<" y = "<<ray_wor.y<<" z = "<<ray_wor.z<<"\n";
 }
-void onPress(){
+void onPress() {
 	//sphere
-	if (glfwGetKey('1') == GLFW_PRESS){
-		if (lastKey1 == GLFW_RELEASE) {
+	if ( glfwGetKey('1') == GLFW_PRESS ) {
+		if ( lastKey1 == GLFW_RELEASE ) {
 			addSphere();
 		}
 		lastKey1 = GLFW_PRESS;
 
 	}
-	else if (glfwGetKey('1') == GLFW_RELEASE){
+	else if ( glfwGetKey('1') == GLFW_RELEASE ) {
 		lastKey1 = GLFW_RELEASE;
 	}
 
 	//cube
-	if (glfwGetKey('2') == GLFW_PRESS){
-		if (lastKey2 == GLFW_RELEASE) addCube();
+	if ( glfwGetKey('2') == GLFW_PRESS ) {
+		if ( lastKey2 == GLFW_RELEASE ) addCube();
 		lastKey2 = GLFW_PRESS;
 	}
-	else if (glfwGetKey('2') == GLFW_RELEASE){
+	else if ( glfwGetKey('2') == GLFW_RELEASE ) {
 		lastKey2 = GLFW_RELEASE;
 	}
 
 	//cylinder
-	if (glfwGetKey('3') == GLFW_PRESS){
-		if (lastKey3 == GLFW_RELEASE) addCylinder();
+	if ( glfwGetKey('3') == GLFW_PRESS ) {
+		if ( lastKey3 == GLFW_RELEASE ) addCylinder();
 		lastKey3 = GLFW_PRESS;
 	}
-	else if (glfwGetKey('3') == GLFW_RELEASE){
+	else if ( glfwGetKey('3') == GLFW_RELEASE ) {
 		lastKey3 = GLFW_RELEASE;
 	}
 
 	//plane
-	if (glfwGetKey('4') == GLFW_PRESS){
-		if (lastKey4 == GLFW_RELEASE) transparentPlane();
+	if ( glfwGetKey('4') == GLFW_PRESS ) {
+		if ( lastKey4 == GLFW_RELEASE ) transparentPlane();
 		lastKey4 = GLFW_PRESS;
 	}
-	else if (glfwGetKey('4') == GLFW_RELEASE){
+	else if ( glfwGetKey('4') == GLFW_RELEASE ) {
 		lastKey4 = GLFW_RELEASE;
 	}
-	if (glfwGetKey('0') == GLFW_PRESS){
-		if (lastKey5 == GLFW_RELEASE){
-			if (pickObject) pickObject = 0;
+	if ( glfwGetKey('0') == GLFW_PRESS ) {
+		if ( lastKey5 == GLFW_RELEASE ) {
+			if ( pickObject ) pickObject = 0;
 			else pickObject = 1;
 		}
 		lastKey5 == GLFW_PRESS;
 	}
-	else if (glfwGetKey('0') == GLFW_RELEASE){
+	else if ( glfwGetKey('0') == GLFW_RELEASE ) {
 		lastKey5 = GLFW_RELEASE;
 	}
-	if (glfwGetKey('Z') == GLFW_PRESS){
-		if (lastKey6 == GLFW_RELEASE)
-		if (update) {
+	if ( glfwGetKey('Z') == GLFW_PRESS ) {
+		if ( lastKey6 == GLFW_RELEASE )
+		if ( update ) {
 			update = 0;
 
 		}
@@ -243,48 +239,48 @@ void onPress(){
 		lastKey6 = GLFW_PRESS;
 
 	}
-	else if (glfwGetKey('Z') == GLFW_RELEASE){
+	else if ( glfwGetKey('Z') == GLFW_RELEASE ) {
 		lastKey6 = GLFW_RELEASE;
 
 	}
-	if (glfwGetKey('X') == GLFW_PRESS && !update){
-		if (lastKey7 == GLFW_RELEASE){
+	if ( glfwGetKey('X') == GLFW_PRESS && !update ) {
+		if ( lastKey7 == GLFW_RELEASE ) {
 			playFrame = 0;
 			playOneFrame = 1;
 		}
 		lastKey7 = GLFW_PRESS;
 	}
-	else if (glfwGetKey('X') == GLFW_RELEASE){
+	else if ( glfwGetKey('X') == GLFW_RELEASE ) {
 		lastKey7 = GLFW_RELEASE;
 	}
-	if (glfwGetKey('C') == GLFW_PRESS){
-		if (lastKey8 == GLFW_RELEASE){
+	if ( glfwGetKey('C') == GLFW_PRESS ) {
+		if ( lastKey8 == GLFW_RELEASE ) {
 			sphere.clear();
 			c3.clear();
 			cylinder.clear();
 		}
 		lastKey8 = GLFW_PRESS;
 	}
-	else if (glfwGetKey('C') == GLFW_RELEASE){
+	else if ( glfwGetKey('C') == GLFW_RELEASE ) {
 		lastKey8 = GLFW_RELEASE;
 	}
-	if (glfwGetKey('G') == GLFW_PRESS){
-		if (lastKey9 == GLFW_RELEASE){
-			if (enGravity) enGravity = 0;
+	if ( glfwGetKey('G') == GLFW_PRESS ) {
+		if ( lastKey9 == GLFW_RELEASE ) {
+			if ( enGravity ) enGravity = 0;
 			else enGravity = 1;
 		}
 		lastKey9 = GLFW_PRESS;
 	}
-	else if (glfwGetKey('G') == GLFW_RELEASE){
+	else if ( glfwGetKey('G') == GLFW_RELEASE ) {
 		lastKey9 = GLFW_RELEASE;
 	}
 	//pickBox=========================================================================================
-	if (lastMouse == GLFW_RELEASE && glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !pickObject){
+	if ( lastMouse == GLFW_RELEASE && glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !pickObject ) {
 		glfwGetMousePos(&clickX1, &clickY1);
 		pick(clickX1, clickY1);
 		lastMouse = GLFW_PRESS;
 	}
-	else if (lastMouse == GLFW_PRESS && glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !pickObject) {
+	else if ( lastMouse == GLFW_PRESS && glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !pickObject ) {
 		glfwGetMousePos(&clickX2, &clickY2);
 		float dx = clickX2 - clickX1;
 		float dy = clickY2 - clickY1;
@@ -300,56 +296,51 @@ void onPress(){
 		//float bckPos = plane[4]->position.z;
 		//float fntPos = plane[5]->position.z;
 		vec4 pos = vec4(0, 0, 0, 0);
-		if (topPos + dy <= begin_y + gridSize && btmPos + dy > begin_y) pos.y = dy;
-		if (lftPos + dx >= begin_x && rhtPos + dx < begin_x + gridSize) pos.x = dx;
+		if ( topPos + dy <= begin_y + gridSize && btmPos + dy > begin_y ) pos.y = dy;
+		if ( lftPos + dx >= begin_x && rhtPos + dx < begin_x + gridSize ) pos.x = dx;
 		grid.clearGridPlane();
-		for (int i = 0; i < plane.size(); i++) {
+		for ( int i = 0; i < plane.size(); i++ ) {
 			plane[i]->position += pos;
 			grid.hashPlane(plane[i]);
 		}
 
 	}
-	else if (glfwGetMouseButton(GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE && !pickObject) {
+	else if ( glfwGetMouseButton(GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE && !pickObject ) {
 		lastMouse = GLFW_RELEASE;
 	}
 
 	//pickObject=========================================================================================
-	if (lastMouse == GLFW_RELEASE && glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && pickObject){
+	if ( lastMouse == GLFW_RELEASE && glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && pickObject ) {
 		glfwGetMousePos(&clickX1, &clickY1);
 		lastMouse = GLFW_PRESS;
 	}
-	else if (lastMouse == GLFW_PRESS && glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && pickObject) {
+	else if ( lastMouse == GLFW_PRESS && glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && pickObject ) {
 
 	}
-	else if (glfwGetMouseButton(GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE && pickObject) {
+	else if ( glfwGetMouseButton(GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE && pickObject ) {
 		lastMouse = GLFW_RELEASE;
 	}
 
 }
 
-int main(void)
-{
-	cout << "start\n";
+int main(void) {
 	// Initialise GLFW
-	if (!glfwInit())
-	{
+	if ( !glfwInit() ) {
 		fprintf(stderr, "Failed to initialize GLFW\n");
 		return -1;
 	}
-	cout << "init\n";
 	//GLUTkeyboardfun(keyboard);
 	glfwOpenWindowHint(GLFW_FSAA_SAMPLES, 4);
 	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 2);
 	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 1);
 	// Open a window and create its OpenGL context
-	if (!glfwOpenWindow(1024, 768, 0, 0, 0, 0, 32, 0, GLFW_WINDOW))
-	{
+	if ( !glfwOpenWindow(1024, 768, 0, 0, 0, 0, 32, 0, GLFW_WINDOW) ) {
 		fprintf(stderr, "Failed to open GLFW window.\n");
 		glfwTerminate();
 		return -1;
 	}
 	// Initialize GLEW
-	if (glewInit() != GLEW_OK) {
+	if ( glewInit() != GLEW_OK ) {
 		fprintf(stderr, "Failed to initialize GLEW\n");
 		return -1;
 	}
@@ -456,11 +447,11 @@ int main(void)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	do{
+	do {
 		// Measure speed
 		double currentTime = glfwGetTime();
 		nbFrames++;
-		if (currentTime - lastTime >= 1.0){ // If last prinf() was more than 1sec ago
+		if ( currentTime - lastTime >= 1.0 ) { // If last prinf() was more than 1sec ago
 			// printf and reset
 			printf("%f ms/frame\n", 1000.0 / double(nbFrames));
 			nbFrames = 0;
@@ -475,7 +466,7 @@ int main(void)
 
 		// Compute the MVP matrix from keyboard and mouse input
 		grid.hashGrid(c3, cylinder, sphere);
-		if (update || playOneFrame){
+		if ( update || playOneFrame ) {
 			grid.checkCollisionGrid();
 		}
 		computeMatricesFromInputs();
@@ -488,9 +479,8 @@ int main(void)
 		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 		glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
 		glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
-		for (int i = 0; i < c3.size(); i++)
-		{
-			if (update || playOneFrame){
+		for ( int i = 0; i < c3.size(); i++ ) {
+			if ( update || playOneFrame ) {
 				c3[i]->updatePosition(timeStep, GRAVITY*enGravity);
 				c3[i]->setEdge();
 			}
@@ -508,9 +498,8 @@ int main(void)
 			c3[i]->render();
 			glPopMatrix();
 		}
-		for (int i = 0; i < sphere.size(); i++)
-		{
-			if (update || playOneFrame)(*sphere[i]).updatePosition(timeStep, GRAVITY*enGravity);
+		for ( int i = 0; i < sphere.size(); i++ ) {
+			if ( update || playOneFrame )(*sphere[i]).updatePosition(timeStep, GRAVITY*enGravity);
 			glm::mat4 ScaleMatrix = mat4();
 			glm::mat4 RotateMatrix = (*sphere[i]).getRotationMatrix();
 			glm::mat4 TranslateMatrix = (*sphere[i]).getTranslationMatrix();
@@ -525,9 +514,8 @@ int main(void)
 			(*sphere[i]).render();
 			glPopMatrix();
 		}
-		for (int i = 0; i < cylinder.size(); i++)
-		{
-			if (update || playOneFrame)(*cylinder[i]).updatePosition(timeStep, GRAVITY*enGravity);
+		for ( int i = 0; i < cylinder.size(); i++ ) {
+			if ( update || playOneFrame )(*cylinder[i]).updatePosition(timeStep, GRAVITY*enGravity);
 			glm::mat4 ScaleMatrix = mat4();
 			glm::mat4 RotateMatrix = cylinder[i]->getRotationMatrix();
 			glm::mat4 TranslateMatrix = cylinder[i]->getTranslationMatrix();
@@ -542,9 +530,8 @@ int main(void)
 			(*cylinder[i]).render();
 			glPopMatrix();
 		}
-		for (int i = 0; i < plane.size(); i++)
-		{
-			if (update || playOneFrame)(*plane[i]).updatePosition(0.01f, 0);
+		for ( int i = 0; i < plane.size(); i++ ) {
+			if ( update || playOneFrame )(*plane[i]).updatePosition(0.01f, 0);
 			glm::mat4 ScaleMatrix = mat4();
 			glm::mat4 RotateMatrix = (*plane[i]).getRotationMatrix();
 			glm::mat4 TranslateMatrix = (*plane[i]).getTranslationMatrix();
@@ -654,8 +641,8 @@ int main(void)
 		glfwSwapBuffers();
 		playOneFrame = 0;
 	} // Check if the ESC key was pressed or the window was closed
-	while (glfwGetKey(GLFW_KEY_ESC) != GLFW_PRESS &&
-	glfwGetWindowParam(GLFW_OPENED));
+	while ( glfwGetKey(GLFW_KEY_ESC) != GLFW_PRESS &&
+	glfwGetWindowParam(GLFW_OPENED) );
 
 	// Cleanup VBO and shader
 	glDeleteBuffers(1, &vertexbuffer);
