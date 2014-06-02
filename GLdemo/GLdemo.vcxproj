@@ -107,6 +107,10 @@
     <ClInclude Include="box3D\Rigidbody.h" />
     <ClInclude Include="box3D\Sphere.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="StandardShading.vertexshader" />
+    <None Include="StandardTransparentShading.fragmentshader" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

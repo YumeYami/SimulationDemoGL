@@ -16,6 +16,9 @@
     <Filter Include="box3D">
       <UniqueIdentifier>{cf45dee7-106a-4b10-a7c4-b38e34f7a595}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader Files">
+      <UniqueIdentifier>{58b0f501-b2a1-41c6-80a2-99830ccc7ecc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="demo.cpp">
@@ -80,5 +83,13 @@
     <ClInclude Include="box3D\Sphere.h">
       <Filter>box3D</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StandardShading.vertexshader">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="StandardTransparentShading.fragmentshader">
+      <Filter>Shader Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

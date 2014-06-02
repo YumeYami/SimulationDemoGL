@@ -12,7 +12,7 @@ float inline minn(float x, float y){
 }
 //completed
 void inline checkCollision_SphereCube(Sphere* sph1,Cube* cube2){
-	if(projectSize(cube2->velocity - sph1->velocity,cube2->position - sph1->position) >= 0) return;
+	//if(projectSize(cube2->velocity - sph1->velocity,cube2->position - sph1->position) >= 0) return;
 	//cout<<"check cube\n";
 	for (int i = 0; i < 12; i++)
 	{

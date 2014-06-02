@@ -40,7 +40,9 @@ Grid grid;
 void addSphere(){
 	//0->8
 	//-2->6
-	vec3 position = vec3(rand()%(gridSize-5)-2,begin_x+gridSize-4,rand()%(gridSize-5)-2);
+	/*vec3 position = vec3(rand()%(gridSize-5)-2,begin_x+gridSize-4,rand()%(gridSize-5)-2);*/
+	//vec3 position = vec3((gridSize - 5) , begin_x + gridSize - 4, (gridSize - 5) );
+	vec3 position = vec3((gridSize - 5) - 2, begin_x + gridSize - 4, (gridSize - 5) - 2);
 	vec3 rotation = vec3(0,0,1);
 	vec3 velocity = vec3(rand()%2/10.0,-rand()%2/10.0,rand()%2/10.0);
 	float size = rand()%6/10.0+0.5;
@@ -50,7 +52,8 @@ void addSphere(){
 	sphere.push_back(sp);
 }
 void addCube(){
-	vec3 position = vec3(rand()%(gridSize-5)-2,begin_x+gridSize-4,rand()%(gridSize-5)-2);
+	//vec3 position = vec3(rand()%(gridSize-5)-2,begin_x+gridSize-4,rand()%(gridSize-5)-2);
+	vec3 position = vec3((gridSize - 5) - 2, begin_x + gridSize - 4, (gridSize - 5) - 2);
 	vec3 rotation = vec3(0,0,1);
 	vec3 velocity = vec3(rand()%4/15.0,-rand()%4/15.0,rand()%4/15.0);
 	float size = 1;
