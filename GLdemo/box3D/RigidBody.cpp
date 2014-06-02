@@ -2,8 +2,10 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 // Include standard headers
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <iostream>
+#include <string>
+//#include <stdlib.h>
 #include <vector>
 // Include GLEW
 #include <GL/glew.h>
@@ -25,9 +27,9 @@
 //#include <common/objloader.hpp>
 //#include <common/vboindexer.hpp>
 //#include <common/quaternion_utils.hpp> // See quaternion_utils.cpp for RotationBetweenVectors, LookAt and RotateTowards
-#include <iostream>
 #include "Rigidbody.h"
 #include "box3DglobalRule.cpp"
+#include "util_func.h"
 
 using namespace glm;
 using namespace std;
@@ -117,11 +119,12 @@ public:
 		angularVelocity *= 0.98f;
 	}
 	virtual vec4 getColPoint() {
+		
 		return vec4(0, 0, 0, 0);
 	}
-	void inline printVec4(std::string name, vec4 vec) {
-		//std::cout<<name<<"\t: [ "<<vec.x<<"\t"<<vec.y<<"\t"<<vec.z<<"\t"<<vec.w<<"\t"<<length(vec)<<" ]\n";
-	}
 };
+void inline printVec4(std::string name, vec4 vec) {
+	cout << name << "\t: [ " << vec.x << "\t" << vec.y << "\t" << vec.z << "\t" << vec.w << "\t" << length(vec) << " ]\n";
+}
 //End guard at bottom of header file
 #endif 

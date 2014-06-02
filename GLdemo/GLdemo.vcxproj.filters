@@ -57,6 +57,9 @@
     <ClCompile Include="box3D\Rigidbody.cpp">
       <Filter>box3D</Filter>
     </ClCompile>
+    <ClCompile Include="box3D\util_func.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="box3D\box3Dcollision.h">
@@ -82,6 +85,9 @@
     </ClInclude>
     <ClInclude Include="box3D\Sphere.h">
       <Filter>box3D</Filter>
+    </ClInclude>
+    <ClInclude Include="box3D\util_func.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
