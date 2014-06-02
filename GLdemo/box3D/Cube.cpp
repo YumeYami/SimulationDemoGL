@@ -2,21 +2,22 @@
 #include "Rigidbody.cpp"
 class Cube : public Rigidbody{
 public:
-	float maxRadius;
 	float vertex[8][3];
 	float tranformVertex[8][3];
 	vec4* edgeSta;
 	vec4* edgeEnd;
 	Cube(vec3 cubePosition, vec3 cubeRotation, vec3 cubeVelocity, float cubeSize, float cubeMass, vec3 cubeColor) {
-		orientation = cubeRotation;
 		position = vec4(cubePosition, 1);
 		velocity = (vec4(cubeVelocity, 0));
-		angularVelocity = vec3(0, 0, 0);
-		size = cubeSize;
 		mass = cubeMass;
+		
+		orientation = cubeRotation;
+		angularVelocity = vec3(0, 0, 0);
+		inertia = vec3(1.0f);
+		
+		size = cubeSize;
 		color = vec4(cubeColor, 0.8f);
-		inertia = 1;
-		maxRadius = size*glm::sqrt(3.0f)*0.5;
+		boundedRadius = size*glm::sqrt(3.0f)*0.5;
 
 		vertex[0][0] = cubeVertex0.x*size / 2; vertex[0][1] = cubeVertex0.y*size / 2; vertex[0][2] = cubeVertex0.z*size / 2;
 		vertex[1][0] = cubeVertex1.x*size / 2; vertex[1][1] = cubeVertex1.y*size / 2; vertex[1][2] = cubeVertex1.z*size / 2;
@@ -30,7 +31,6 @@ public:
 		edgeSta = new vec4[12];
 		edgeEnd = new vec4[12];
 		setEdge();
-
 	}
 	void inline setEdge(){
 		vec4 temp0 = position + getRotationMatrix()*vec4(vertex[0][0], vertex[0][1], vertex[0][2], 0);
