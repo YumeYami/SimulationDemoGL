@@ -93,7 +93,7 @@ public:
 		velocity = velocity + momentum / mass;
 		velocity *= 0.90;
 		if ( length(velocity) < 0.1f ) {
-		velocity = vec4(0);
+			velocity = vec4(0);
 		}
 	}
 	virtual void inline addAngularMomentum(vec4 angularMomentum) {
@@ -138,6 +138,8 @@ public:
 		accuMomentum = vec4(0);
 		accuAngularMomentum = vec3(0);
 	}
+	virtual void inline render() = 0;
+	//virtual void inline setEdge();
 };
 //End guard at bottom of header file
 #endif 

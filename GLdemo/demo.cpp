@@ -322,7 +322,27 @@ void onPress() {
 	}
 
 }
-
+void renderObjects(vector<Cube*> c3, GLuint matrixIDs[]) {
+	for ( int i = 0; i < c3.size(); i++ ) {
+		if ( update || playOneFrame ) {
+			c3[i]->updatePosition(timeStep, GRAVITY*enGravity);
+			c3[i]->setEdge();
+		}
+		glm::mat4 ScaleMatrix = mat4();
+		glm::mat4 RotateMatrix = (*c3[i]).getRotationMatrix();
+		glm::mat4 TranslateMatrix = (*c3[i]).getTranslationMatrix();
+		glm::mat4 RotateModel = mat4(1);
+		glm::mat4 TranslateModel = mat4(1);
+		glPushMatrix();
+		glUniformMatrix4fv(matrixIDs[0], 1, GL_FALSE, &ScaleMatrix[0][0]);
+		glUniformMatrix4fv(matrixIDs[1], 1, GL_FALSE, &RotateMatrix[0][0]);
+		glUniformMatrix4fv(matrixIDs[2], 1, GL_FALSE, &TranslateMatrix[0][0]);
+		glUniformMatrix4fv(matrixIDs[3], 1, GL_FALSE, &TranslateModel[0][0]);
+		glUniformMatrix4fv(matrixIDs[4], 1, GL_FALSE, &RotateModel[0][0]);
+		c3[i]->render();
+		glPopMatrix();
+	}
+}
 int main(void) {
 	// Initialise GLFW
 	if ( !glfwInit() ) {
@@ -479,6 +499,9 @@ int main(void) {
 		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 		glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
 		glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
+		GLuint matrixIDs[] = {ScaleMatrixID, RotateMatrixID, TranslateMatrixID, TranslateModelID, RotateModelID};
+		//Rigidbody  = dynamic_cast<Rigidbody*>(pba);
+		renderObjects(c3, matrixIDs);/*
 		for ( int i = 0; i < c3.size(); i++ ) {
 			if ( update || playOneFrame ) {
 				c3[i]->updatePosition(timeStep, GRAVITY*enGravity);
@@ -497,7 +520,7 @@ int main(void) {
 			glUniformMatrix4fv(RotateModelID, 1, GL_FALSE, &RotateModel[0][0]);
 			c3[i]->render();
 			glPopMatrix();
-		}
+		}*/
 		for ( int i = 0; i < sphere.size(); i++ ) {
 			if ( update || playOneFrame )(*sphere[i]).updatePosition(timeStep, GRAVITY*enGravity);
 			glm::mat4 ScaleMatrix = mat4();
