@@ -22,7 +22,6 @@ bool inline convergent_check(Rigidbody* rigid1, Rigidbody* rigid2) {
 }
 bool inline outOfBound_check(Rigidbody* rigid1, Rigidbody* rigid2) {
 	float dist = length(rigid1->position - rigid2->position);
-	//cout << dist << " " << rigid1->boundedRadius<<" " << rigid2->boundedRadius << "\n";
 	if ( dist > rigid1->boundedRadius + rigid2->boundedRadius ) return true;
 	else if ( !convergent_check(rigid1, rigid2) )return true;
 	else return false;
@@ -31,13 +30,11 @@ bool inline outOfBound_check(Rigidbody* rigid1, Rigidbody* rigid2) {
 void inline checkCollision_SphereCube(Sphere* sph1, Cube* cube2) {
 	if ( outOfBound_check(sph1, cube2) ) return;
 	//bounded sphere check
-	//cout<<"check cube\n";
 	for ( int i = 0; i < 12; i++ ) {
 		vec4 start = (cube2->edgeSta[i]);
 		vec4 end = (cube2->edgeEnd[i]);
 		vec4 colPoint = dist3D_Segment_to_point(start, end, sph1->position);
 		if ( length(colPoint) <= sph1->radius ) {
-			//cout<<"collision Cube";
 			colSphere_Cube(sph1, cube2, colPoint);
 			return;
 		}
@@ -118,15 +115,11 @@ void inline checkCollision_PlaneCylinder(Plane* plane1, Cylinder* cylinder2) {
 	vec4 dist = cylinder2->position - plane1->position;
 	vec4 cylNormal = cylinder2->getNormal();
 	vec4 posheight = projectVec(cylinder2->position - plane1->position, planeNormal);
-	//printVec4("posh",posheight);
 	vec3 temp1 = cross((vec3)planeNormal, (vec3)cylNormal);
 	vec4 lowestPos = vec4(cross(temp1, (vec3)cylNormal), 0);
 	vec4 bodyheight = projectVec(cylNormal*(cylinder2->length / 2), planeNormal);
-	//printVec4("body ",bodyheight);
 	vec4 baseheight = projectVec(lowestPos, planeNormal);
-	//printVec4("base ",baseheight);
 	if ( length(bodyheight) + length(baseheight) >= length(posheight) ) {
-		//cout<<"col plane cylinder\n";
 		vec4 colPoint(0, 0, 0, 0);
 
 		colPlane_Cylinder(cylinder2, plane1, lowestPos);
@@ -454,7 +447,7 @@ void inline checkCollision_CylinderCylinder(Cylinder* cyl1, Cylinder* cyl2) {
 }
 
 void inline checkCollision(vector<Cube*> cu, vector<Cylinder*> cy, vector<Plane*> pl, vector<Sphere*> sp) {
-	cout <<"size "<<cu.size()<<" "<<cy.size()<<" "<<pl.size()<<" "<<sp.size()<<"\n";
+	//cout <<"size "<<cu.size()<<" "<<cy.size()<<" "<<pl.size()<<" "<<sp.size()<<"\n";
 	for ( int i = 0; i < sp.size(); i++ ) {
 		Sphere* sp1 = sp.at(i);
 		for ( int j = 0; j < cu.size(); j++ ) checkCollision_SphereCube(sp1, cu.at(j));
@@ -463,7 +456,6 @@ void inline checkCollision(vector<Cube*> cu, vector<Cylinder*> cy, vector<Plane*
 		if ( i < sp.size() - 1 ) {
 			for ( int j = i + 1; j < sp.size(); j++ ) checkCollision_SphereSphere(sp1, sp.at(j));
 		}
-		cout << i << " check\n";
 	}
 	for ( int i = 0; i < pl.size(); i++ ) {
 		Plane* pl1 = pl.at(i);
@@ -502,6 +494,7 @@ public:
 	}
 	void addPlaneToGridCell(Plane* pl) {
 		plane.push_back(pl);
+		//cout << "grid plane size " << plane.size()<<"\n";
 	}
 	void clearGridCellPlane() {
 		plane.clear();
