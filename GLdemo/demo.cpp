@@ -4,38 +4,43 @@
 #include <vector>
 #include <iostream>
 // Realtime - Project library
-#include "box3D/box3Dcollision.cpp"
-#include "controls.hpp"
 #include <GL/glew.h>
 #include <GL/glfw.h>
 #include <GL/GLU.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <common/shader.cpp>
-using namespace glm;
-using namespace std;
+#include "controls.hpp"
+#include "demo.h"
+#include "box3D/box3Dcollision.cpp"
 
 #define GRAVITY 0.05f
 #define GLOBAL_FRICTION 0.01f
 
-std::vector<unsigned short> indices;
-std::vector<glm::vec3> indexed_vertices;
-std::vector<glm::mat4> indexed_rotates;
-std::vector<glm::vec2> indexed_uvs;
-std::vector<glm::vec3> indexed_normals;
+using namespace glm;
+using namespace std;
+
+int fixX = 0, fixY = 0;
+int showX = 0, showY = 0;
+int clickX1, clickY1 = 0;
+int clickX2, clickY2 = 0;
+int xposL, yposL;
+int pickObject = 0;
+int width = 512;
+int height = 384;
+int update = 1;
+int playFrame = 1;
+int playOneFrame = 0;
+int enGravity = 0;
 
 vector<Cube*> c3;
 vector<Sphere*> sphere;
 vector<Cylinder*> cylinder;
 vector<Plane*> plane;
-
 Grid grid;
 
 void addSphere() {
-	//0->8
-	//-2->6
 	vec3 position = vec3(rand() % (gridSize - 5) - 2, begin_x + gridSize - 4, rand() % (gridSize - 5) - 2);
-	//vec3 position = vec3((gridSize - 5), begin_x + gridSize - 4, (gridSize - 5));
 	vec3 rotation = vec3(0, 0, 1);
 	vec3 velocity = vec3(rand() % 2 / 2.0, -rand() % 2 / 2.0, rand() % 2 / 2.0);
 	float size = rand() % 25 / 10.0 + 0.5;
@@ -46,7 +51,6 @@ void addSphere() {
 }
 void addCube() {
 	vec3 position = vec3(rand() % (gridSize - 5) - 2, begin_x + gridSize - 4, rand() % (gridSize - 5) - 2);
-	//vec3 position = vec3(0, begin_x + gridSize - 4, 0 );
 	vec3 rotation = vec3(0, 0, 1);
 	vec3 velocity = vec3(rand() % 4 / 15.0, -rand() % 4 / 15.0, rand() % 4 / 15.0);
 	float size = rand() % 20 / 10 + 0.5;
@@ -69,8 +73,7 @@ void addCylinder() {
 }
 void addPlane() {
 	//top,bottom,left,right,front,back
-	vec3 pos[6] = {vec3(1.5, begin_y + gridSize - 1.5, 1.5), vec3(1.5, begin_y + 1.5, 1.5), vec3(begin_x + 1.5, 1.5, 1.5),
-		vec3(begin_x + gridSize - 1.5, 1.5, 1.5), vec3(1.5, 1.5, begin_z + gridSize - 1.5), vec3(1.5, 1.5, begin_z + 1.5)};
+	vec3 pos[6] = {vec3(1.5, begin_y + gridSize - 1.5, 1.5), vec3(1.5, begin_y + 1.5, 1.5), vec3(begin_x + 1.5, 1.5, 1.5), vec3(begin_x + gridSize - 1.5, 1.5, 1.5), vec3(1.5, 1.5, begin_z + gridSize - 1.5), vec3(1.5, 1.5, begin_z + 1.5)};
 	vec3 rot[6] = {vec3(PI, 0, 0), vec3(0, 0, 0), vec3(0, 0, -PI / 2), vec3(0, 0, PI / 2), vec3(-PI / 2, 0, 0), vec3(PI / 2, 0, 0)};
 	for ( int i = 0; i < 6; i++ ) {
 		vec3 position = pos[i];
@@ -91,180 +94,7 @@ void transparentPlane() {
 	}
 }
 int lastkey[10];
-int lastKey1 = GLFW_RELEASE;
-int lastKey2 = GLFW_RELEASE;
-int lastKey3 = GLFW_RELEASE;
-int lastKey4 = GLFW_RELEASE;
-int lastKey5 = GLFW_RELEASE;
-int lastKey6 = GLFW_RELEASE;
-int lastKey7 = GLFW_RELEASE;
-int lastKey8 = GLFW_RELEASE;
-int lastKey9 = GLFW_RELEASE;
-int lastMouse = GLFW_RELEASE;
-int fixX = 0, fixY = 0;
-int showX = 0, showY = 0;
-int clickX1, clickY1 = 0;
-int clickX2, clickY2 = 0;
-int xposL, yposL;
-int pickObject = 0;
-int width = 512;
-int height = 384;
-int update = 1;
-int playFrame = 1;
-int playOneFrame = 0;
-int enGravity = 0;
 
-void pick(int mouse_x, int mouse_y) {
-	float x = (2.0f * mouse_x) / width - 1.0f;
-	float y = 1.0f - (2.0f * mouse_y) / height;
-	float z = 1.0f;
-	vec3 ray_nds = vec3(x, y, z);
-	vec4 ray_clip = vec4(ray_nds.x, ray_nds.y, -1.0, 1.0);
-	vec4 ray_eye = inverse(getProjectionMatrix()) * ray_clip;
-	ray_eye = vec4(ray_eye.x, ray_eye.y, -1.0, 0.0);
-	vec3 ray_wor = (vec3)(inverse(getViewMatrix()) * ray_eye);
-	// don't forget to normalise the vector at some point
-	ray_wor = normalize(ray_wor);
-	//cout<<"ray x= "<<ray_wor.x<<" y = "<<ray_wor.y<<" z = "<<ray_wor.z<<"\n";
-}
-void onPress() {
-	//sphere
-	if ( glfwGetKey('1') == GLFW_PRESS ) {
-		if ( lastKey1 == GLFW_RELEASE ) {
-			addSphere();
-		}
-		lastKey1 = GLFW_PRESS;
-
-	}
-	else if ( glfwGetKey('1') == GLFW_RELEASE ) {
-		lastKey1 = GLFW_RELEASE;
-	}
-
-	//cube
-	if ( glfwGetKey('2') == GLFW_PRESS ) {
-		if ( lastKey2 == GLFW_RELEASE ) addCube();
-		lastKey2 = GLFW_PRESS;
-	}
-	else if ( glfwGetKey('2') == GLFW_RELEASE ) {
-		lastKey2 = GLFW_RELEASE;
-	}
-
-	//cylinder
-	if ( glfwGetKey('3') == GLFW_PRESS ) {
-		if ( lastKey3 == GLFW_RELEASE ) addCylinder();
-		lastKey3 = GLFW_PRESS;
-	}
-	else if ( glfwGetKey('3') == GLFW_RELEASE ) {
-		lastKey3 = GLFW_RELEASE;
-	}
-
-	//plane
-	if ( glfwGetKey('4') == GLFW_PRESS ) {
-		if ( lastKey4 == GLFW_RELEASE ) transparentPlane();
-		lastKey4 = GLFW_PRESS;
-	}
-	else if ( glfwGetKey('4') == GLFW_RELEASE ) {
-		lastKey4 = GLFW_RELEASE;
-	}
-	if ( glfwGetKey('0') == GLFW_PRESS ) {
-		if ( lastKey5 == GLFW_RELEASE ) {
-			if ( pickObject ) pickObject = 0;
-			else pickObject = 1;
-		}
-		lastKey5 == GLFW_PRESS;
-	}
-	else if ( glfwGetKey('0') == GLFW_RELEASE ) {
-		lastKey5 = GLFW_RELEASE;
-	}
-	if ( glfwGetKey('Z') == GLFW_PRESS ) {
-		if ( lastKey6 == GLFW_RELEASE )
-		if ( update ) {
-			update = 0;
-
-		}
-		else {
-			update = 1;
-			playFrame = 1;
-		}
-		lastKey6 = GLFW_PRESS;
-
-	}
-	else if ( glfwGetKey('Z') == GLFW_RELEASE ) {
-		lastKey6 = GLFW_RELEASE;
-
-	}
-	if ( glfwGetKey('X') == GLFW_PRESS && !update ) {
-		if ( lastKey7 == GLFW_RELEASE ) {
-			playFrame = 0;
-			playOneFrame = 1;
-		}
-		lastKey7 = GLFW_PRESS;
-	}
-	else if ( glfwGetKey('X') == GLFW_RELEASE ) {
-		lastKey7 = GLFW_RELEASE;
-	}
-	if ( glfwGetKey('C') == GLFW_PRESS ) {
-		if ( lastKey8 == GLFW_RELEASE ) {
-			sphere.clear();
-			c3.clear();
-			cylinder.clear();
-		}
-		lastKey8 = GLFW_PRESS;
-	}
-	else if ( glfwGetKey('C') == GLFW_RELEASE ) {
-		lastKey8 = GLFW_RELEASE;
-	}
-	if ( glfwGetKey('G') == GLFW_PRESS ) {
-		if ( lastKey9 == GLFW_RELEASE ) {
-			if ( enGravity ) enGravity = 0;
-			else enGravity = 1;
-		}
-		lastKey9 = GLFW_PRESS;
-	}
-	else if ( glfwGetKey('G') == GLFW_RELEASE ) {
-		lastKey9 = GLFW_RELEASE;
-	}
-	//pickBox=========================================================================================
-	if ( lastMouse == GLFW_RELEASE && glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !pickObject ) {
-		glfwGetMousePos(&clickX1, &clickY1);
-		pick(clickX1, clickY1);
-		lastMouse = GLFW_PRESS;
-	}
-	else if ( lastMouse == GLFW_PRESS && glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !pickObject ) {
-		glfwGetMousePos(&clickX2, &clickY2);
-		float dx = clickX2 - clickX1;
-		float dy = clickY2 - clickY1;
-		clickX1 = clickX2;
-		clickY1 = clickY2;
-		dx /= 200.0f;
-		dy /= -200.0f;
-		float topPos = plane[0]->position.y;
-		float btmPos = plane[1]->position.y;
-		float lftPos = plane[2]->position.x;
-		float rhtPos = plane[3]->position.x;
-		vec4 pos = vec4(0, 0, 0, 0);
-		if ( topPos + dy <= begin_y + gridSize && btmPos + dy > begin_y ) pos.y = dy;
-		if ( lftPos + dx >= begin_x && rhtPos + dx < begin_x + gridSize ) pos.x = dx;
-		grid.clearGridPlane();
-		for ( int i = 0; i < plane.size(); i++ ) {
-			plane[i]->position += pos;
-			grid.hashPlane(plane[i]);
-		}
-	}
-	else if ( glfwGetMouseButton(GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE && !pickObject ) {
-		lastMouse = GLFW_RELEASE;
-	}
-	//pickObject=========================================================================================
-	if ( lastMouse == GLFW_RELEASE && glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && pickObject ) {
-		glfwGetMousePos(&clickX1, &clickY1);
-		lastMouse = GLFW_PRESS;
-	}
-	else if ( lastMouse == GLFW_PRESS && glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && pickObject ) {
-	}
-	else if ( glfwGetMouseButton(GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE && pickObject ) {
-		lastMouse = GLFW_RELEASE;
-	}
-}
 //initial openGL
 //testing document
 int initOpenGL() {
@@ -379,4 +209,3 @@ int main(void) {
 	glfwTerminate();
 	return 0;
 }
-
