@@ -1,8 +1,8 @@
-#include "Cube.cpp"
-#include "Sphere.cpp"
-#include "Cylinder.cpp"
-#include "Plane.cpp"
-#include "Cone.cpp"
+#include "Cube.h"
+#include "Sphere.h"
+#include "Cylinder.h"
+#include "Plane.h"
+#include "Cone.h"
 
 #define PARALLEL_SIZE 0.01f
 #define SMALL_NUM 0.00000001f
