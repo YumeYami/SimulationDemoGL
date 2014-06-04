@@ -5,22 +5,16 @@
 #include <iostream>
 // Realtime - Project library
 #include "box3D/box3Dcollision.cpp"
-
-// Include GLEW
+#include "controls.hpp"
 #include <GL/glew.h>
-// Include GLFW
 #include <GL/glfw.h>
-// Include GLU
 #include <GL/GLU.h>
-// Include GLM
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <common/shader.cpp>
 using namespace glm;
 using namespace std;
-#include <common/shader.cpp>
-//#include <common/texture.cpp>
-//#include <common/controls.cpp>
-#include "controls.hpp"
+
 #define GRAVITY 0.05f
 #define GLOBAL_FRICTION 0.01f
 
@@ -94,10 +88,8 @@ void transparentPlane() {
 	for ( int i = 0; i < 6; i++ ) {
 		if ( plane[i]->color.a == 0.2f ) plane[i]->color.a = 0.8f;
 		else plane[i]->color.a = 0.2f;
-
 	}
 }
-
 int lastkey[10];
 int lastKey1 = GLFW_RELEASE;
 int lastKey2 = GLFW_RELEASE;
@@ -246,13 +238,10 @@ void onPress() {
 		clickY1 = clickY2;
 		dx /= 200.0f;
 		dy /= -200.0f;
-		//top,bottom,left,right,back,front
 		float topPos = plane[0]->position.y;
 		float btmPos = plane[1]->position.y;
 		float lftPos = plane[2]->position.x;
 		float rhtPos = plane[3]->position.x;
-		//float bckPos = plane[4]->position.z;
-		//float fntPos = plane[5]->position.z;
 		vec4 pos = vec4(0, 0, 0, 0);
 		if ( topPos + dy <= begin_y + gridSize && btmPos + dy > begin_y ) pos.y = dy;
 		if ( lftPos + dx >= begin_x && rhtPos + dx < begin_x + gridSize ) pos.x = dx;
@@ -261,26 +250,24 @@ void onPress() {
 			plane[i]->position += pos;
 			grid.hashPlane(plane[i]);
 		}
-
 	}
 	else if ( glfwGetMouseButton(GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE && !pickObject ) {
 		lastMouse = GLFW_RELEASE;
 	}
-
 	//pickObject=========================================================================================
 	if ( lastMouse == GLFW_RELEASE && glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && pickObject ) {
 		glfwGetMousePos(&clickX1, &clickY1);
 		lastMouse = GLFW_PRESS;
 	}
 	else if ( lastMouse == GLFW_PRESS && glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && pickObject ) {
-
 	}
 	else if ( glfwGetMouseButton(GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE && pickObject ) {
 		lastMouse = GLFW_RELEASE;
 	}
-
 }
-int main(void) {
+//initial openGL
+//testing document
+int initOpenGL() {
 	// Initialise GLFW
 	if ( !glfwInit() ) {
 		fprintf(stderr, "Failed to initialize GLFW\n");
@@ -301,7 +288,6 @@ int main(void) {
 		fprintf(stderr, "Failed to initialize GLEW\n");
 		return -1;
 	}
-
 	glfwSetWindowTitle("3D Rigid Body Physics Simulation");
 	// Ensure we can capture the escape key being pressed below
 	glfwEnable(GLFW_STICKY_KEYS);
@@ -314,6 +300,13 @@ int main(void) {
 	glDepthFunc(GL_LESS);
 	// Cull triangles which normal is not towards the camera
 	//glEnable(GL_CULL_FACE); // Not this time !
+	// Enable blending
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	return 0;
+}
+int main(void) {
+	if ( initOpenGL() == -1 )return -1;
 	// Create and compile our GLSL program from the shader
 	GLuint programID2 = LoadShaders("StandardShading.vertexshader", "StandardTransparentShading.fragmentshader");
 	// Get a handle for our "MVP" uniform
@@ -325,43 +318,30 @@ int main(void) {
 	GLuint RotateMatrixID = glGetUniformLocation(programID2, "Rotate");
 	GLuint TranslateModelID = glGetUniformLocation(programID2, "TranslateModel");
 	GLuint RotateModelID = glGetUniformLocation(programID2, "RotateModel");
-	// Get a handle for our buffers
-	GLuint vertexPosition_modelspaceID = glGetAttribLocation(programID2, "vertexPosition_modelspace");
-	GLuint vertexRotation_modelspaceID = glGetAttribLocation(programID2, "vertexRotation_modelspace");
-	GLuint vertexUVID = glGetAttribLocation(programID2, "vertexUV");
-	GLuint vertexNormal_modelspaceID = glGetAttribLocation(programID2, "vertexNormal_modelspace");
 	//---------------------------------------------------------------------------------------------------------------
 	addPlane();
 	grid = Grid(plane);
 
-	// For speed computation
-	double lastTime = glfwGetTime();
+	float lastTime = glfwGetTime();
 	int nbFrames = 0;
-
-	// Enable blending
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	do {
 		// Measure speed
-		double currentTime = glfwGetTime();
+		float currentTime = glfwGetTime();
 		nbFrames++;
 		if ( currentTime - lastTime >= 1.0 ) { // If last prinf() was more than 1sec ago
 			// printf and reset
-			printf("%f ms/frame\n", 1000.0 / double(nbFrames));
+			printf("%f ms/frame\n", 1000.0 / float(nbFrames));
 			nbFrames = 0;
 			lastTime += 1.0;
 		}
-		// Clear the screen
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		// Use our shader
-		glUseProgram(programID2);
-		// Compute the MVP matrix from keyboard and mouse input
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);// Clear the screen
+		glUseProgram(programID2);// Use our shader
 		grid.hashGrid(c3, cylinder, sphere);
 		if ( update || playOneFrame ) {
 			grid.checkCollisionGrid();
 		}
-		computeMatricesFromInputs();
+		computeMatricesFromInputs();// Compute the MVP matrix from keyboard and mouse input
 		grid.clearGrid();
 		onPress();
 		glm::mat4 ModelMatrix = mat4(1.0f);

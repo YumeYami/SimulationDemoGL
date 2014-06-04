@@ -39,6 +39,7 @@ int showXpos=512,showYpos=384;
 int clickXpos=0,clickYpos=0;
 int xpos,ypos;
 int lastMouseRightStatus=GLFW_RELEASE;
+
 void computeMatricesFromInputs(){
 
 	// glfwGetTime is called only once, the first time this function is called
@@ -127,3 +128,141 @@ void computeMatricesFromInputs(){
 	// For the next frame, the "last time" will be "now"
 	lastTime = currentTime;
 }
+//void onPress() {
+//	//sphere
+//	if ( glfwGetKey('1') == GLFW_PRESS ) {
+//		if ( lastKey1 == GLFW_RELEASE ) {
+//			addSphere();
+//		}
+//		lastKey1 = GLFW_PRESS;
+//
+//	}
+//	else if ( glfwGetKey('1') == GLFW_RELEASE ) {
+//		lastKey1 = GLFW_RELEASE;
+//	}
+//
+//	//cube
+//	if ( glfwGetKey('2') == GLFW_PRESS ) {
+//		if ( lastKey2 == GLFW_RELEASE ) addCube();
+//		lastKey2 = GLFW_PRESS;
+//	}
+//	else if ( glfwGetKey('2') == GLFW_RELEASE ) {
+//		lastKey2 = GLFW_RELEASE;
+//	}
+//
+//	//cylinder
+//	if ( glfwGetKey('3') == GLFW_PRESS ) {
+//		if ( lastKey3 == GLFW_RELEASE ) addCylinder();
+//		lastKey3 = GLFW_PRESS;
+//	}
+//	else if ( glfwGetKey('3') == GLFW_RELEASE ) {
+//		lastKey3 = GLFW_RELEASE;
+//	}
+//
+//	//plane
+//	if ( glfwGetKey('4') == GLFW_PRESS ) {
+//		if ( lastKey4 == GLFW_RELEASE ) transparentPlane();
+//		lastKey4 = GLFW_PRESS;
+//	}
+//	else if ( glfwGetKey('4') == GLFW_RELEASE ) {
+//		lastKey4 = GLFW_RELEASE;
+//	}
+//	if ( glfwGetKey('0') == GLFW_PRESS ) {
+//		if ( lastKey5 == GLFW_RELEASE ) {
+//			if ( pickObject ) pickObject = 0;
+//			else pickObject = 1;
+//		}
+//		lastKey5 == GLFW_PRESS;
+//	}
+//	else if ( glfwGetKey('0') == GLFW_RELEASE ) {
+//		lastKey5 = GLFW_RELEASE;
+//	}
+//	if ( glfwGetKey('Z') == GLFW_PRESS ) {
+//		if ( lastKey6 == GLFW_RELEASE )
+//		if ( update ) {
+//			update = 0;
+//
+//		}
+//		else {
+//			update = 1;
+//			playFrame = 1;
+//		}
+//		lastKey6 = GLFW_PRESS;
+//
+//	}
+//	else if ( glfwGetKey('Z') == GLFW_RELEASE ) {
+//		lastKey6 = GLFW_RELEASE;
+//
+//	}
+//	if ( glfwGetKey('X') == GLFW_PRESS && !update ) {
+//		if ( lastKey7 == GLFW_RELEASE ) {
+//			playFrame = 0;
+//			playOneFrame = 1;
+//		}
+//		lastKey7 = GLFW_PRESS;
+//	}
+//	else if ( glfwGetKey('X') == GLFW_RELEASE ) {
+//		lastKey7 = GLFW_RELEASE;
+//	}
+//	if ( glfwGetKey('C') == GLFW_PRESS ) {
+//		if ( lastKey8 == GLFW_RELEASE ) {
+//			sphere.clear();
+//			c3.clear();
+//			cylinder.clear();
+//		}
+//		lastKey8 = GLFW_PRESS;
+//	}
+//	else if ( glfwGetKey('C') == GLFW_RELEASE ) {
+//		lastKey8 = GLFW_RELEASE;
+//	}
+//	if ( glfwGetKey('G') == GLFW_PRESS ) {
+//		if ( lastKey9 == GLFW_RELEASE ) {
+//			if ( enGravity ) enGravity = 0;
+//			else enGravity = 1;
+//		}
+//		lastKey9 = GLFW_PRESS;
+//	}
+//	else if ( glfwGetKey('G') == GLFW_RELEASE ) {
+//		lastKey9 = GLFW_RELEASE;
+//	}
+//	//pickBox=========================================================================================
+//	if ( lastMouse == GLFW_RELEASE && glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !pickObject ) {
+//		glfwGetMousePos(&clickX1, &clickY1);
+//		pick(clickX1, clickY1);
+//		lastMouse = GLFW_PRESS;
+//	}
+//	else if ( lastMouse == GLFW_PRESS && glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !pickObject ) {
+//		glfwGetMousePos(&clickX2, &clickY2);
+//		float dx = clickX2 - clickX1;
+//		float dy = clickY2 - clickY1;
+//		clickX1 = clickX2;
+//		clickY1 = clickY2;
+//		dx /= 200.0f;
+//		dy /= -200.0f;
+//		float topPos = plane[0]->position.y;
+//		float btmPos = plane[1]->position.y;
+//		float lftPos = plane[2]->position.x;
+//		float rhtPos = plane[3]->position.x;
+//		vec4 pos = vec4(0, 0, 0, 0);
+//		if ( topPos + dy <= begin_y + gridSize && btmPos + dy > begin_y ) pos.y = dy;
+//		if ( lftPos + dx >= begin_x && rhtPos + dx < begin_x + gridSize ) pos.x = dx;
+//		grid.clearGridPlane();
+//		for ( int i = 0; i < plane.size(); i++ ) {
+//			plane[i]->position += pos;
+//			grid.hashPlane(plane[i]);
+//		}
+//	}
+//	else if ( glfwGetMouseButton(GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE && !pickObject ) {
+//		lastMouse = GLFW_RELEASE;
+//	}
+//	//pickObject=========================================================================================
+//	if ( lastMouse == GLFW_RELEASE && glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && pickObject ) {
+//		glfwGetMousePos(&clickX1, &clickY1);
+//		lastMouse = GLFW_PRESS;
+//	}
+//	else if ( lastMouse == GLFW_PRESS && glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && pickObject ) {
+//	}
+//	else if ( glfwGetMouseButton(GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE && pickObject ) {
+//		lastMouse = GLFW_RELEASE;
+//	}
+//}
