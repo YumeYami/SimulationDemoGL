@@ -60,6 +60,9 @@
     <ClCompile Include="box3D\util_func.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="box3D\Grid.cpp">
+      <Filter>box3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="box3D\box3Dcollision.h">
@@ -94,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="controls.hpp">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="box3D\Grid.h">
+      <Filter>box3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

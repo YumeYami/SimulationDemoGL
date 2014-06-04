@@ -1,6 +1,4 @@
 #include "box3Dcollision.h"
-#include "box3DglobalRule.h"
-#include "box3DcalculateForce.cpp"
 
 #define gridSize 13
 #define begin_x -5

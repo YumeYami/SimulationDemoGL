@@ -207,18 +207,15 @@ void onPress() {
 	//	if ( lastKey6 == GLFW_RELEASE )
 	//	if ( update ) {
 	//		update = 0;
-
 	//	}
 	//	else {
 	//		update = 1;
 	//		playFrame = 1;
 	//	}
 	//	lastKey6 = GLFW_PRESS;
-
 	//}
 	//else if ( glfwGetKey('Z') == GLFW_RELEASE ) {
 	//	lastKey6 = GLFW_RELEASE;
-
 	//}
 	//if ( glfwGetKey('X') == GLFW_PRESS && !update ) {
 	//	if ( lastKey7 == GLFW_RELEASE ) {
