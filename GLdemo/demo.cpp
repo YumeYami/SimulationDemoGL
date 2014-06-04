@@ -98,6 +98,7 @@ void transparentPlane() {
 	}
 }
 
+int lastkey[10];
 int lastKey1 = GLFW_RELEASE;
 int lastKey2 = GLFW_RELEASE;
 int lastKey3 = GLFW_RELEASE;
@@ -120,50 +121,7 @@ int update = 1;
 int playFrame = 1;
 int playOneFrame = 0;
 int enGravity = 0;
-class PickingRay {
-	vec3 clickPosInWorld;
-	vec3 direction;
 
-	/**
-	* Computes the intersection of this ray with the X-Y Plane (where Z = 0)
-	* and writes it back to the provided vector.
-	*/
-public:
-	void intersectionWithXyPlane(vec3 worldPos) {
-		float s = -clickPosInWorld.z / direction.z;
-		worldPos[0] = clickPosInWorld.x + direction.x*s;
-		worldPos[1] = clickPosInWorld.y + direction.y*s;
-		worldPos[2] = 0;
-	}
-
-	vec3 getClickPosInWorld() {
-		return clickPosInWorld;
-	}
-	vec3 getDirection() {
-		return direction;
-	}
-};
-/*
-void picking(float screenX, float screenY, PickingRay pickingRay)
-{
-pickingRay.getClickPosInWorld().set(position);
-pickingRay.getClickPosInWorld().add(view);
-
-screenX -= (float)viewportWidth/2f;
-screenY -= (float)viewportHeight/2f;
-
-// normalize to 1
-screenX /= ((float)viewportWidth/2f);
-screenY /= ((float)viewportHeight/2f);
-
-pickingRay.getClickPosInWorld().x += screenHoritzontally.x*screenX + screenVertically.x*screenY;
-pickingRay.getClickPosInWorld().y += screenHoritzontally.y*screenX + screenVertically.y*screenY;
-pickingRay.getClickPosInWorld().z += screenHoritzontally.z*screenX + screenVertically.z*screenY;
-
-pickingRay.getDirection().set(pickingRay.getClickPosInWorld());
-pickingRay.getDirection().sub(position);
-}
-*/
 void pick(int mouse_x, int mouse_y) {
 	float x = (2.0f * mouse_x) / width - 1.0f;
 	float y = 1.0f - (2.0f * mouse_y) / height;
@@ -322,25 +280,6 @@ void onPress() {
 	}
 
 }
-void renderObject(Rigidbody* rigidbody, GLuint matrixIDs[], float aTimeStep, float aGravity) {
-	if ( update || playOneFrame ) {
-		rigidbody->updatePosition(aTimeStep, aGravity);
-		rigidbody->setEdge();
-	}
-	glm::mat4 ScaleMatrix = mat4();
-	glm::mat4 RotateMatrix = (*rigidbody).getRotationMatrix();
-	glm::mat4 TranslateMatrix = (*rigidbody).getTranslationMatrix();
-	glm::mat4 RotateModel = mat4(1);
-	glm::mat4 TranslateModel = mat4(1);
-	glPushMatrix();
-	glUniformMatrix4fv(matrixIDs[0], 1, GL_FALSE, &ScaleMatrix[0][0]);
-	glUniformMatrix4fv(matrixIDs[1], 1, GL_FALSE, &RotateMatrix[0][0]);
-	glUniformMatrix4fv(matrixIDs[2], 1, GL_FALSE, &TranslateMatrix[0][0]);
-	glUniformMatrix4fv(matrixIDs[3], 1, GL_FALSE, &TranslateModel[0][0]);
-	glUniformMatrix4fv(matrixIDs[4], 1, GL_FALSE, &RotateModel[0][0]);
-	rigidbody->render();
-	glPopMatrix();
-}
 int main(void) {
 	// Initialise GLFW
 	if ( !glfwInit() ) {
@@ -367,21 +306,16 @@ int main(void) {
 	// Ensure we can capture the escape key being pressed below
 	glfwEnable(GLFW_STICKY_KEYS);
 	glfwSetMousePos(1024 / 2, 768 / 2);
-
 	// Dark blue background
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
-
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
 	// Accept fragment if it closer to the camera than the former one
 	glDepthFunc(GL_LESS);
-
 	// Cull triangles which normal is not towards the camera
 	//glEnable(GL_CULL_FACE); // Not this time !
-
 	// Create and compile our GLSL program from the shader
 	GLuint programID2 = LoadShaders("StandardShading.vertexshader", "StandardTransparentShading.fragmentshader");
-
 	// Get a handle for our "MVP" uniform
 	GLuint MatrixID = glGetUniformLocation(programID2, "MVP");
 	GLuint ViewMatrixID = glGetUniformLocation(programID2, "V");
@@ -396,66 +330,9 @@ int main(void) {
 	GLuint vertexRotation_modelspaceID = glGetAttribLocation(programID2, "vertexRotation_modelspace");
 	GLuint vertexUVID = glGetAttribLocation(programID2, "vertexUV");
 	GLuint vertexNormal_modelspaceID = glGetAttribLocation(programID2, "vertexNormal_modelspace");
-
-
 	//---------------------------------------------------------------------------------------------------------------
-
-	//addCube();
-	//addSphere();
-	addPlane();/*
-			   addCylinder();
-			   addCylinder();
-			   addCylinder();
-			   Cylinder* cyl = cylinder[0];
-			   cyl->velocity = vec4(0,0,0,0);
-			   cyl->position = vec4(0,-3.5,0,1);
-			   cyl->orientation = vec3(0,0,0);
-			   cyl->angularVelocity = vec3(1,0,0);
-			   cyl->color = vec4(1,0,0,1);
-
-			   Cylinder* cyl2 = cylinder[1];
-			   cyl2->velocity = vec4(0,0,0,0);
-			   cyl2->position = vec4(2,-3.5,0,1);
-			   cyl2->orientation = vec3(0,0,0);
-			   cyl2->angularVelocity = vec3(0,1,0);
-			   cyl2->color = vec4(0,1,0,1);
-
-			   Cylinder* cyl3 = cylinder[2];
-			   cyl3->velocity = vec4(0,0,0,0);
-			   cyl3->position = vec4(0,-3.5,2,1);
-			   cyl3->orientation = vec3(0,0,0);
-			   cyl3->angularVelocity = vec3(0,0,1);
-			   cyl3->color = vec4(0,0,1,1);*/
+	addPlane();
 	grid = Grid(plane);
-
-	GLuint vertexbuffer;
-	glGenBuffers(1, &vertexbuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-	glBufferData(GL_ARRAY_BUFFER, indexed_vertices.size() * sizeof(glm::vec3), &indexed_vertices[0], GL_STATIC_DRAW);
-
-	GLuint rotatebuffer;
-	glGenBuffers(1, &rotatebuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, rotatebuffer);
-	glBufferData(GL_ARRAY_BUFFER, indexed_rotates.size() * sizeof(glm::mat4), &indexed_rotates[0], GL_STATIC_DRAW);
-	GLuint uvbuffer;
-	glGenBuffers(1, &uvbuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-	glBufferData(GL_ARRAY_BUFFER, indexed_uvs.size() * sizeof(glm::vec2), &indexed_uvs[0], GL_STATIC_DRAW);
-
-	GLuint normalbuffer;
-	glGenBuffers(1, &normalbuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-	glBufferData(GL_ARRAY_BUFFER, indexed_normals.size() * sizeof(glm::vec3), &indexed_normals[0], GL_STATIC_DRAW);
-
-	// Generate a buffer for the indices as well
-	GLuint elementbuffer;
-	glGenBuffers(1, &elementbuffer);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short), &indices[0], GL_STATIC_DRAW);
-
-	// Get a handle for our "LightPosition" uniform
-	glUseProgram(programID2);
-	GLuint LightID = glGetUniformLocation(programID2, "LightPosition_worldspace");
 
 	// For speed computation
 	double lastTime = glfwGetTime();
@@ -475,13 +352,10 @@ int main(void) {
 			nbFrames = 0;
 			lastTime += 1.0;
 		}
-
 		// Clear the screen
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 		// Use our shader
 		glUseProgram(programID2);
-
 		// Compute the MVP matrix from keyboard and mouse input
 		grid.hashGrid(c3, cylinder, sphere);
 		if ( update || playOneFrame ) {
@@ -514,114 +388,15 @@ int main(void) {
 			Rigidbody* planeObject = dynamic_cast<Rigidbody*>(plane[i]);
 			planeObject->renderObject(matrixIDs, 0.01f, 0, update, playOneFrame);
 		}
-		playOneFrame = 0;
-		glm::mat4 ScaleMatrix = mat4();
-		glm::mat4 RotateMatrix = mat4();
-		glm::mat4 TranslateMatrix = mat4();
-		glm::mat4 RotateModel = mat4(1);
-		glm::mat4 TranslateModel = mat4(1);
-		glUniformMatrix4fv(ScaleMatrixID, 1, GL_FALSE, &ScaleMatrix[0][0]);
-		glUniformMatrix4fv(RotateMatrixID, 1, GL_FALSE, &RotateMatrix[0][0]);
-		glUniformMatrix4fv(TranslateMatrixID, 1, GL_FALSE, &TranslateMatrix[0][0]);
-		glUniformMatrix4fv(TranslateModelID, 1, GL_FALSE, &TranslateModel[0][0]);
-		glUniformMatrix4fv(RotateModelID, 1, GL_FALSE, &RotateModel[0][0]);
-		// Send our transformation to the currently bound shader, 
-		// in the "MVP" uniform
-		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-		glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
-		glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
-
-		glm::vec3 lightPos = glm::vec3(4, 4, 4);
-		glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
-
-
-		//1rst attribute buffer : vertices
-		glEnableVertexAttribArray(vertexPosition_modelspaceID);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-		glVertexAttribPointer(
-			vertexPosition_modelspaceID,  // The attribute we want to configure
-			3,                            // size
-			GL_FLOAT,                     // type
-			GL_FALSE,                     // normalized?
-			0,                            // stride
-			(void*)0                      // array buffer offset
-			);
-		glEnableVertexAttribArray(vertexRotation_modelspaceID);
-		glBindBuffer(GL_ARRAY_BUFFER, rotatebuffer);
-		glVertexAttribPointer(
-			vertexRotation_modelspaceID,  // The attribute we want to configure
-			16,                            // size
-			GL_FLOAT,                     // type
-			GL_FALSE,                     // normalized?
-			0,                            // stride
-			(void*)0                      // array buffer offset
-			);
-		// 2nd attribute buffer : UVs
-		glEnableVertexAttribArray(vertexUVID);
-		glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-		glVertexAttribPointer(
-			vertexUVID,                   // The attribute we want to configure
-			2,                            // size : U+V => 2
-			GL_FLOAT,                     // type
-			GL_FALSE,                     // normalized?
-			0,                            // stride
-			(void*)0                      // array buffer offset
-			);
-
-		// 3rd attribute buffer : normals
-		glEnableVertexAttribArray(vertexNormal_modelspaceID);
-		glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-		glVertexAttribPointer(
-			vertexNormal_modelspaceID,    // The attribute we want to configure
-			3,                            // size
-			GL_FLOAT,                     // type
-			GL_FALSE,                     // normalized?
-			0,                            // stride
-			(void*)0                      // array buffer offset
-			);
-
-		// Index buffer
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-
-		// Draw the triangles !
-		glDrawElements(
-			GL_TRIANGLES,      // mode
-			indices.size(),    // count
-			GL_UNSIGNED_SHORT, // type
-			(void*)0           // element array buffer offset
-			);
-
-		glDisableVertexAttribArray(vertexPosition_modelspaceID);
-		glDisableVertexAttribArray(vertexRotation_modelspaceID);
-		glDisableVertexAttribArray(vertexUVID);
-		glDisableVertexAttribArray(vertexNormal_modelspaceID);
-
-		//glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-		/*glColor3f(0.0f,0.5f,0.0f);
-		gluCylinder(gluNewQuadric(),0.1,0.1,1,20,2);
-		GLUquadric* sphere;
-		sphere=gluNewQuadric();
-		gluQuadricNormals(sphere, GL_SMOOTH);
-		glColor3f(1,0,0);
-		gluSphere(sphere,0.2,10,10);*/
 		// Swap buffers
 		glfwSwapBuffers();
 		playOneFrame = 0;
 	} // Check if the ESC key was pressed or the window was closed
 	while ( glfwGetKey(GLFW_KEY_ESC) != GLFW_PRESS &&
 	glfwGetWindowParam(GLFW_OPENED) );
-
-	// Cleanup VBO and shader
-	glDeleteBuffers(1, &vertexbuffer);
-	glDeleteBuffers(1, &rotatebuffer);
-	glDeleteBuffers(1, &uvbuffer);
-	glDeleteBuffers(1, &normalbuffer);
-	glDeleteBuffers(1, &elementbuffer);
 	glDeleteProgram(programID2);
-
 	// Close OpenGL window and terminate GLFW
 	glfwTerminate();
-
 	return 0;
 }
 
