@@ -75,13 +75,13 @@ public:
 	virtual vec3 inline getSkin() {
 		return vec3(1, 1, 1);
 	}
-	virtual void inline addForce(float gravity) {
+	virtual void inline addGravity(float gravity) {
 		velocity += vec4(0, -gravity, 0, 0);
 	}
 	virtual void inline addMomentum(vec4 momentum) {
 		velocity = velocity + momentum / mass;
 		velocity *= 0.90;
-		if ( length(velocity) < 0.1f ) {
+		if ( length(velocity) < 0.25f ) {
 			velocity = vec4(0);
 		}
 	}
@@ -117,7 +117,7 @@ public:
 	virtual void inline updatePosition(float time, float gravity) {
 		position += (velocity)*time;
 		orientation += angularVelocity*time;
-		addForce(gravity);
+		addGravity(gravity);
 		if ( gravity != 0 ) velocity *= 0.98f;
 		angularVelocity *= 0.98f;
 	}
