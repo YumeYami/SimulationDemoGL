@@ -140,6 +140,25 @@ public:
 	}
 	virtual void inline render() = 0;
 	virtual void inline setEdge() {}
+	void renderObject(GLuint matrixIDs[], float aTimeStep, float aGravity, int update, int playOneFrame) {
+		if ( update || playOneFrame ) {
+			updatePosition(aTimeStep, aGravity);
+			setEdge();
+		}
+		glm::mat4 ScaleMatrix = mat4();
+		glm::mat4 RotateMatrix = getRotationMatrix();
+		glm::mat4 TranslateMatrix = getTranslationMatrix();
+		glm::mat4 RotateModel = mat4(1);
+		glm::mat4 TranslateModel = mat4(1);
+		glPushMatrix();
+		glUniformMatrix4fv(matrixIDs[0], 1, GL_FALSE, &ScaleMatrix[0][0]);
+		glUniformMatrix4fv(matrixIDs[1], 1, GL_FALSE, &RotateMatrix[0][0]);
+		glUniformMatrix4fv(matrixIDs[2], 1, GL_FALSE, &TranslateMatrix[0][0]);
+		glUniformMatrix4fv(matrixIDs[3], 1, GL_FALSE, &TranslateModel[0][0]);
+		glUniformMatrix4fv(matrixIDs[4], 1, GL_FALSE, &RotateModel[0][0]);
+		render();
+		glPopMatrix();
+	}
 };
 //End guard at bottom of header file
 #endif 

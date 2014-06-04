@@ -500,19 +500,19 @@ int main(void) {
 		GLuint matrixIDs[] = {ScaleMatrixID, RotateMatrixID, TranslateMatrixID, TranslateModelID, RotateModelID};
 		for ( int i = 0; i < c3.size(); i++ ) {
 			Rigidbody* cubeObject = dynamic_cast<Rigidbody*>(c3[i]);
-			renderObject(cubeObject, matrixIDs, timeStep, GRAVITY*enGravity);
+			cubeObject->renderObject(matrixIDs, timeStep, GRAVITY*enGravity, update, playOneFrame);
 		}
 		for ( int i = 0; i < sphere.size(); i++ ) {
 			Rigidbody* sphereObject = dynamic_cast<Rigidbody*>(sphere[i]);
-			renderObject(sphereObject, matrixIDs, timeStep, GRAVITY*enGravity);
+			sphereObject->renderObject(matrixIDs, timeStep, GRAVITY*enGravity, update, playOneFrame);
 		}
 		for ( int i = 0; i < cylinder.size(); i++ ) {
 			Rigidbody* cylinderObject = dynamic_cast<Rigidbody*>(cylinder[i]);
-			renderObject(cylinderObject, matrixIDs, timeStep, GRAVITY*enGravity);
+			cylinderObject->renderObject(matrixIDs, timeStep, GRAVITY*enGravity, update, playOneFrame);
 		}
 		for ( int i = 0; i < plane.size(); i++ ) {
 			Rigidbody* planeObject = dynamic_cast<Rigidbody*>(plane[i]);
-			renderObject(planeObject, matrixIDs, 0.01f, 0);
+			planeObject->renderObject(matrixIDs, 0.01f, 0, update, playOneFrame);
 		}
 		playOneFrame = 0;
 		glm::mat4 ScaleMatrix = mat4();
