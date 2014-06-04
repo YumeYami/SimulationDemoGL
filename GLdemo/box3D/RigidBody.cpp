@@ -139,7 +139,7 @@ public:
 		accuAngularMomentum = vec3(0);
 	}
 	virtual void inline render() = 0;
-	//virtual void inline setEdge();
+	virtual void inline setEdge() {}
 };
 //End guard at bottom of header file
 #endif 
