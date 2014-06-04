@@ -454,20 +454,16 @@ void inline checkCollision_CylinderCylinder(Cylinder* cyl1, Cylinder* cyl2) {
 }
 
 void inline checkCollision(vector<Cube*> cu, vector<Cylinder*> cy, vector<Plane*> pl, vector<Sphere*> sp) {
-	//cout <<"size "<<cu.size()<<" "<<cy.size()<<" "<<pl.size()<<" "<<sp.size()<<"\n";
+	cout <<"size "<<cu.size()<<" "<<cy.size()<<" "<<pl.size()<<" "<<sp.size()<<"\n";
 	for ( int i = 0; i < sp.size(); i++ ) {
 		Sphere* sp1 = sp.at(i);
-
 		for ( int j = 0; j < cu.size(); j++ ) checkCollision_SphereCube(sp1, cu.at(j));
 		for ( int j = 0; j < cy.size(); j++ ) checkCollision_SphereCylinder(sp1, cy.at(j));
-		for ( int j = 0; j < pl.size(); j++ ) {
-			checkCollision_SpherePlane(sp1, pl.at(j));
-			//cout<<"check\n";
+		for ( int j = 0; j < pl.size(); j++ ) checkCollision_SpherePlane(sp1, pl.at(j));
+		if ( i < sp.size() - 1 ) {
+			for ( int j = i + 1; j < sp.size(); j++ ) checkCollision_SphereSphere(sp1, sp.at(j));
 		}
-		if ( i < sp.size() - 1 )
-		for ( int j = i + 1; j < sp.size(); j++ ) {
-			checkCollision_SphereSphere(sp1, sp.at(j));
-		}
+		cout << i << " check\n";
 	}
 	for ( int i = 0; i < pl.size(); i++ ) {
 		Plane* pl1 = pl.at(i);

@@ -448,6 +448,7 @@ int main(void) {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	do {
+		cout << "main loop";
 		// Measure speed
 		double currentTime = glfwGetTime();
 		nbFrames++;
