@@ -10,14 +10,26 @@
 float inline minn(float x, float y) {
 	return (x < y ? x : y);
 }
-//
-bool inline outOfBound_rough_check(Rigidbody* rigid1, Rigidbody* rigid2) {
+
+bool inline convergent_check(Rigidbody* rigid1, Rigidbody* rigid2) {
+	if ( Plane* plane = dynamic_cast<Plane*>(rigid1) ) {
+		return (projectSize(rigid2->velocity, plane->getNormal()) >= 0) ? false : true;
+	}
+	else  if ( Plane* plane = dynamic_cast<Plane*>(rigid2) ) {
+		return (projectSize(rigid1->velocity, plane->getNormal()) >= 0) ? false : true;
+	}
+	return (dot(rigid1->velocity - rigid2->velocity, rigid1->position - rigid2->position) >= 0) ? false : true;
+}
+bool inline outOfBound_check(Rigidbody* rigid1, Rigidbody* rigid2) {
 	float dist = length(rigid1->position - rigid2->position);
 	//cout << dist << " " << rigid1->boundedRadius<<" " << rigid2->boundedRadius << "\n";
-	return (dist > rigid1->boundedRadius + rigid2->boundedRadius) ? true : false;
+	if ( dist > rigid1->boundedRadius + rigid2->boundedRadius ) return true;
+	else if ( !convergent_check(rigid1, rigid2) )return true;
+	else return false;
 }
+//
 void inline checkCollision_SphereCube(Sphere* sph1, Cube* cube2) {
-	if ( outOfBound_rough_check(sph1, cube2) ) return;
+	if ( outOfBound_check(sph1, cube2) ) return;
 	//bounded sphere check
 	//cout<<"check cube\n";
 	for ( int i = 0; i < 12; i++ ) {
@@ -33,7 +45,7 @@ void inline checkCollision_SphereCube(Sphere* sph1, Cube* cube2) {
 }
 //
 void inline checkCollision_SphereCylinder(Sphere* sph1, Cylinder* cylinder2) {
-	if ( outOfBound_rough_check(sph1, cylinder2) ) return;
+	if ( outOfBound_check(sph1, cylinder2) ) return;
 	//bounded sphere check
 	vec4 spherePos = cylinder2->getInverseRatationMatrix()*(sph1->position - cylinder2->position);
 	vec4 cylNormal = vec4(0, 1, 0, 0);
@@ -56,7 +68,7 @@ void inline checkCollision_SphereCylinder(Sphere* sph1, Cylinder* cylinder2) {
 }
 //
 void inline checkCollision_SpherePlane(Sphere* sph1, Plane* plane2) {
-	if ( outOfBound_rough_check(sph1, plane2) ) return;
+	if ( outOfBound_check(sph1, plane2) ) return;
 	//bounded sphere check
 	vec4 spPos = sph1->position;
 	float radius = sph1->radius;
@@ -68,7 +80,7 @@ void inline checkCollision_SpherePlane(Sphere* sph1, Plane* plane2) {
 }
 //
 void inline checkCollision_SphereSphere(Sphere* sph1, Sphere* sph2) {
-	if ( outOfBound_rough_check(sph1, sph2) ) return;
+	if ( outOfBound_check(sph1, sph2) ) return;
 	//bounded sphere check
 	vec4 sphPos = sph1->position;
 	float radius = sph1->radius;
@@ -82,7 +94,7 @@ void inline checkCollision_SphereSphere(Sphere* sph1, Sphere* sph2) {
 }
 //some bug
 void inline checkCollision_PlaneCube(Plane* plane1, Cube* cube2) {
-	if ( outOfBound_rough_check(plane1, cube2) ) return;
+	if ( outOfBound_check(plane1, cube2) ) return;
 	//bounded sphere check
 	for ( int i = 0; i < 12; i++ ) {
 		vec4 start = (cube2->edgeSta[i]);
@@ -99,7 +111,7 @@ void inline checkCollision_PlaneCube(Plane* plane1, Cube* cube2) {
 }
 //
 void inline checkCollision_PlaneCylinder(Plane* plane1, Cylinder* cylinder2) {
-	if ( outOfBound_rough_check(plane1, cylinder2) ) return;
+	if ( outOfBound_check(plane1, cylinder2) ) return;
 	//bounded sphere check
 	vec4 planeNormal = plane1->getNormal();
 	if ( projectSize(cylinder2->velocity, planeNormal) >= 0 ) return;
@@ -122,7 +134,7 @@ void inline checkCollision_PlaneCylinder(Plane* plane1, Cylinder* cylinder2) {
 }
 //on code
 void inline checkCollision_CubeCube(Cube* sph1, Cube* sph2) {
-	if ( outOfBound_rough_check(sph1, sph2) ) return;
+	if ( outOfBound_check(sph1, sph2) ) return;
 	//bounded sphere check
 	if ( projectSize(sph2->velocity - sph1->velocity, sph2->position - sph1->position) >= 0 ) return;
 	vec4 sphPos = sph1->position;
