@@ -79,10 +79,10 @@ public:
 		velocity += vec4(0, -gravity, 0, 0);
 	}
 	virtual void inline addMomentum(vec4 momentum) {
-		velocity = velocity + momentum;
-		velocity *= 0.90;
+		velocity = velocity + momentum/mass;
+		//velocity *= 0.90;
 	}
-	virtual void inline addAngularMomentum_vec4(vec4 angularMomentum) {
+	virtual void inline addAngularMomentum(vec4 angularMomentum) {
 		angularVelocity += vec3(angularMomentum);
 		if ( length(angularVelocity) >= 1 )angularVelocity *= 1 / length(angularVelocity);
 		//printVec4("anguvelo ",vec4(angularVelocity,0));
@@ -115,7 +115,7 @@ public:
 		position += (velocity)*time;
 		orientation += angularVelocity*time;
 		addForce(gravity);
-		if ( gravity != 0 ) velocity *= 0.98f;
+		//if ( gravity != 0 ) velocity *= 0.98f;
 		angularVelocity *= 0.98f;
 	}
 	virtual vec4 getColPoint() {

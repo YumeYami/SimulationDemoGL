@@ -155,17 +155,17 @@ void inline colSphere_Sphere(Sphere* sph1, Sphere* sph2) {
 	sph1->addMomentum(normalize(dist)*lineMomentum);
 	sph2->addMomentum(normalize(dist)*-lineMomentum);
 	vec3 angularMomentum = cross(vec3(relatevelo), normalize(vec3(dist)));
-	sph1->addAngularMomentum_vec4(sph1->getInverseRatationMatrix()*vec4(angularMomentum, 0));
-	sph2->addAngularMomentum_vec4(sph2->getInverseRatationMatrix()*vec4(-angularMomentum, 0));
+	sph1->addAngularMomentum(sph1->getInverseRatationMatrix()*vec4(angularMomentum, 0));
+	sph2->addAngularMomentum(sph2->getInverseRatationMatrix()*vec4(-angularMomentum, 0));
 }
 //completed
 void inline colSphere_Plane(Sphere* sph1, Plane* plane2, vec4 height) {
-	printVec4("velo", sph1->velocity);
-	vec4 planeNormal = plane2->getNormal();
-	vec4 newVelo = projectVec(-sph1->velocity, plane2->getNormal());
-	vec4 velo = sph1->velocity + newVelo*2.0f;
-	sph1->addMomentum(newVelo*2.0f);
-	sph1->updatePosition(height*(length(sph1->radius) - length(height)));
+	//printVec4("velo", sph1->velocity);
+	//vec4 planeNormal = plane2->getNormal();
+	//vec4 newVelo = projectVec(-sph1->velocity, plane2->getNormal());
+	//vec4 velo = sph1->velocity + newVelo*2.0f;
+	sph1->addMomentum(height*0.2f);
+	//sph1->updatePosition(height*(length(sph1->radius) - length(height)));
 }
 //completed
 void inline colSphere_Cube(Sphere* sph1, Cube* cube2, vec4 colPoint_ModelSphere) {
@@ -175,11 +175,11 @@ void inline colSphere_Cube(Sphere* sph1, Cube* cube2, vec4 colPoint_ModelSphere)
 	vec4 moment1 = -projectVec(relatevelo, normalize(colPoint_ModelSphere));
 	//printVec4("cube velo",cube2->velocity);
 	sph1->addMomentum(-moment1);
-	sph1->addAngularMomentum_vec4(-relatevelo - moment1);
+	sph1->addAngularMomentum(-relatevelo - moment1);
 	vec4 colPoint_ModelCube = sph1->position - cube2->position + colPoint_ModelSphere;
 	vec4 moment2 = projectVec(relatevelo, -colPoint_ModelCube);
 	cube2->addMomentum(moment1);
-	cube2->addAngularMomentum_vec4(relatevelo - moment2);
+	cube2->addAngularMomentum(relatevelo - moment2);
 
 	//printVec4("cube ",-moment1);
 	//sph1->velocity=vec4(0,0,0,0);
@@ -227,18 +227,18 @@ void inline colCube_Cube(Cube* cube1, Cube* cube2, vec4 colPoint_ModelCube1) {
 	vec4 relatevelo = cube2->velocity - cube1->velocity;//ref from cu1
 	vec4 moment1 = -projectVec(relatevelo, normalize(colPoint_ModelCube1));
 	cube1->addMomentum(-moment1);
-	cube1->addAngularMomentum_vec4(-relatevelo - moment1);
+	cube1->addAngularMomentum(-relatevelo - moment1);
 	vec4 colPoint_ModelCube2 = cube1->position - cube2->position + colPoint_ModelCube1;
 	vec4 moment2 = projectVec(relatevelo, -colPoint_ModelCube2);
 	cube2->addMomentum(moment1);
-	cube2->addAngularMomentum_vec4((relatevelo - moment2)*0.01f);
+	cube2->addAngularMomentum((relatevelo - moment2)*0.01f);
 
 }
 void inline colCube_Cylinder(Cube* cube1, Cylinder* cy2, vec4 colPoint_ModelCube) {
 	vec4 relatevelo = cy2->velocity - cube1->velocity;//ref from cu1
 	vec4 moment1 = -projectVec(relatevelo, normalize(colPoint_ModelCube));
 	cube1->addMomentum(-moment1);
-	cube1->addAngularMomentum_vec4(-relatevelo - moment1);
+	cube1->addAngularMomentum(-relatevelo - moment1);
 	vec4 colPoint_ModelCyl = cube1->position - cy2->position + colPoint_ModelCube;
 	vec4 moment2 = projectVec(relatevelo, -colPoint_ModelCyl);
 	cy2->addMomentum(moment1);
@@ -252,7 +252,7 @@ void inline colPlane_Cylinder(Cylinder* cyl1, Plane* plane1, vec4 colPointCyl) {
 	vec4 moment1 = -projectVec(relatevelo, normalize(plane1->getNormal()));
 	//printVec4("cube velo",cube2->velocity);
 	cyl1->addMomentum(-2.0f*moment1);
-	cyl1->addAngularMomentum_vec4((-relatevelo - moment1)*0.1f);
+	cyl1->addAngularMomentum((-relatevelo - moment1)*0.1f);
 }
 
 void inline colCylinder_Cylinder(Cylinder* cy1, Cylinder* cy2, vec4 colPoint_ModelCy2) {
@@ -264,6 +264,6 @@ void inline colCylinder_Cylinder(Cylinder* cy1, Cylinder* cy2, vec4 colPoint_Mod
 	cy1->addMomentum(normalize(dist)*lineMomentum);
 	cy2->addMomentum(normalize(dist)*-lineMomentum);
 	vec3 angularMomentum = cross(vec3(relatevelo), normalize(vec3(dist)));
-	cy1->addAngularMomentum_vec4(cy1->getInverseRatationMatrix()*vec4(angularMomentum, 0));
-	cy2->addAngularMomentum_vec4(cy2->getInverseRatationMatrix()*vec4(-angularMomentum, 0));
+	cy1->addAngularMomentum(cy1->getInverseRatationMatrix()*vec4(angularMomentum, 0));
+	cy2->addAngularMomentum(cy2->getInverseRatationMatrix()*vec4(-angularMomentum, 0));
 }

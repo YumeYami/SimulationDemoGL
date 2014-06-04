@@ -31,7 +31,6 @@ void inline checkCollision_SphereCube(Sphere* sph1, Cube* cube2) {
 		}
 	}
 }
-
 //
 void inline checkCollision_SphereCylinder(Sphere* sph1, Cylinder* cylinder2) {
 	if ( outOfBound_rough_check(sph1, cylinder2) ) return;
@@ -66,7 +65,6 @@ void inline checkCollision_SpherePlane(Sphere* sph1, Plane* plane2) {
 	if ( length(height) <= radius ) {
 		colSphere_Plane(sph1, plane2, height);
 	}
-
 }
 //
 void inline checkCollision_SphereSphere(Sphere* sph1, Sphere* sph2) {
