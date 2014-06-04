@@ -87,10 +87,11 @@
     <ClCompile Include="box3D\CollisionResponse.cpp" />
     <ClCompile Include="box3D\CollisionDetection.cpp" />
     <ClCompile Include="box3D\CollsionGlobalFunc.cpp" />
-    <ClCompile Include="box3D\box3Drendering.cpp" />
     <ClCompile Include="box3D\Cone.cpp" />
     <ClCompile Include="box3D\Cube.cpp" />
     <ClCompile Include="box3D\Cylinder.cpp" />
+    <ClCompile Include="box3D\Grid.cpp" />
+    <ClCompile Include="box3D\GridCell.cpp" />
     <ClCompile Include="box3D\Plane.cpp" />
     <ClCompile Include="box3D\Rigidbody.cpp" />
     <ClCompile Include="box3D\Sphere.cpp" />
@@ -102,6 +103,8 @@
     <ClInclude Include="box3D\Cone.h" />
     <ClInclude Include="box3D\Cube.h" />
     <ClInclude Include="box3D\Cylinder.h" />
+    <ClInclude Include="box3D\Grid.h" />
+    <ClInclude Include="box3D\GridCell.h" />
     <ClInclude Include="box3D\Plane.h" />
     <ClInclude Include="box3D\Rigidbody.h" />
     <ClInclude Include="box3D\Sphere.h" />

@@ -24,9 +24,6 @@
     <ClCompile Include="demo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="box3D\box3Drendering.cpp">
-      <Filter>box3D</Filter>
-    </ClCompile>
     <ClCompile Include="box3D\Cone.cpp">
       <Filter>box3D</Filter>
     </ClCompile>
@@ -60,6 +57,12 @@
     <ClCompile Include="box3D\CollsionGlobalFunc.cpp">
       <Filter>box3D</Filter>
     </ClCompile>
+    <ClCompile Include="box3D\Grid.cpp">
+      <Filter>box3D</Filter>
+    </ClCompile>
+    <ClCompile Include="box3D\GridCell.cpp">
+      <Filter>box3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="box3D\Cone.h">
@@ -82,6 +85,12 @@
     </ClInclude>
     <ClInclude Include="box3D\util_func.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="box3D\Grid.h">
+      <Filter>box3D</Filter>
+    </ClInclude>
+    <ClInclude Include="box3D\GridCell.h">
+      <Filter>box3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
