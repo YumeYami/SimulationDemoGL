@@ -44,7 +44,7 @@ void addSphere() {
 	//vec3 position = vec3((gridSize - 5), begin_x + gridSize - 4, (gridSize - 5));
 	vec3 rotation = vec3(0, 0, 1);
 	vec3 velocity = vec3(rand() % 2 / 2.0, -rand() % 2 / 2.0, rand() % 2 / 2.0);
-	float size = rand() % 6 / 10.0 + 0.5;
+	float size = rand() % 25 / 10.0 + 0.5;
 	float mass = 1;
 	vec3 color = vec3(rand() % 11 / 10.0, rand() % 11 / 10.0, rand() % 11 / 10.0);
 	Sphere* sp = new Sphere(position, rotation, velocity, size, mass, color);
@@ -55,7 +55,7 @@ void addCube() {
 	//vec3 position = vec3(0, begin_x + gridSize - 4, 0 );
 	vec3 rotation = vec3(0, 0, 1);
 	vec3 velocity = vec3(rand() % 4 / 15.0, -rand() % 4 / 15.0, rand() % 4 / 15.0);
-	float size = 1;
+	float size = rand()%20/10+0.5;
 	float mass = 1;
 	vec3 color = vec3(rand() % 11 / 10.0, rand() % 11 / 10.0, rand() % 11 / 10.0);
 	Cube *cube = new Cube(position, rotation, velocity, size, mass, color);

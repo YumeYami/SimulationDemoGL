@@ -155,8 +155,8 @@ void inline colSphere_Sphere(Sphere* sph1, Sphere* sph2) {
 	sph1->addMomentum(normalize(dist)*lineMomentum);
 	sph2->addMomentum(normalize(dist)*-lineMomentum);
 	vec3 angularMomentum = cross(vec3(relatevelo), normalize(vec3(dist)));
-	sph1->addAngularMomentum(sph1->getInverseRatationMatrix()*vec4(angularMomentum, 0));
-	sph2->addAngularMomentum(sph2->getInverseRatationMatrix()*vec4(-angularMomentum, 0));
+	//sph1->addAngularMomentum(sph1->getInverseRatationMatrix()*vec4(angularMomentum, 0));
+	//sph2->addAngularMomentum(sph2->getInverseRatationMatrix()*vec4(-angularMomentum, 0));
 }
 //completed
 void inline colSphere_Plane(Sphere* sph1, Plane* plane2, vec4 height) {

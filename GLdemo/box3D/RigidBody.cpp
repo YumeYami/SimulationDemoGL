@@ -88,13 +88,13 @@ public:
 		velocity += vec4(0, -gravity, 0, 0);
 	}
 	virtual void inline addMomentum(vec4 momentum) {
-		printVec4("momentum",accuMomentum);
-		accuMomentum += momentum;
-		//velocity = velocity + momentum / mass;
-		//velocity *= 0.90;
-		//if ( length(velocity) < 0.1f ) {
-		//velocity = vec4(0);
-		//}
+		//printVec4("momentum",accuMomentum);
+		//accuMomentum += momentum;
+		velocity = velocity + momentum / mass;
+		velocity *= 0.90;
+		if ( length(velocity) < 0.1f ) {
+		velocity = vec4(0);
+		}
 	}
 	virtual void inline addAngularMomentum(vec4 angularMomentum) {
 		//angularVelocity += vec3(angularMomentum);
@@ -128,7 +128,7 @@ public:
 		position += addPosision;
 	}
 	virtual void inline updatePosition(float time, float gravity) {
-		velocity += (accuMomentum / mass)*0.9f;
+		//velocity += (accuMomentum / mass)*0.9f;
 		//if ( length(velocity) < 0.25 ) velocity = vec4(0);
 		position += (velocity)*time;
 		orientation += angularVelocity*time;

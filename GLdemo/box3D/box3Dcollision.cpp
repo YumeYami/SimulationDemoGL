@@ -126,18 +126,17 @@ void inline checkCollision_PlaneCylinder(Plane* plane1, Cylinder* cylinder2) {
 	}
 }
 //on code
-void inline checkCollision_CubeCube(Cube* sph1, Cube* sph2) {
-	if ( outOfBound_check(sph1, sph2) ) return;
+void inline checkCollision_CubeCube(Cube* cube1, Cube* cube2) {
+	if ( outOfBound_check(cube1, cube2) ) return;
 	//bounded sphere check
-	if ( projectSize(sph2->velocity - sph1->velocity, sph2->position - sph1->position) >= 0 ) return;
-	vec4 sphPos = sph1->position;
-	float size = sph1->size*1.4f;
-	vec4 d = sphPos - sph2->position;
+	//if ( projectSize(sph2->velocity - sph1->velocity, sph2->position - sph1->position) >= 0 ) return;
+	vec4 cubePos = cube1->position;
+	vec4 d = cubePos - cube2->position;
 	float distance = length(d);
-	float sumR = (size + sph2->size*1.4f) / 2;
-	if ( distance <= sumR ) {
+	//float sumR = (size + cube2->size*1.4f) / 2;
+	if ( distance <= (cube1->boundedRadius + cube2->boundedRadius)/2.0f ) {
 		//onCollision
-		colCube_Cube(sph1, sph2, (sph2->position - sph1->position) / 2.0f);
+		colCube_Cube(cube1, cube2, (cube2->position - cube1->position) / 2.0f);
 	}
 	else return;
 
@@ -494,7 +493,6 @@ public:
 	}
 	void addPlaneToGridCell(Plane* pl) {
 		plane.push_back(pl);
-		//cout << "grid plane size " << plane.size()<<"\n";
 	}
 	void clearGridCellPlane() {
 		plane.clear();
