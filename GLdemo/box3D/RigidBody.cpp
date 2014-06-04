@@ -40,10 +40,12 @@ public:
 	vec4 position;
 	vec4 velocity;
 	float mass;
+	vec4 accuMomentum;
 
 	vec3 orientation;
 	vec3 angularVelocity;
 	vec3 inertia;
+	vec3 accuAngularMomentum;
 
 	float size;
 	float boundedRadius;
@@ -55,10 +57,12 @@ public:
 		position = vec4(0, 0, 0, 1);
 		velocity = vec4(0, 0, 0, 0);
 		mass = 1;
+		accuMomentum = vec4(0);
 
 		orientation = vec3(0, 0, 0);
 		angularVelocity = vec3(0, 0, 0);
 		inertia = vec3(1.0f);
+		accuAngularMomentum = vec3(0);
 
 		size = 1;
 		boundedRadius = 1;
@@ -81,19 +85,22 @@ public:
 	virtual void inline addMomentum(vec4 momentum) {
 		velocity = velocity + momentum / mass;
 		velocity *= 0.90;
-		if ( length(velocity) < 0.25f ) {
+		if ( length(velocity) < 0.1f ) {
 			velocity = vec4(0);
 		}
+		//accuMomentum += momentum;
 	}
 	virtual void inline addAngularMomentum(vec4 angularMomentum) {
-		angularVelocity += vec3(angularMomentum);
-		if ( length(angularVelocity) >= 1 )angularVelocity *= 1 / length(angularVelocity);
+		//angularVelocity += vec3(angularMomentum);
+		//if ( length(angularVelocity) >= 1 )angularVelocity *= 1 / length(angularVelocity);
 		//printVec4("anguvelo ",vec4(angularVelocity,0));
+		accuAngularMomentum += vec3(angularMomentum);
 	}
 	virtual void inline addAngularMomentum(vec3 angularMomentum) {
-		angularVelocity += angularMomentum;
-		if ( length(angularVelocity) >= 1 )angularVelocity *= 1 / length(angularVelocity);
+		//angularVelocity += angularMomentum;
+		//if ( length(angularVelocity) >= 1 )angularVelocity *= 1 / length(angularVelocity);
 		//printVec4("anguvelo ",vec4(angularVelocity,0));
+		accuAngularMomentum += angularMomentum;
 	}
 	virtual vec4 inline getNormal() {
 		return normalize(getRotationMatrix()*vec4(0, 1, 0, 0));
@@ -115,15 +122,12 @@ public:
 		position += addPosision;
 	}
 	virtual void inline updatePosition(float time, float gravity) {
+		velocity += (accuMomentum / mass)*0.9f;
 		position += (velocity)*time;
 		orientation += angularVelocity*time;
 		addGravity(gravity);
 		if ( gravity != 0 ) velocity *= 0.98f;
 		angularVelocity *= 0.98f;
-	}
-	virtual vec4 getColPoint() {
-
-		return vec4(0, 0, 0, 0);
 	}
 };
 void inline printVec4(std::string name, vec4 vec) {

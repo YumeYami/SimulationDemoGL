@@ -163,9 +163,14 @@ void inline colSphere_Plane(Sphere* sph1, Plane* plane2, vec4 height) {
 	//printVec4("velo", sph1->velocity);
 	vec4 planeNormal = plane2->getNormal();
 	vec4 changeMomentum = projectVec(-sph1->velocity, plane2->getNormal());
-	vec4 velo = sph1->velocity + changeMomentum*2.0f;
-	sph1->addMomentum(changeMomentum*2.0f);
+	//vec4 velo = sph1->velocity + changeMomentum*2.0f;
+	sph1->addMomentum(changeMomentum*1.9f);
 	//sph1->updatePosition(height*2.0f*(length(sph1->radius) - length(height)));
+	/*vec4 centerVec = sph1->position - plane2->position;
+	vec4 height = projectVec(centerVec, plane2->getNormal()) - sph1->radius;
+	if ( length(height) < 0 )
+		sph1->addMomentum();*/
+	
 }
 //completed
 void inline colSphere_Cube(Sphere* sph1, Cube* cube2, vec4 colPoint_ModelSphere) {
