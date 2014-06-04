@@ -17,19 +17,17 @@ vec3 inline projectVec(vec3 vec, vec3 base) {
 float inline projectSize(vec4 vec, vec4 base) {
 	return dot(vec, base) / length(base);
 }
-//return project vec
 vec3 inline projectVecCross_vec3(vec3 vec, vec3 base) {
 	vec3 temp = cross(vec, normalize(base));
 	return cross(normalize(base), temp);
 }
-//parallel test
 bool inline isParallel(vec4 normal1, vec4 normal2) {
 	if ( dot(normal1, normal2) - length(normal1)*length(normal2) <= PARALLEL_SIZE ) {
 
 	}
 }
 //
-float inline dist3D_Line_to_Line(vec4 l1p1, vec4 l1p0, vec4 l2p1, vec4 l2p0) {
+float inline min_dist_line_to_line(vec4 l1p1, vec4 l1p0, vec4 l2p1, vec4 l2p0) {
 	vec4   u = l1p1 - l1p0;
 	vec4   v = l2p1 - l2p0;
 	vec4   w = l1p0 - l2p0;
@@ -56,11 +54,7 @@ float inline dist3D_Line_to_Line(vec4 l1p1, vec4 l1p0, vec4 l2p1, vec4 l2p0) {
 
 	return length(dP);   // return the closest distance
 }
-//===================================================================
-// dist3D_Segment_to_Segment(): get the 3D minimum distance between 2 segments
-//    Input:  two 3D line segments S1 and S2
-//    Return: the shortest distance between S1 and S2
-vec4 inline dist3D_Segment_to_Segment(vec4 s1p1, vec4 s1p0, vec4 s2p1, vec4 s2p0) {
+vec4 inline min_dist_segment_to_segment(vec4 s1p1, vec4 s1p0, vec4 s2p1, vec4 s2p0) {
 	vec4   u = s1p1 - s1p0;
 	vec4   v = s2p1 - s2p0;
 	vec4   w = s1p0 - s2p0;
@@ -128,15 +122,13 @@ vec4 inline dist3D_Segment_to_Segment(vec4 s1p1, vec4 s1p0, vec4 s2p1, vec4 s2p0
 
 	return dP;   // return the closest distance
 }
-//minimum distance point to line
-vec4 inline dist3D_Line_to_point(vec4 line_start, vec4 line_end, vec4 point) {
+vec4 inline min_dist_line_to_point(vec4 line_start, vec4 line_end, vec4 point) {
 	vec4 lineVec = line_end - line_start;
 	vec4 pointPos = point - line_start;
 	vec4 proj = projectVec(pointPos, lineVec);
 	return -pointPos + proj;
 }
-//minimum distance segment to line
-vec4 inline dist3D_Segment_to_point(vec4 line_start, vec4 line_end, vec4 point) {
+vec4 inline min_dist_segment_to_point(vec4 line_start, vec4 line_end, vec4 point) {
 	vec4 lineVec = line_end - line_start;
 	vec4 pointPos = point - line_start;
 	vec4 proj = projectVec(pointPos, lineVec);
@@ -144,8 +136,7 @@ vec4 inline dist3D_Segment_to_point(vec4 line_start, vec4 line_end, vec4 point) 
 	if ( length(proj) >= length(lineVec) ) return -pointPos + lineVec;
 	return -pointPos + proj;
 }
-
-//completed
+//===================================================================
 void inline colSphere_Sphere(Sphere* sph1, Sphere* sph2) {
 	vec4 dist = sph2->position - sph1->position;
 	vec4 velo1 = sph1->velocity;
@@ -158,7 +149,6 @@ void inline colSphere_Sphere(Sphere* sph1, Sphere* sph2) {
 	//sph1->addAngularMomentum(sph1->getInverseRatationMatrix()*vec4(angularMomentum, 0));
 	//sph2->addAngularMomentum(sph2->getInverseRatationMatrix()*vec4(-angularMomentum, 0));
 }
-//completed
 void inline colSphere_Plane(Sphere* sph1, Plane* plane2, vec4 height) {
 	//printVec4("velo", sph1->velocity);
 	vec4 planeNormal = plane2->getNormal();
@@ -172,7 +162,6 @@ void inline colSphere_Plane(Sphere* sph1, Plane* plane2, vec4 height) {
 		sph1->addMomentum();*/
 	
 }
-//completed
 void inline colSphere_Cube(Sphere* sph1, Cube* cube2, vec4 colPoint_ModelSphere) {
 	//cout<<"col sph1 cube: " <<"\n";
 
@@ -192,7 +181,6 @@ void inline colSphere_Cube(Sphere* sph1, Cube* cube2, vec4 colPoint_ModelSphere)
 	//sph1->angularVelocity=vec3(0,0,0);
 	//cube2->angularVelocity=vec3(0,0,0);
 }
-//completed
 void inline colSphere_Cylinder(Sphere* sph1, Cylinder* cy2, vec4 colPoint_ModelSphere) {
 	//cout<<"col sphere cylinder\n";
 	vec4 dist = cy2->position - sph1->position;
@@ -249,7 +237,6 @@ void inline colCube_Cylinder(Cube* cube1, Cylinder* cy2, vec4 colPoint_ModelCube
 	cy2->addMomentum(moment1);
 	//cy2->addAngularMomentum_vec4(relatevelo - moment2);
 }
-
 void inline colPlane_Cylinder(Cylinder* cyl1, Plane* plane1, vec4 colPointCyl) {
 	//vec4 moment1 = projectVec(-cylinder2->velocity , plane1->getNormal());
 	//cylinder2->addMomentum(moment1*2);
@@ -259,7 +246,6 @@ void inline colPlane_Cylinder(Cylinder* cyl1, Plane* plane1, vec4 colPointCyl) {
 	cyl1->addMomentum(-2.0f*moment1);
 	cyl1->addAngularMomentum((-relatevelo - moment1)*0.1f);
 }
-
 void inline colCylinder_Cylinder(Cylinder* cy1, Cylinder* cy2, vec4 colPoint_ModelCy2) {
 	vec4 dist = cy2->position - cy1->position;
 	vec4 velo1 = cy1->velocity;

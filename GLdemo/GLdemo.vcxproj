@@ -84,9 +84,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="box3D\box3DcalculateForce.cpp" />
-    <ClCompile Include="box3D\box3Dcollision.cpp" />
-    <ClCompile Include="box3D\box3DglobalRule.cpp" />
+    <ClCompile Include="box3D\CollisionResponse.cpp" />
+    <ClCompile Include="box3D\CollisionDetection.cpp" />
+    <ClCompile Include="box3D\CollsionGlobalFunc.cpp" />
     <ClCompile Include="box3D\box3Drendering.cpp" />
     <ClCompile Include="box3D\Cone.cpp" />
     <ClCompile Include="box3D\Cube.cpp" />
@@ -99,8 +99,6 @@
     <ClCompile Include="demo.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="box3D\box3Dcollision.h" />
-    <ClInclude Include="box3D\box3DglobalRule.h" />
     <ClInclude Include="box3D\Cone.h" />
     <ClInclude Include="box3D\Cube.h" />
     <ClInclude Include="box3D\Cylinder.h" />

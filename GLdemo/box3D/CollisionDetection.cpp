@@ -1,6 +1,8 @@
-#include "box3Dcollision.h"
-#include "box3DglobalRule.h"
-#include "box3DcalculateForce.cpp"
+#ifndef COLLISION_DETECTION_CPP
+#define COLLISION_DETECTION_CPP
+
+#include "CollsionGlobalFunc.cpp"
+#include "CollisionResponse.cpp"
 
 #define gridSize 13
 #define begin_x -5
@@ -33,7 +35,7 @@ void inline checkCollision_SphereCube(Sphere* sph1, Cube* cube2) {
 	for ( int i = 0; i < 12; i++ ) {
 		vec4 start = (cube2->edgeSta[i]);
 		vec4 end = (cube2->edgeEnd[i]);
-		vec4 colPoint = dist3D_Segment_to_point(start, end, sph1->position);
+		vec4 colPoint = min_dist_segment_to_point(start, end, sph1->position);
 		if ( length(colPoint) <= sph1->radius ) {
 			colSphere_Cube(sph1, cube2, colPoint);
 			return;
@@ -53,13 +55,13 @@ void inline checkCollision_SphereCylinder(Sphere* sph1, Cylinder* cylinder2) {
 		if ( projectDist <= cylinder2->length + sph1->radius ) return;
 		else {
 
-			colSphere_Cylinder(sph1, cylinder2, dist3D_Segment_to_point(cylinder2->getBasePoint(), cylinder2->getTopPoint(), sph1->position));
+			colSphere_Cylinder(sph1, cylinder2, min_dist_segment_to_point(cylinder2->getBasePoint(), cylinder2->getTopPoint(), sph1->position));
 		}
 	}
 	else {
 		if ( length(projectDist*cylNormal + vec4(cylinder2->radius, 0, 0, 0) - spherePos) >= sph1->radius ) return;
 		else {
-			colSphere_Cylinder(sph1, cylinder2, dist3D_Segment_to_point(cylinder2->getBasePoint(), cylinder2->getTopPoint(), sph1->position));
+			colSphere_Cylinder(sph1, cylinder2, min_dist_segment_to_point(cylinder2->getBasePoint(), cylinder2->getTopPoint(), sph1->position));
 		}
 	}
 }
@@ -384,8 +386,8 @@ void inline checkCollision_CubeCylinder(Cube* cyl1, Cylinder* cyl2) {
 //}
 void inline checkCollision_CylinderCylinder(Cylinder* cyl1, Cylinder* cyl2) {
 	if ( projectSize(cyl2->velocity - cyl1->velocity, cyl2->position - cyl1->position) >= 0 ) return;
-	vec4 minDistSegment = dist3D_Segment_to_Segment(cyl1->getBasePoint(), cyl1->getTopPoint(), cyl2->getBasePoint(), cyl2->getTopPoint());
-	float minDistLine = dist3D_Line_to_Line(cyl1->getBasePoint(), cyl1->getTopPoint(), cyl2->getBasePoint(), cyl2->getTopPoint());
+	vec4 minDistSegment = min_dist_segment_to_segment(cyl1->getBasePoint(), cyl1->getTopPoint(), cyl2->getBasePoint(), cyl2->getTopPoint());
+	float minDistLine = min_dist_line_to_line(cyl1->getBasePoint(), cyl1->getTopPoint(), cyl2->getBasePoint(), cyl2->getTopPoint());
 	if ( length(minDistSegment) >= cyl1->radius + cyl2->radius )return;
 	if ( minDistLine == length(minDistSegment) ) {
 		colCylinder_Cylinder(cyl1, cyl2, minDistSegment);
@@ -709,3 +711,4 @@ public:
 
 	}
 };
+#endif // !COLLISION_DETECTION_CPP

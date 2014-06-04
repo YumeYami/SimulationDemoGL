@@ -24,15 +24,6 @@
     <ClCompile Include="demo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="box3D\box3DcalculateForce.cpp">
-      <Filter>box3D</Filter>
-    </ClCompile>
-    <ClCompile Include="box3D\box3Dcollision.cpp">
-      <Filter>box3D</Filter>
-    </ClCompile>
-    <ClCompile Include="box3D\box3DglobalRule.cpp">
-      <Filter>box3D</Filter>
-    </ClCompile>
     <ClCompile Include="box3D\box3Drendering.cpp">
       <Filter>box3D</Filter>
     </ClCompile>
@@ -60,14 +51,17 @@
     <ClCompile Include="box3D\util_func.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="box3D\CollisionResponse.cpp">
+      <Filter>box3D</Filter>
+    </ClCompile>
+    <ClCompile Include="box3D\CollisionDetection.cpp">
+      <Filter>box3D</Filter>
+    </ClCompile>
+    <ClCompile Include="box3D\CollsionGlobalFunc.cpp">
+      <Filter>box3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="box3D\box3Dcollision.h">
-      <Filter>box3D</Filter>
-    </ClInclude>
-    <ClInclude Include="box3D\box3DglobalRule.h">
-      <Filter>box3D</Filter>
-    </ClInclude>
     <ClInclude Include="box3D\Cone.h">
       <Filter>box3D</Filter>
     </ClInclude>

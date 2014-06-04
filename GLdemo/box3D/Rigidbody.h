@@ -27,7 +27,7 @@
 //#include <common/objloader.hpp>
 //#include <common/vboindexer.hpp>
 //#include <common/quaternion_utils.hpp> // See quaternion_utils.cpp for RotationBetweenVectors, LookAt and RotateTowards
-#include "box3DglobalRule.cpp"
+#include "CollsionGlobalFunc.cpp"
 #include "util_func.h"
 
 void inline printVec4(std::string name, vec4 vec);

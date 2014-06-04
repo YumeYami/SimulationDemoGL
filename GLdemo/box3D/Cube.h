@@ -26,6 +26,4 @@ public:
 	void inline updateVeloCube(vec4 velo);
 	void inline render();
 };
-
-
 #endif

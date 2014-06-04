@@ -4,7 +4,7 @@
 #include <vector>
 #include <iostream>
 // Realtime - Project library
-#include "box3D/box3Dcollision.cpp"
+#include "box3D/CollisionDetection.cpp"
 #include "controls.hpp"
 #include <GL/glew.h>
 #include <GL/glfw.h>
