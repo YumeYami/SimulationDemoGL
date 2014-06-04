@@ -355,6 +355,7 @@ int main(void) {
 		for ( int i = 0; i < c3.size(); i++ ) {
 			Rigidbody* cubeObject = dynamic_cast<Rigidbody*>(c3[i]);
 			cubeObject->renderObject(matrixIDs, timeStep, GRAVITY*enGravity, update, playOneFrame);
+			//cubeObject->updatePosition(1,1);
 		}
 		for ( int i = 0; i < sphere.size(); i++ ) {
 			Rigidbody* sphereObject = dynamic_cast<Rigidbody*>(sphere[i]);

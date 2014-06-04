@@ -1,5 +1,5 @@
 ﻿#include "Cylinder.h"
-#include "Rigidbody.cpp"
+#include "Rigidbody.h"
 class Cylinder : public Rigidbody {
 public:
 	float radius;

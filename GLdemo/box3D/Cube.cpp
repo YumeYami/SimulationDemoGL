@@ -1,5 +1,5 @@
 ﻿#include "Cube.h"
-#include "Rigidbody.cpp"
+#include "Rigidbody.h"
 class Cube : public Rigidbody{
 public:
 	float vertex[8][3];

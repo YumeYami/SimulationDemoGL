@@ -1,5 +1,5 @@
 ﻿#include "Plane.h"
-#include "Rigidbody.cpp"
+#include "Rigidbody.h"
 using namespace std;
 class Plane : public Rigidbody {
 public:

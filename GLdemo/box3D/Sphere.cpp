@@ -1,5 +1,5 @@
 ﻿#include "Sphere.h"
-#include "Rigidbody.cpp"
+#include "Rigidbody.h"
 class Sphere : public Rigidbody {
 public:
 	float radius;
