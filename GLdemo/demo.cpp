@@ -322,9 +322,9 @@ void onPress() {
 	}
 
 }
-void renderObject(Rigidbody* rigidbody, GLuint matrixIDs[]) {
+void renderObject(Rigidbody* rigidbody, GLuint matrixIDs[], float aTimeStep, float aGravity) {
 	if ( update || playOneFrame ) {
-		rigidbody->updatePosition(timeStep, GRAVITY*enGravity);
+		rigidbody->updatePosition(aTimeStep, aGravity);
 		rigidbody->setEdge();
 	}
 	glm::mat4 ScaleMatrix = mat4();
@@ -500,32 +500,19 @@ int main(void) {
 		GLuint matrixIDs[] = {ScaleMatrixID, RotateMatrixID, TranslateMatrixID, TranslateModelID, RotateModelID};
 		for ( int i = 0; i < c3.size(); i++ ) {
 			Rigidbody* cubeObject = dynamic_cast<Rigidbody*>(c3[i]);
-			renderObject(cubeObject, matrixIDs);
+			renderObject(cubeObject, matrixIDs, timeStep, GRAVITY*enGravity);
 		}
 		for ( int i = 0; i < sphere.size(); i++ ) {
 			Rigidbody* sphereObject = dynamic_cast<Rigidbody*>(sphere[i]);
-			renderObject(sphereObject, matrixIDs);
+			renderObject(sphereObject, matrixIDs, timeStep, GRAVITY*enGravity);
 		}
 		for ( int i = 0; i < cylinder.size(); i++ ) {
 			Rigidbody* cylinderObject = dynamic_cast<Rigidbody*>(cylinder[i]);
-			renderObject(cylinderObject, matrixIDs);
+			renderObject(cylinderObject, matrixIDs, timeStep, GRAVITY*enGravity);
 		}
 		for ( int i = 0; i < plane.size(); i++ ) {
-			if ( update || playOneFrame )(*plane[i]).updatePosition(0.01f, 0);
-			glm::mat4 ScaleMatrix = mat4();
-			glm::mat4 RotateMatrix = (*plane[i]).getRotationMatrix();
-			glm::mat4 TranslateMatrix = (*plane[i]).getTranslationMatrix();
-			glm::mat4 RotateModel = mat4(1);
-			glm::mat4 TranslateModel = mat4(1);
-			glPushMatrix();
-			glUniformMatrix4fv(ScaleMatrixID, 1, GL_FALSE, &ScaleMatrix[0][0]);
-			glUniformMatrix4fv(RotateMatrixID, 1, GL_FALSE, &RotateMatrix[0][0]);
-			glUniformMatrix4fv(TranslateMatrixID, 1, GL_FALSE, &TranslateMatrix[0][0]);
-			glUniformMatrix4fv(TranslateModelID, 1, GL_FALSE, &TranslateModel[0][0]);
-			glUniformMatrix4fv(RotateModelID, 1, GL_FALSE, &RotateModel[0][0]);
-			glPolygonMode(GL_FRONT_AND_BACK, GL_SMOOTH);
-			plane[i]->render();
-			glPopMatrix();
+			Rigidbody* planeObject = dynamic_cast<Rigidbody*>(plane[i]);
+			renderObject(planeObject, matrixIDs, 0.01f, 0);
 		}
 		playOneFrame = 0;
 		glm::mat4 ScaleMatrix = mat4();
