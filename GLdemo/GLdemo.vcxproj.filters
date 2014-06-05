@@ -83,14 +83,14 @@
     <ClInclude Include="box3D\Sphere.h">
       <Filter>box3D</Filter>
     </ClInclude>
-    <ClInclude Include="box3D\util_func.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="box3D\Grid.h">
       <Filter>box3D</Filter>
     </ClInclude>
     <ClInclude Include="box3D\GridCell.h">
       <Filter>box3D</Filter>
+    </ClInclude>
+    <ClInclude Include="box3D\util_func.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

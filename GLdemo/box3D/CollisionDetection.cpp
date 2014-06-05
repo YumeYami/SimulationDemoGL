@@ -39,7 +39,6 @@ void inline checkCollision_SphereCube(Sphere* sph1, Cube* cube2) {
 		}
 	}
 }
-//
 void inline checkCollision_SphereCylinder(Sphere* sph1, Cylinder* cylinder2) {
 	if ( outOfBound_check(sph1, cylinder2) ) return;
 	//bounded sphere check
@@ -62,7 +61,6 @@ void inline checkCollision_SphereCylinder(Sphere* sph1, Cylinder* cylinder2) {
 		}
 	}
 }
-//
 void inline checkCollision_SpherePlane(Sphere* sph1, Plane* plane2) {
 	if ( outOfBound_check(sph1, plane2) ) return;
 	//bounded sphere check
@@ -74,7 +72,6 @@ void inline checkCollision_SpherePlane(Sphere* sph1, Plane* plane2) {
 		colSphere_Plane(sph1, plane2, height);
 	}
 }
-//
 void inline checkCollision_SphereSphere(Sphere* sph1, Sphere* sph2) {
 	if ( outOfBound_check(sph1, sph2) ) return;
 	//bounded sphere check
@@ -88,7 +85,6 @@ void inline checkCollision_SphereSphere(Sphere* sph1, Sphere* sph2) {
 		colSphere_Sphere(sph1, sph2);
 	}
 }
-//some bug
 void inline checkCollision_PlaneCube(Plane* plane1, Cube* cube2) {
 	if ( outOfBound_check(plane1, cube2) ) return;
 	//bounded sphere check
@@ -105,7 +101,6 @@ void inline checkCollision_PlaneCube(Plane* plane1, Cube* cube2) {
 		}
 	}
 }
-//
 void inline checkCollision_PlaneCylinder(Plane* plane1, Cylinder* cylinder2) {
 	if ( outOfBound_check(plane1, cylinder2) ) return;
 	//bounded sphere check
@@ -124,7 +119,6 @@ void inline checkCollision_PlaneCylinder(Plane* plane1, Cylinder* cylinder2) {
 		colPlane_Cylinder(cylinder2, plane1, lowestPos);
 	}
 }
-//on code
 void inline checkCollision_CubeCube(Cube* cube1, Cube* cube2) {
 	if ( outOfBound_check(cube1, cube2) ) return;
 	//bounded sphere check
@@ -272,7 +266,6 @@ void inline checkCollision_CubeCube(Cube* cube1, Cube* cube2) {
 	//	}
 	//}
 }
-//
 void inline checkCollision_CubeCylinder(Cube* cyl1, Cylinder* cyl2) {
 	if ( projectSize(cyl2->velocity - cyl1->velocity, cyl2->position - cyl1->position) >= 0 ) return;
 	if ( projectSize(cyl2->velocity - cyl1->velocity, cyl2->position - cyl1->position) >= 0 ) return;
@@ -286,101 +279,6 @@ void inline checkCollision_CubeCylinder(Cube* cyl1, Cylinder* cyl2) {
 		colCube_Cylinder(cyl1, cyl2, (cyl2->position - cyl1->position));
 	}
 }
-
-//float f1(float t,float r0,float r1,float h1b1Div2, float c1sqr,float a2,float b2){
-//	float omt = 1-t;
-//	float tsqr =t*t;
-//	float omtsqr = omt*omt;
-//	float term0=r0*sqrt(omtsqr+tsqr);
-//	float term1=r1*sqrt(omtsqr+c1sqr*tsqr);
-//	float term2 = h1b1Div2;
-//	float term3 = abs(omt*a2+t*b2);
-//	return term0+term1+term2-term3;
-//}
-//float fDer1(float t,float r0,float r1,float h1b1Div2, float c1sqr,float a2,float b2){
-//	float omt = 1-t;
-//	float tsqr =t*t;
-//	float omtsqr = omt*omt;
-//	float term0=r0*(2*t-1)/sqrt(omtsqr+tsqr);
-//	float term1=r1*((1+c1sqr)*t-1)/sqrt(omtsqr+c1sqr*tsqr);
-//	float term2 = h1b1Div2;
-//	float term3 = (b2-a2)*sign(omt*a2+t*b2);
-//	return term0+term1+term2-term3;
-//}
-//
-//int separatedByCylinderPerpendiculars2(vec3 p0,vec3 w0, float r0, float h0, vec3 p1,vec3 w1,float r1,float h1){
-//	vec3 delta = p1-p0;
-//	float c1 = dot(w0,w1);
-//	float b1 = sqrt(1-c1*c1);
-//	vec3 v0 = (w1-c1*w0)/b1;
-//	vec3 u0 = cross(v0,w0);
-//	float a2 = dot(delta,u0);
-//	float b2 = dot(delta,v0);
-////	(float t,float r0,float r1,float h1b1Div2, float c1sqr,float a2,float b2)
-//	if(f1(0,r0,r1,h1*b1/2,c1*c1,a2,b2)<=0||f1(1,r0,r1,h1*b1/2,c1*c1,a2,b2)<=0) return 1;
-//	if(fDer1(0,r0,r1,h1*b1/2,c1*c1,a2,b2)>=0||fDer1(1,r0,r1,h1*b1/2,c1*c1,a2,b2)<=0) return 0;
-//
-//	float t0,t1,fd0,fd1,tmid,fdmid;
-//	int i;
-//	t0=0;
-//	t1=1;
-//	tmid = 0.5*(t0+t1);
-//	if(f1(tmid,r0,r1,h1*b1/2,c1*c1,a2,b2)<=0) return 1;
-//	
-//	a2=-a2;
-//	if(f1(0,r0,r1,h1*b1/2,c1*c1,a2,b2)<=0 || f1(1,r0,r1,h1*b1/2,c1*c1,a2,b2)<=0) return 1;
-//	if(fDer1(0,r0,r1,h1*b1/2,c1*c1,a2,b2)>=0 || fDer1(1,r0,r1,h1*b1/2,c1*c1,a2,b2)<=0) return 0;
-//	
-//	if(f1(tmid,r0,r1,h1*b1/2,c1*c1,a2,b2)<=0) return 1;
-//	return 1;
-//}
-//
-//float g1(float s, float t, float r0, float h0Div2, float r1,float h1Div2,
-//		float a0,float b0,float c0,float a1,float b1,float c1,float lenDelta){
-//			float omsmt = 1-s-t;
-//			float ssqr =s*s;
-//			float tsqr=t*t;
-//			float omsmtsqr = omsmt*omsmt;
-//			float temp=ssqr+tsqr+omsmtsqr;
-//			float L0=a0*s+b0*t+c0*omsmt;
-//			float L1 = a1*s+b1*t+c1*omsmt;
-//			float Q0 = temp-L0*L0;
-//			float Q1=temp-L1*L1;
-//			return r0*sqrt(Q0)+r1*sqrt(Q1)+h0Div2*abs(L0)+h1Div2*abs(L1)-omsmt*lenDelta;
-//}
-//vec2 gDer1(float s, float t, float r0, float h0Div2, float r1,float h1Div2,
-//		float a0,float b0,float c0,float a1,float b1,float c1,float lenDelta){
-//			float omsmt = 1-s-t;
-//			float ssqr =s*s;
-//			float tsqr=t*t;
-//			float omsmtsqr = omsmt*omsmt;
-//			float temp=ssqr+tsqr+omsmtsqr;
-//			float L0=a0*s+b0*t+c0*omsmt;
-//			float L1 = a1*s+b1*t+c1*omsmt;
-//			float Q0 = temp-L0*L0;
-//			float Q1=temp-L1*L1;
-//			float diffS = s-omsmt, diffT = t-omsmt;
-//			float diffa0c0 = a0-c0,diffa1c1=a1-c1,diffb0c0=b0-c0,diffb1c1=b1-c1;
-//			float halfQ0s = diffS-diffa0c0*L0, halfQ1s=diffS-diffa1c1*L1;
-//			float halfQ0t = diffT-diffa0c0*L0, halfQ1t=diffT-diffa1c1*L1;
-//			float factor0 = r0/sqrt(Q0),factor1=r1/sqrt(L1);
-//			float signL0 = sign(L0),signL1=sign(L1);
-//			vec2 gradient = vec2(0,0);
-//			gradient[0]+=halfQ0s*factor0;
-//			gradient[0]+=halfQ1s*factor1;
-//			gradient[0]+=h0Div2*diffa0c0*signL0;
-//			gradient[0]+=h1Div2*diffa1c1*signL1;
-//			gradient[0]+=lenDelta;
-//			gradient[1]+=halfQ0t*factor0;
-//			gradient[1]+=halfQ1t*factor1;
-//			gradient[1]+=h0Div2*diffb0c0*signL0;
-//			gradient[1]+=h1Div2*diffb1c1*signL1;
-//			gradient[1]+=lenDelta;
-//			return gradient;
-//}
-//int separatedByOtherDirections1(vec3 w0,float r0,float h0,vec3 w1,float r1,float h1,vec3 delta){
-//	return 1;
-//}
 void inline checkCollision_CylinderCylinder(Cylinder* cyl1, Cylinder* cyl2) {
 	if ( projectSize(cyl2->velocity - cyl1->velocity, cyl2->position - cyl1->position) >= 0 ) return;
 	vec4 minDistSegment = min_dist_segment_to_segment(cyl1->getBasePoint(), cyl1->getTopPoint(), cyl2->getBasePoint(), cyl2->getTopPoint());
