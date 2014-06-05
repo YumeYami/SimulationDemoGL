@@ -4,25 +4,22 @@
 #include <vector>
 #include <iostream>
 // Realtime - Project library
-#include "box3D/CollisionDetection.cpp"
-#include "controls.hpp"
 #include <GL/glew.h>
 #include <GL/glfw.h>
 #include <GL/GLU.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <common/shader.cpp>
+
+#include "box3D/CollisionDetection.cpp"
+#include "demo.h"
+#include "controls.hpp"
+
 using namespace glm;
 using namespace std;
 
 #define GRAVITY 0.05f
 #define GLOBAL_FRICTION 0.01f
-
-std::vector<unsigned short> indices;
-std::vector<glm::vec3> indexed_vertices;
-std::vector<glm::mat4> indexed_rotates;
-std::vector<glm::vec2> indexed_uvs;
-std::vector<glm::vec3> indexed_normals;
 
 vector<Cube*> c3;
 vector<Sphere*> sphere;
@@ -31,9 +28,31 @@ vector<Plane*> plane;
 
 Grid grid;
 
+int lastkey[10];
+int lastKey1 = GLFW_RELEASE;
+int lastKey2 = GLFW_RELEASE;
+int lastKey3 = GLFW_RELEASE;
+int lastKey4 = GLFW_RELEASE;
+int lastKey5 = GLFW_RELEASE;
+int lastKey6 = GLFW_RELEASE;
+int lastKey7 = GLFW_RELEASE;
+int lastKey8 = GLFW_RELEASE;
+int lastKey9 = GLFW_RELEASE;
+int lastMouse = GLFW_RELEASE;
+int fixX = 0, fixY = 0;
+int showX = 0, showY = 0;
+int clickX1, clickY1 = 0;
+int clickX2, clickY2 = 0;
+int xposL, yposL;
+int pickObject = 0;
+int width = 512;
+int height = 384;
+int update = 1;
+int playFrame = 1;
+int playOneFrame = 0;
+int enGravity = 0;
+
 void addSphere() {
-	//0->8
-	//-2->6
 	vec3 position = vec3(rand() % (gridSize - 5) - 2, begin_x + gridSize - 4, rand() % (gridSize - 5) - 2);
 	//vec3 position = vec3((gridSize - 5), begin_x + gridSize - 4, (gridSize - 5));
 	vec3 rotation = vec3(0, 0, 1);
@@ -90,29 +109,6 @@ void transparentPlane() {
 		else plane[i]->color.a = 0.2f;
 	}
 }
-int lastkey[10];
-int lastKey1 = GLFW_RELEASE;
-int lastKey2 = GLFW_RELEASE;
-int lastKey3 = GLFW_RELEASE;
-int lastKey4 = GLFW_RELEASE;
-int lastKey5 = GLFW_RELEASE;
-int lastKey6 = GLFW_RELEASE;
-int lastKey7 = GLFW_RELEASE;
-int lastKey8 = GLFW_RELEASE;
-int lastKey9 = GLFW_RELEASE;
-int lastMouse = GLFW_RELEASE;
-int fixX = 0, fixY = 0;
-int showX = 0, showY = 0;
-int clickX1, clickY1 = 0;
-int clickX2, clickY2 = 0;
-int xposL, yposL;
-int pickObject = 0;
-int width = 512;
-int height = 384;
-int update = 1;
-int playFrame = 1;
-int playOneFrame = 0;
-int enGravity = 0;
 
 void pick(int mouse_x, int mouse_y) {
 	float x = (2.0f * mouse_x) / width - 1.0f;
@@ -268,7 +264,7 @@ void onPress() {
 //initial openGL
 //testing document
 int initOpenGL() {
-	// Initialise GLFW
+	// Initialize GLFW
 	if ( !glfwInit() ) {
 		fprintf(stderr, "Failed to initialize GLFW\n");
 		return -1;

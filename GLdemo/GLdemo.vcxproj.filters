@@ -92,6 +92,12 @@
     <ClInclude Include="box3D\util_func.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="demo.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="controls.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="StandardShading.vertexshader">

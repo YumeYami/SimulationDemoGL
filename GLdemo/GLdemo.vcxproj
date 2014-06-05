@@ -109,6 +109,8 @@
     <ClInclude Include="box3D\Rigidbody.h" />
     <ClInclude Include="box3D\Sphere.h" />
     <ClInclude Include="box3D\util_func.h" />
+    <ClInclude Include="controls.hpp" />
+    <ClInclude Include="demo.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="StandardShading.vertexshader" />

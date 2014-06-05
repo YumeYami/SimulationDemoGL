@@ -1,5 +1,7 @@
-// Include GLFW
+// Include GLEW, GWFW
+#include <GL/glew.h>
 #include <GL/glfw.h>
+#include <gl/GLU.h>
 
 // Include GLM
 #include <glm/glm.hpp>
@@ -7,6 +9,7 @@
 using namespace glm;
 #include <iostream>
 #include "controls.hpp"
+#include "demo.h"
 
 glm::mat4 ViewMatrix;
 glm::mat4 ProjectionMatrix;
