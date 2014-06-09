@@ -28,7 +28,7 @@ bool inline outOfBound_check(Rigidbody* rigid1, Rigidbody* rigid2) {
 	else return false;
 }
 //
-void inline checkCollision_SphereCube(Sphere* sph1, Cube* cube2) {
+void inline checkCollision_SphereCube(Sphere* sph1, Cube* cube2) {//completed
 	//bounded sphere check
 	if ( outOfBound_check(sph1, cube2) ) return;
 	vec4 sph_CubeSpace = cube2->getInverseRatationMatrix()*(sph1->position - cube2->position);
@@ -43,7 +43,6 @@ void inline checkCollision_SphereCube(Sphere* sph1, Cube* cube2) {
 			return;
 		}
 	}
-	printv4("sphtest ", sph_CubeSpace);
 	vec4 colPoint_CubeSpace = vec4(0);
 	if ( 0 < sph_CubeSpace.x && sph_CubeSpace.x < totalSize && abs(sph_CubeSpace.y) < cube2->size && abs(sph_CubeSpace.z) < cube2->size )
 		colPoint_CubeSpace = sph_CubeSpace - vec4(sph1->size, 0, 0, 0);
@@ -95,18 +94,11 @@ void inline checkCollision_SpherePlane(Sphere* sph1, Plane* plane2) {//completed
 		colSphere_Plane(sph1, plane2, height);
 	}
 }
-void inline checkCollision_SphereSphere(Sphere* sph1, Sphere* sph2) {
+void inline checkCollision_SphereSphere(Sphere* sph1, Sphere* sph2) {//completed
 	if ( outOfBound_check(sph1, sph2) ) return;
 	//bounded sphere check
-	vec4 sphPos = sph1->position;
-	float radius = sph1->radius;
-	vec4 d = sphPos - sph2->position;
-	float distance = length(d);
-	float sumR = radius + sph2->radius;
-	if ( distance <= sumR ) {
-		//onCollision
-		colSphere_Sphere(sph1, sph2);
-	}
+	else colSphere_Sphere(sph1, sph2);
+	//
 }
 void inline checkCollision_PlaneCube(Plane* plane1, Cube* cube2) {
 	if ( outOfBound_check(plane1, cube2) ) return;
@@ -369,7 +361,7 @@ void inline checkCollision(vector<Cube*> cu, vector<Cylinder*> cy, vector<Plane*
 	//cout <<"size "<<cu.size()<<" "<<cy.size()<<" "<<pl.size()<<" "<<sp.size()<<"\n";
 	for ( int i = 0; i < sp.size(); i++ ) {
 		Sphere* sp1 = sp.at(i);
-		for ( int j = 0; j < cu.size(); j++ ) checkCollision_SphereCube(sp1, cu.at(j));
+		for (unsigned int j = 0; j < cu.size(); j++ ) checkCollision_SphereCube(sp1, cu.at(j));
 		for ( int j = 0; j < cy.size(); j++ ) checkCollision_SphereCylinder(sp1, cy.at(j));
 		for ( int j = 0; j < pl.size(); j++ ) checkCollision_SpherePlane(sp1, pl.at(j));
 		if ( i < sp.size() - 1 ) {

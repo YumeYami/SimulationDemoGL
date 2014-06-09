@@ -27,7 +27,7 @@ vector<Plane*> plane;
 
 Grid grid;
 void addSphereTest() {
-	vec3 position = vec3(0, begin_x + gridSize-2, 0);
+	vec3 position = vec3(0, begin_x + gridSize - 2, 0);
 	vec3 velocity = vec3(0);
 	vec3 rotation = vec3(0, 0, 0);
 	float size = 2;
@@ -126,7 +126,9 @@ int lastKey6 = GLFW_RELEASE;
 int lastKey7 = GLFW_RELEASE;
 int lastKey8 = GLFW_RELEASE;
 int lastKey9 = GLFW_RELEASE;
+int lastKey0 = GLFW_RELEASE;
 int lastMouse = GLFW_RELEASE;
+int lastKeyZ = GLFW_RELEASE;
 int fixX = 0, fixY = 0;
 int showX = 0, showY = 0;
 int clickX1, clickY1 = 0;
@@ -156,7 +158,7 @@ void pick(int mouse_x, int mouse_y) {
 void onPress() {
 	//sphere
 	if ( glfwGetKey('1') == GLFW_PRESS ) {
-		if ( lastKey1 == GLFW_RELEASE ) addSphereTest();
+		if ( lastKey1 == GLFW_RELEASE ) addSphere();
 		lastKey1 = GLFW_PRESS;
 
 	}
@@ -166,7 +168,7 @@ void onPress() {
 
 	//cube
 	if ( glfwGetKey('2') == GLFW_PRESS ) {
-		if ( lastKey2 == GLFW_RELEASE ) addCubeTest();
+		if ( lastKey2 == GLFW_RELEASE ) addCube();
 		lastKey2 = GLFW_PRESS;
 	}
 	else if ( glfwGetKey('2') == GLFW_RELEASE ) {
@@ -192,24 +194,34 @@ void onPress() {
 	}
 	//
 	if ( glfwGetKey('5') == GLFW_PRESS ) {
-		if ( lastKey3 == GLFW_RELEASE ) addSphereTest2();
-		lastKey3 = GLFW_PRESS;
+		if ( lastKey5 == GLFW_RELEASE ) addSphereTest();
+		lastKey5 = GLFW_PRESS;
 	}
 	else if ( glfwGetKey('5') == GLFW_RELEASE ) {
-		lastKey3 = GLFW_RELEASE;
+		lastKey5 = GLFW_RELEASE;
 	}
+	//
+	if ( glfwGetKey('6') == GLFW_PRESS ) {
+		if ( lastKey6 == GLFW_RELEASE ) addCubeTest();
+		lastKey6 = GLFW_PRESS;
+
+	}
+	else if ( glfwGetKey('6') == GLFW_RELEASE ) {
+		lastKey6 = GLFW_RELEASE;
+	}
+
 	if ( glfwGetKey('0') == GLFW_PRESS ) {
-		if ( lastKey5 == GLFW_RELEASE ) {
+		if ( lastKey0 == GLFW_RELEASE ) {
 			if ( pickObject ) pickObject = 0;
 			else pickObject = 1;
 		}
-		lastKey5 == GLFW_PRESS;
+		lastKey0 == GLFW_PRESS;
 	}
 	else if ( glfwGetKey('0') == GLFW_RELEASE ) {
-		lastKey5 = GLFW_RELEASE;
+		lastKey0 = GLFW_RELEASE;
 	}
 	if ( glfwGetKey('Z') == GLFW_PRESS ) {
-		if ( lastKey6 == GLFW_RELEASE )
+		if ( lastKeyZ == GLFW_RELEASE )
 		if ( update ) {
 			update = 0;
 
@@ -218,11 +230,11 @@ void onPress() {
 			update = 1;
 			playFrame = 1;
 		}
-		lastKey6 = GLFW_PRESS;
+		lastKeyZ = GLFW_PRESS;
 
 	}
 	else if ( glfwGetKey('Z') == GLFW_RELEASE ) {
-		lastKey6 = GLFW_RELEASE;
+		lastKeyZ = GLFW_RELEASE;
 
 	}
 	if ( glfwGetKey('X') == GLFW_PRESS && !update ) {
@@ -376,7 +388,7 @@ int main(void) {
 		}
 		computeMatricesFromInputs();// Compute the MVP matrix from keyboard and mouse input
 		grid.clearGrid();
-		
+
 		glm::mat4 ModelMatrix = mat4(1.0f);
 		glm::mat4 ProjectionMatrix = getProjectionMatrix();
 		glm::mat4 ViewMatrix = getViewMatrix();
