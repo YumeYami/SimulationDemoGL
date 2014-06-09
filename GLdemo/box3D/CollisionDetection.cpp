@@ -43,6 +43,7 @@ void inline checkCollision_SphereCube(Sphere* sph1, Cube* cube2) {
 			return;
 		}
 	}
+	printv4("sphtest ", sph_CubeSpace);
 	vec4 colPoint_CubeSpace = vec4(0);
 	if ( 0 < sph_CubeSpace.x && sph_CubeSpace.x < totalSize && abs(sph_CubeSpace.y) < cube2->size && abs(sph_CubeSpace.z) < cube2->size )
 		colPoint_CubeSpace = sph_CubeSpace - vec4(sph1->size, 0, 0, 0);
@@ -50,11 +51,11 @@ void inline checkCollision_SphereCube(Sphere* sph1, Cube* cube2) {
 		colPoint_CubeSpace = sph_CubeSpace - vec4(0, sph1->size, 0, 0);
 	else if ( 0 < sph_CubeSpace.z && sph_CubeSpace.z < totalSize  && abs(sph_CubeSpace.y) < cube2->size && abs(sph_CubeSpace.x)< cube2->size )
 		colPoint_CubeSpace = sph_CubeSpace - vec4(0, 0, sph1->size, 0);
-	else if ( 0 > sph_CubeSpace.x && sph_CubeSpace.x > totalSize  && abs(sph_CubeSpace.y) < cube2->size && abs(sph_CubeSpace.z)< cube2->size )
+	else if ( 0 > sph_CubeSpace.x && sph_CubeSpace.x > -totalSize  && abs(sph_CubeSpace.y) < cube2->size && abs(sph_CubeSpace.z)< cube2->size )
 		colPoint_CubeSpace = sph_CubeSpace + vec4(sph1->size, 0, 0, 0);
-	else if ( 0 > sph_CubeSpace.y && sph_CubeSpace.y > totalSize  && abs(sph_CubeSpace.x) < cube2->size && abs(sph_CubeSpace.z)< cube2->size )
+	else if ( 0 > sph_CubeSpace.y && sph_CubeSpace.y > -totalSize  && abs(sph_CubeSpace.x) < cube2->size && abs(sph_CubeSpace.z)< cube2->size )
 		colPoint_CubeSpace = sph_CubeSpace + vec4(0, sph1->size, 0, 0);
-	else if ( 0 > sph_CubeSpace.z && sph_CubeSpace.z > totalSize  && abs(sph_CubeSpace.y) < cube2->size && abs(sph_CubeSpace.x) < cube2->size )
+	else if ( 0 > sph_CubeSpace.z && sph_CubeSpace.z > -totalSize  && abs(sph_CubeSpace.y) < cube2->size && abs(sph_CubeSpace.x) < cube2->size )
 		colPoint_CubeSpace = sph_CubeSpace + vec4(0, 0, sph1->size, 0);
 	else
 		return;

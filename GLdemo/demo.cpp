@@ -156,7 +156,7 @@ void pick(int mouse_x, int mouse_y) {
 void onPress() {
 	//sphere
 	if ( glfwGetKey('1') == GLFW_PRESS ) {
-		if ( lastKey1 == GLFW_RELEASE ) addSphere();
+		if ( lastKey1 == GLFW_RELEASE ) addSphereTest();
 		lastKey1 = GLFW_PRESS;
 
 	}
@@ -166,7 +166,7 @@ void onPress() {
 
 	//cube
 	if ( glfwGetKey('2') == GLFW_PRESS ) {
-		if ( lastKey2 == GLFW_RELEASE ) addCube();
+		if ( lastKey2 == GLFW_RELEASE ) addCubeTest();
 		lastKey2 = GLFW_PRESS;
 	}
 	else if ( glfwGetKey('2') == GLFW_RELEASE ) {
