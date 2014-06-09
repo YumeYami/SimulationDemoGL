@@ -11,7 +11,7 @@ Cube::Cube(vec3 cubePosition, vec3 cubeRotation, vec3 cubeVelocity, float cubeSi
 
 	size = cubeSize/2;
 	color = vec4(cubeColor, 0.8f);
-	boundedRadius = size*glm::sqrt(3.0f)*0.5;
+	boundedRadius = size*glm::sqrt(3.0f)*0.5f;
 
 	vertex[0][0] = cubeVertex0.x*size; vertex[0][1] = cubeVertex0.y*size; vertex[0][2] = cubeVertex0.z*size;
 	vertex[1][0] = cubeVertex1.x*size; vertex[1][1] = cubeVertex1.y*size; vertex[1][2] = cubeVertex1.z*size;

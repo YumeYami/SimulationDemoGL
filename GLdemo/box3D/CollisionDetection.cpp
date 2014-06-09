@@ -34,7 +34,7 @@ void inline checkCollision_SphereCube(Sphere* sph1, Cube* cube2) {
 	vec4 sph_CubeSpace = cube2->getInverseRatationMatrix()*(sph1->position - cube2->position);
 	float totalSize = cube2->size + sph1->size;
 	if ( abs(sph_CubeSpace.x) > totalSize || abs(sph_CubeSpace.y) > totalSize || abs(sph_CubeSpace.z) > totalSize ) return;
-	for ( int i = 0; i < 12; i++ ) {
+	for ( unsigned int i = 0; i < 12; i++ ) {
 		vec4 start = (cube2->edgeSta[i]);
 		vec4 end = (cube2->edgeEnd[i]);
 		vec4 colPoint = min_dist_segment_to_point(start, end, sph1->position);
@@ -106,7 +106,7 @@ void inline checkCollision_PlaneCube(Plane* plane1, Cube* cube2) {
 	if ( outOfBound_check(plane1, cube2) ) return;
 	//bounded sphere check
 	vector<vec4> colPoint;
-	for ( int i = 0; i < 12; i++ ) {
+	for ( unsigned int i = 0; i < 12; i++ ) {
 		vec4 start = (cube2->edgeSta[i]);
 		vec4 end = (cube2->edgeEnd[i]);
 		if ( dot(start - plane1->position, plane1->getNormal()) <= 0 ) {
@@ -230,29 +230,29 @@ void inline checkCollision_CylinderCylinder(Cylinder* cyl1, Cylinder* cyl2) {
 
 void inline checkCollision(vector<Cube*> cu, vector<Cylinder*> cy, vector<Plane*> pl, vector<Sphere*> sp) {
 	//cout <<"size "<<cu.size()<<" "<<cy.size()<<" "<<pl.size()<<" "<<sp.size()<<"\n";
-	for ( int i = 0; i < sp.size(); i++ ) {
+	for ( unsigned int i = 0; i < sp.size(); i++ ) {
 		Sphere* sp1 = sp.at(i);
-		for (unsigned int j = 0; j < cu.size(); j++ ) checkCollision_SphereCube(sp1, cu.at(j));
-		for ( int j = 0; j < cy.size(); j++ ) checkCollision_SphereCylinder(sp1, cy.at(j));
-		for ( int j = 0; j < pl.size(); j++ ) checkCollision_SpherePlane(sp1, pl.at(j));
+		for ( unsigned int j = 0; j < cu.size(); j++ ) checkCollision_SphereCube(sp1, cu.at(j));
+		for ( unsigned int j = 0; j < cy.size(); j++ ) checkCollision_SphereCylinder(sp1, cy.at(j));
+		for ( unsigned int j = 0; j < pl.size(); j++ ) checkCollision_SpherePlane(sp1, pl.at(j));
 		if ( i < sp.size() - 1 ) {
-			for ( int j = i + 1; j < sp.size(); j++ ) checkCollision_SphereSphere(sp1, sp.at(j));
+			for ( unsigned int j = i + 1; j < sp.size(); j++ ) checkCollision_SphereSphere(sp1, sp.at(j));
 		}
 	}
-	for ( int i = 0; i < pl.size(); i++ ) {
+	for ( unsigned int i = 0; i < pl.size(); i++ ) {
 		Plane* pl1 = pl.at(i);
-		for ( int j = 0; j < cu.size(); j++ ) checkCollision_PlaneCube(pl1, cu.at(j));
-		for ( int j = 0; j < cy.size(); j++ ) checkCollision_PlaneCylinder(pl1, cy.at(j));
+		for ( unsigned int j = 0; j < cu.size(); j++ ) checkCollision_PlaneCube(pl1, cu.at(j));
+		for ( unsigned int j = 0; j < cy.size(); j++ ) checkCollision_PlaneCylinder(pl1, cy.at(j));
 	}
-	for ( int i = 0; i < cu.size(); i++ ) {
+	for ( unsigned int i = 0; i < cu.size(); i++ ) {
 		Cube* cu1 = cu.at(i);
-		if ( i < cu.size() - 1 ) for ( int j = i + 1; j < cu.size(); j++ ) checkCollision_CubeCube(cu1, cu.at(j));
-		for ( int j = 0; j < cy.size(); j++ ) checkCollision_CubeCylinder(cu1, cy.at(j));
+		if ( i < cu.size() - 1 ) for ( unsigned int j = i + 1; j < cu.size(); j++ ) checkCollision_CubeCube(cu1, cu.at(j));
+		for ( unsigned int j = 0; j < cy.size(); j++ ) checkCollision_CubeCylinder(cu1, cy.at(j));
 	}
-	for ( int i = 0; i < cy.size(); i++ ) {
+	for ( unsigned int i = 0; i < cy.size(); i++ ) {
 		Cylinder* cy1 = cy.at(i);
 		if ( i < cy.size() - 1 )
-		for ( int j = i + 1; j < cy.size(); j++ )
+		for ( unsigned int j = i + 1; j < cy.size(); j++ )
 			checkCollision_CylinderCylinder(cy1, cy.at(j));
 
 	}

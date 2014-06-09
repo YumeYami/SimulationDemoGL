@@ -63,7 +63,7 @@ void addSphere() {
 	//vec3 position = vec3((gridSize - 5), begin_x + gridSize - 4, (gridSize - 5));
 	vec3 rotation = vec3(0, 0, 1);
 	vec3 velocity = vec3(rand() % 2 / 2.0, -rand() % 2 / 2.0, rand() % 2 / 2.0);
-	float size = rand() % 25 / 10.0 + 0.5;
+	float size = rand() % 25 / 10.0f + 0.5f;
 	float mass = 1;
 	vec3 color = vec3(rand() % 11 / 10.0, rand() % 11 / 10.0, rand() % 11 / 10.0);
 	Sphere* sp = new Sphere(position, rotation, velocity, size, mass, color);
@@ -74,7 +74,7 @@ void addCube() {
 	//vec3 position = vec3(0, begin_x + gridSize - 4, 0 );
 	vec3 rotation = vec3(0, 0, 1);
 	vec3 velocity = vec3(rand() % 4 / 15.0, -rand() % 4 / 15.0, rand() % 4 / 15.0);
-	float size = rand() % 20 / 10 + 0.5;
+	float size = rand() % 20 / 10 + 0.5f;
 	float mass = 1;
 	vec3 color = vec3(rand() % 11 / 10.0, rand() % 11 / 10.0, rand() % 11 / 10.0);
 	Cube *cube = new Cube(position, rotation, velocity, size, mass, color);
@@ -97,7 +97,7 @@ void addPlane() {
 	vec3 pos[6] = {vec3(1.5, begin_y + gridSize - 1.5, 1.5), vec3(1.5, begin_y + 1.5, 1.5), vec3(begin_x + 1.5, 1.5, 1.5),
 		vec3(begin_x + gridSize - 1.5, 1.5, 1.5), vec3(1.5, 1.5, begin_z + gridSize - 1.5), vec3(1.5, 1.5, begin_z + 1.5)};
 	vec3 rot[6] = {vec3(PI, 0, 0), vec3(0, 0, 0), vec3(0, 0, -PI / 2), vec3(0, 0, PI / 2), vec3(-PI / 2, 0, 0), vec3(PI / 2, 0, 0)};
-	for ( int i = 0; i < 6; i++ ) {
+	for ( unsigned int i = 0; i < 6; i++ ) {
 		vec3 position = pos[i];
 		vec3 rotation = rot[i];
 		vec3 velocity = vec3(0, 0, 0);
@@ -110,7 +110,7 @@ void addPlane() {
 }
 void transparentPlane() {
 	//top,bottom,left,right,front, back
-	for ( int i = 0; i < 6; i++ ) {
+	for ( unsigned int i = 0; i < 6; i++ ) {
 		if ( plane[i]->transparent == 0.2f ) plane[i]->transparent = 0.8f;
 		else plane[i]->transparent = 0.2f;
 	}
@@ -216,7 +216,7 @@ void onPress() {
 			if ( pickObject ) pickObject = 0;
 			else pickObject = 1;
 		}
-		lastKey0 == GLFW_PRESS;
+		lastKey0 = GLFW_PRESS;
 	}
 	else if ( glfwGetKey('0') == GLFW_RELEASE ) {
 		lastKey0 = GLFW_RELEASE;
@@ -291,7 +291,7 @@ void onPress() {
 		if ( topPos + dy <= begin_y + gridSize && btmPos + dy > begin_y ) pos.y = dy;
 		if ( lftPos + dx >= begin_x && rhtPos + dx < begin_x + gridSize ) pos.x = dx;
 		grid.clearGridPlane();
-		for ( int i = 0; i < plane.size(); i++ ) {
+		for ( unsigned int i = 0; i < plane.size(); i++ ) {
 			plane[i]->position += pos;
 			grid.hashPlane(plane[i]);
 		}
@@ -398,20 +398,20 @@ int main(void) {
 		glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
 		glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
 		GLuint matrixIDs[] = {ScaleMatrixID, RotateMatrixID, TranslateMatrixID, TranslateModelID, RotateModelID};
-		for ( int i = 0; i < c3.size(); i++ ) {
+		for ( unsigned int i = 0; i < c3.size(); i++ ) {
 			Rigidbody* cubeObject = dynamic_cast<Rigidbody*>(c3[i]);
 			cubeObject->renderObject(matrixIDs, timeStep, GRAVITY*enGravity, update, playOneFrame);
 			//cubeObject->updatePosition(1,1);
 		}
-		for ( int i = 0; i < sphere.size(); i++ ) {
+		for ( unsigned int i = 0; i < sphere.size(); i++ ) {
 			Rigidbody* sphereObject = dynamic_cast<Rigidbody*>(sphere[i]);
 			sphereObject->renderObject(matrixIDs, timeStep, GRAVITY*enGravity, update, playOneFrame);
 		}
-		for ( int i = 0; i < cylinder.size(); i++ ) {
+		for ( unsigned int i = 0; i < cylinder.size(); i++ ) {
 			Rigidbody* cylinderObject = dynamic_cast<Rigidbody*>(cylinder[i]);
 			cylinderObject->renderObject(matrixIDs, timeStep, GRAVITY*enGravity, update, playOneFrame);
 		}
-		for ( int i = 0; i < plane.size(); i++ ) {
+		for ( unsigned int i = 0; i < plane.size(); i++ ) {
 			Rigidbody* planeObject = dynamic_cast<Rigidbody*>(plane[i]);
 			planeObject->renderObject(matrixIDs, 0.01f, 0, update, playOneFrame);
 		}

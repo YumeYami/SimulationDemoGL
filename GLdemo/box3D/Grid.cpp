@@ -4,62 +4,59 @@ Grid::Grid() {}
 Grid::Grid(vector<Plane*>pl) {
 
 	width = 1;
-	for ( int i = 0; i < gridSize; i++ ) {
-		for ( int j = 0; j < gridSize; j++ ) {
-			for ( int k = 0; k < gridSize; k++ ) {
+	for ( unsigned int i = 0; i < gridSize; i++ ) {
+		for ( unsigned int j = 0; j < gridSize; j++ ) {
+			for ( unsigned int k = 0; k < gridSize; k++ ) {
 				//gridcell[i][j][k] = GridCell();
 			}
 		}
 	}
 	//gridcell[i][j][k] = GridCell(begin_x+width*i,begin_y+width*j,begin_z+width*k);
 	//hashGrid(cu,cy,sp);
-	for ( int i = 0; i < pl.size(); i++ ) {
+	for ( unsigned int i = 0; i < pl.size(); i++ ) {
 		hashPlane((pl[i]));
 	}
 }
 Grid::~Grid() {}
 GridCell gridcell[gridSize][gridSize][gridSize];
 void Grid::hashGrid(vector<Cube*> cu, vector<Cylinder*> cy, vector<Sphere*> sp) {
-	for ( int i = 0; i < cu.size(); i++ ) hashCube(cu[i]);
-	for ( int i = 0; i < cy.size(); i++ ) hashCylinder(cy[i]);
-	for ( int i = 0; i < sp.size(); i++ ) hashSphere(sp[i]);
+	for ( unsigned int i = 0; i < cu.size(); i++ ) hashCube(cu[i]);
+	for ( unsigned int i = 0; i < cy.size(); i++ ) hashCylinder(cy[i]);
+	for ( unsigned int i = 0; i < sp.size(); i++ ) hashSphere(sp[i]);
 }
 void Grid::hashCube(Cube* r) {
 
 	vec4 pos = r->position;
-	int a, b, c = 0;
 	//findIndex(vec3(pos.x,pos.y,pos.z),a,b,c);
 	vector<int> x;
 	vector<int> y;
 	vector<int> z;
 	findGrid(vec3(pos.x, pos.y, pos.z), r->getSkin(), x, y, z);
-	for ( int i = 0; i < x.size(); i++ ) {
+	for ( unsigned int i = 0; i < x.size(); i++ ) {
 		if ( x[i] >= 0 && x[i] < gridSize && y[i] >= 0 && y[i] < gridSize && z[i] >= 0 && z[i] < gridSize )
 			gridcell[x[i]][y[i]][z[i]].addCubeToGridCell(r);
 	}
 }
 void Grid::hashCylinder(Cylinder* r) {
 	vec4 pos = r->position;
-	int a, b, c = 0;
 	//findIndex(vec3(pos.x,pos.y,pos.z),a,b,c);
 	vector<int> x;
 	vector<int> y;
 	vector<int> z;
 	findGrid(vec3(pos.x, pos.y, pos.z), r->getSkin(), x, y, z);
-	for ( int i = 0; i < x.size(); i++ ) {
+	for ( unsigned int i = 0; i < x.size(); i++ ) {
 		if ( x[i] >= 0 && x[i] < gridSize && y[i] >= 0 && y[i] < gridSize && z[i] >= 0 && z[i] < gridSize )
 			gridcell[x[i]][y[i]][z[i]].addCylinderToGridCell(r);
 	}
 }
 void Grid::hashSphere(Sphere* r) {
 	vec4 pos = r->position;
-	int a, b, c = 0;
 	//findIndex(vec3(pos.x,pos.y,pos.z),a,b,c);
 	vector<int> x;
 	vector<int> y;
 	vector<int> z;
 	findGrid(vec3(pos.x, pos.y, pos.z), r->getSkin(), x, y, z);
-	for ( int i = 0; i < x.size(); i++ ) {
+	for ( unsigned int i = 0; i < x.size(); i++ ) {
 		if ( x[i] >= 0 && x[i] < gridSize && y[i] >= 0 && y[i] < gridSize && z[i] >= 0 && z[i] < gridSize )
 			gridcell[x[i]][y[i]][z[i]].addSphereToGridCell(r);
 	}
@@ -69,9 +66,9 @@ void Grid::hashPlane(Plane* r) {
 	vec4 pos = r->position;
 	int a, b, c = 0;
 	findIndex(vec3(pos.x, pos.y, pos.z), a, b, c);
-	for ( int i = 0; i < gridSize; i++ ) {
-		for ( int j = 0; j < gridSize; j++ ) {
-			for ( int k = 0; k < gridSize; k++ ) {
+	for ( unsigned int i = 0; i < gridSize; i++ ) {
+		for ( unsigned int j = 0; j < gridSize; j++ ) {
+			for ( unsigned int k = 0; k < gridSize; k++ ) {
 				if ( r->orientation == vec3(0, 0, PI / 2) || r->orientation == vec3(0, 0, -PI / 2) ) {
 					gridcell[a][j][k].addPlaneToGridCell(r);
 				}
@@ -93,22 +90,22 @@ void Grid::findIndex(vec3 pos, int &i, int &j, int &k) {
 	k = (int)(pos.z - begin_z) / width;
 }
 void Grid::clearGridPlane() {
-	for ( int i = 0; i < gridSize; i++ )
-	for ( int j = 0; j < gridSize; j++ )
-	for ( int k = 0; k < gridSize; k++ )
+	for ( unsigned int i = 0; i < gridSize; i++ )
+	for ( unsigned int j = 0; j < gridSize; j++ )
+	for ( unsigned int k = 0; k < gridSize; k++ )
 		gridcell[i][j][k].clearGridCellPlane();
 }
 void Grid::clearGrid() {
-	for ( int i = 0; i < gridSize; i++ )
-	for ( int j = 0; j < gridSize; j++ )
-	for ( int k = 0; k < gridSize; k++ )
+	for ( unsigned int i = 0; i < gridSize; i++ )
+	for ( unsigned int j = 0; j < gridSize; j++ )
+	for ( unsigned int k = 0; k < gridSize; k++ )
 		gridcell[i][j][k].clearGridCell();
 
 }
 void Grid::checkCollisionGrid() {
-	for ( int i = 0; i < gridSize; i++ )
-	for ( int j = 0; j < gridSize; j++ )
-	for ( int k = 0; k < gridSize; k++ ) {
+	for ( unsigned int i = 0; i < gridSize; i++ )
+	for ( unsigned int j = 0; j < gridSize; j++ )
+	for ( unsigned int k = 0; k < gridSize; k++ ) {
 		gridcell[i][j][k].checkCollisionGridCell();
 	}
 }
