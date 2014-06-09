@@ -155,6 +155,7 @@ void pick(int mouse_x, int mouse_y) {
 	ray_wor = normalize(ray_wor);
 	//cout<<"ray x= "<<ray_wor.x<<" y = "<<ray_wor.y<<" z = "<<ray_wor.z<<"\n";
 }
+//keyboard function
 void onPress() {
 	//sphere
 	if ( glfwGetKey('1') == GLFW_PRESS ) {
@@ -310,7 +311,6 @@ void onPress() {
 	}
 }
 //initial openGL
-//testing document
 int initOpenGL() {
 	// Initialize GLFW
 	if ( !glfwInit() ) {
@@ -349,6 +349,7 @@ int initOpenGL() {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	return 0;
 }
+//main function
 int main(void) {
 	if ( initOpenGL() == -1 )return -1;
 	// Create and compile our GLSL program from the shader

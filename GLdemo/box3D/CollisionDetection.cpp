@@ -27,8 +27,8 @@ bool inline outOfBound_check(Rigidbody* rigid1, Rigidbody* rigid2) {
 	else if ( !convergent_check(rigid1, rigid2) )return true;
 	else return false;
 }
-//
-void inline checkCollision_SphereCube(Sphere* sph1, Cube* cube2) {//completed
+//completed
+void inline checkCollision_SphereCube(Sphere* sph1, Cube* cube2) {
 	//bounded sphere check
 	if ( outOfBound_check(sph1, cube2) ) return;
 	vec4 sph_CubeSpace = cube2->getInverseRatationMatrix()*(sph1->position - cube2->position);
@@ -83,7 +83,8 @@ void inline checkCollision_SphereCylinder(Sphere* sph1, Cylinder* cylinder2) {
 		}
 	}
 }
-void inline checkCollision_SpherePlane(Sphere* sph1, Plane* plane2) {//completed with infinite plane
+//completed with infinite plane
+void inline checkCollision_SpherePlane(Sphere* sph1, Plane* plane2) {
 	if ( outOfBound_check(sph1, plane2) ) return;
 	//bounded sphere check
 	vec4 spPos = sph1->position;
@@ -94,7 +95,8 @@ void inline checkCollision_SpherePlane(Sphere* sph1, Plane* plane2) {//completed
 		colSphere_Plane(sph1, plane2, height);
 	}
 }
-void inline checkCollision_SphereSphere(Sphere* sph1, Sphere* sph2) {//completed
+//completed
+void inline checkCollision_SphereSphere(Sphere* sph1, Sphere* sph2) {
 	if ( outOfBound_check(sph1, sph2) ) return;
 	//bounded sphere check
 	else colSphere_Sphere(sph1, sph2);
@@ -103,10 +105,12 @@ void inline checkCollision_SphereSphere(Sphere* sph1, Sphere* sph2) {//completed
 void inline checkCollision_PlaneCube(Plane* plane1, Cube* cube2) {
 	if ( outOfBound_check(plane1, cube2) ) return;
 	//bounded sphere check
+	vector<vec4> colPoint;
 	for ( int i = 0; i < 12; i++ ) {
 		vec4 start = (cube2->edgeSta[i]);
 		vec4 end = (cube2->edgeEnd[i]);
 		if ( dot(start - plane1->position, plane1->getNormal()) <= 0 ) {
+			colPoint.push_back(start);
 			colCube_Plane(cube2, plane1, start - cube2->position);
 			return;
 		}
@@ -147,139 +151,6 @@ void inline checkCollision_CubeCube(Cube* cube1, Cube* cube2) {
 		colCube_Cube(cube1, cube2, (cube2->position - cube1->position) / 2.0f);
 	}
 	else return;
-
-	//float size = cube1->size;
-	//base is cube1
-	//for (int i = 0; i < 12; i++)
-	//{
-	//	vec4 point0 = inverseRotateCube1*(cube2->edgeSta[i] - cube1->position);
-	//	vec4 point1 = inverseRotateCube1*(cube2->edgeEnd[i] - cube1->position);
-	//	//point_ModelCube1
-	//	vec4 line;
-	//	vec4 startline;
-	//	vec4 endline;
-	//	vec4 proj;
-
-	//	//left
-	//	if(point1.x > point0.x){
-	//		line = point1 - point0;
-	//		startline = point0;
-	//		endline = point1;
-	//	}
-	//	else
-	//	{
-	//		line = point0 - point1;
-	//		startline = point1;
-	//		endline = point0;
-	//	}
-	//	if(startline.x<=size && endline.x>=size){
-	//		proj = line * abs( (size - abs(startline.x)) / line.x);
-	//		if(abs(startline.y + proj.y)<=size/2 && abs(startline.z + proj.z)<=size/2) {
-	//			colCube_Cube(cube1,cube2,startline+proj);
-	//			return;
-	//		}
-	//	}
-
-	//	//right
-	//	if(point1.x < point0.x){
-	//		line = point1 - point0;
-	//		startline = point0;
-	//		endline = point1;
-	//	}
-	//	else
-	//	{
-	//		line = point0 - point1;
-	//		startline = point1;
-	//		endline = point0;
-	//	}
-	//	if(startline.x>=-size && endline.x<=-size){
-	//		proj = line * abs( (size - abs(startline.x)) / line.x);
-	//		if(abs(startline.y + proj.y) <= size/2 && abs(startline.z + proj.z)<=size/2) {
-	//			colCube_Cube(cube1,cube2,startline+proj);
-	//			return;
-	//		}
-	//	}
-
-	//	//front
-	//	if(point1.z > point0.z){
-	//		line = point1 - point0;
-	//		startline = point0;
-	//		endline = point1;
-	//	}
-	//	else
-	//	{
-	//		line = point0 - point1;
-	//		startline = point1;
-	//		endline = point0;
-	//	}
-	//	if(startline.z<=size && endline.z>=size){
-	//		proj = line * abs( (size - abs(startline.z)) / line.z);
-	//		if(abs(startline.y + proj.y)<=size/2 && abs(startline.x + proj.x)<=size/2) {
-	//			colCube_Cube(cube1,cube2,startline+proj);
-	//			return;
-	//		}
-	//	}
-
-	//	//back
-	//	if(point1.z < point0.z){
-	//		line = point1 - point0;
-	//		startline = point0;
-	//		endline = point1;
-	//	}
-	//	else
-	//	{
-	//		line = point0 - point1;
-	//		startline = point1;
-	//		endline = point0;
-	//	}
-	//	if(startline.z>=-size && endline.z<=-size){
-	//		proj = line * abs( (size - abs(startline.z)) / line.z);
-	//		if(abs(startline.y + proj.y) <= size/2 && abs(startline.x + proj.x)<=size/2) {
-	//			colCube_Cube(cube1,cube2,startline+proj);
-	//			return;
-	//		}
-	//	}
-
-	//	//top
-	//	if(point1.y > point0.y){
-	//		line = point1 - point0;
-	//		startline = point0;
-	//		endline = point1;
-	//	}
-	//	else
-	//	{
-	//		line = point0 - point1;
-	//		startline = point1;
-	//		endline = point0;
-	//	}
-	//	if(startline.y<=size && endline.y>=size){
-	//		proj = line * abs( (size - abs(startline.y)) / line.y);
-	//		if(abs(startline.x + proj.x)<=size/2 && abs(startline.z + proj.z)<=size/2) {
-	//			colCube_Cube(cube1,cube2,startline+proj);
-	//			return;
-	//		}
-	//	}
-
-	//	//right
-	//	if(point1.y < point0.y){
-	//		line = point1 - point0;
-	//		startline = point0;
-	//		endline = point1;
-	//	}
-	//	else
-	//	{
-	//		line = point0 - point1;
-	//		startline = point1;
-	//		endline = point0;
-	//	}
-	//	if(startline.y>=-size && endline.y<=-size){
-	//		proj = line * abs( (size - abs(startline.z)) / line.z);
-	//		if(abs(startline.x + proj.x) <= size/2 && abs(startline.z + proj.z)<=size/2) {
-	//			colCube_Cube(cube1,cube2,startline+proj);
-	//			return;
-	//		}
-	//	}
-	//}
 }
 void inline checkCollision_CubeCylinder(Cube* cyl1, Cylinder* cyl2) {
 	if ( projectSize(cyl2->velocity - cyl1->velocity, cyl2->position - cyl1->position) >= 0 ) return;
