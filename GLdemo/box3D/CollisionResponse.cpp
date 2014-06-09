@@ -217,6 +217,18 @@ void inline colCube_Plane(Cube* cube1, Plane* plane2, vec4 colPoint_ModelCube) {
 		cube1->angularVelocity = (vec3(-cube1->angularVelocity.x, cube1->angularVelocity.y, -cube1->angularVelocity.z));
 	}
 }
+void inline colCube_Plane(Cube* cube1, Plane* plane2, vector<vec4> colPoint) {
+	vec4 relatevelo = cube1->velocity;//ref from sph1
+	vec4 moment1 = -projectVec(relatevelo, normalize(plane2->getNormal()));
+	if ( cube1->velocity.y <= 0.1f ) {
+		cube1->orientation.z = 0;
+		cube1->orientation.x = 0;
+	}
+	cube1->addMomentum(moment1*2.0f);
+	if ( plane2->getNormal().y == 1.0f ) {
+		cube1->angularVelocity = (vec3(-cube1->angularVelocity.x, cube1->angularVelocity.y, -cube1->angularVelocity.z));
+	}
+}
 void inline colCube_Cube(Cube* cube1, Cube* cube2, vec4 colPoint_ModelCube1) {
 	vec4 relatevelo = cube2->velocity - cube1->velocity;//ref from cu1
 	vec4 moment1 = -projectVec(relatevelo, normalize(colPoint_ModelCube1));

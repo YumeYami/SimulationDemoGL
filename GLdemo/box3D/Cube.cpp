@@ -24,6 +24,7 @@ Cube::Cube(vec3 cubePosition, vec3 cubeRotation, vec3 cubeVelocity, float cubeSi
 	//setEdge(&edgeStart,&edgeEnd,vertex);
 	edgeSta = new vec4[12];
 	edgeEnd = new vec4[12];
+	transformVertex = new vec4[8];
 	setEdge();
 }
 Cube::~Cube() {}
