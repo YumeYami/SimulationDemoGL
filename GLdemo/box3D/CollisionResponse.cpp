@@ -159,8 +159,8 @@ void inline colSphere_Plane(Sphere* sph1, Plane* plane2, vec4 height) {
 	/*vec4 centerVec = sph1->position - plane2->position;
 	vec4 height = projectVec(centerVec, plane2->getNormal()) - sph1->radius;
 	if ( length(height) < 0 )
-		sph1->addMomentum();*/
-	
+	sph1->addMomentum();*/
+
 }
 void inline colSphere_Cube(Sphere* sph1, Cube* cube2, vec4 colPoint_SphereSpace) {
 	//cout<<"col sph1 cube: " <<"\n";
@@ -231,6 +231,20 @@ void inline colCube_Plane(Cube* cube1, Plane* plane2, vector<vec4> colPoint) {
 }
 void inline colCube_Cube(Cube* cube1, Cube* cube2, vec4 colPoint_ModelCube1) {
 	vec4 relatevelo = cube2->velocity - cube1->velocity;//ref from cu1
+	vec4 moment1 = -projectVec(relatevelo, normalize(colPoint_ModelCube1));
+	cube1->addMomentum(-moment1);
+	cube1->addAngularMomentum(-relatevelo - moment1);
+	vec4 colPoint_ModelCube2 = cube1->position - cube2->position + colPoint_ModelCube1;
+	vec4 moment2 = projectVec(relatevelo, -colPoint_ModelCube2);
+	cube2->addMomentum(moment1);
+	cube2->addAngularMomentum((relatevelo - moment2)*0.01f);
+
+}
+void inline colCube_Cube(Cube* cube1, Cube* cube2, vector<vec4> colPoint_Cube1Space, vector<vec4> colPoint_Cube2Space) {
+	vec4 relatevelo = cube2->velocity - cube1->velocity;//ref from cu1
+	vec4 colPoint_ModelCube1;
+	if ( colPoint_Cube1Space.size() != 0 ) colPoint_ModelCube1 = colPoint_Cube1Space[0];
+	else colPoint_ModelCube1 = colPoint_Cube2Space[0];
 	vec4 moment1 = -projectVec(relatevelo, normalize(colPoint_ModelCube1));
 	cube1->addMomentum(-moment1);
 	cube1->addAngularMomentum(-relatevelo - moment1);
