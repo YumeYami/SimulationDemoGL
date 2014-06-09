@@ -9,7 +9,6 @@
 using namespace glm;
 #include <iostream>
 #include "controls.hpp"
-#include "demo.h"
 
 glm::mat4 ViewMatrix;
 glm::mat4 ProjectionMatrix;

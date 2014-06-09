@@ -54,13 +54,13 @@
     <ClCompile Include="box3D\CollisionDetection.cpp">
       <Filter>box3D</Filter>
     </ClCompile>
-    <ClCompile Include="box3D\CollsionGlobalFunc.cpp">
-      <Filter>box3D</Filter>
-    </ClCompile>
     <ClCompile Include="box3D\Grid.cpp">
       <Filter>box3D</Filter>
     </ClCompile>
     <ClCompile Include="box3D\GridCell.cpp">
+      <Filter>box3D</Filter>
+    </ClCompile>
+    <ClCompile Include="box3D\CollisionGlobalFunc.cpp">
       <Filter>box3D</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,7 +1,7 @@
 #ifndef COLLISION_DETECTION_CPP
 #define COLLISION_DETECTION_CPP
 
-#include "CollsionGlobalFunc.cpp"
+#include "CollisionGlobalFunc.cpp"
 #include "CollisionResponse.cpp"
 #include "GridCell.h"
 #include "Grid.h"

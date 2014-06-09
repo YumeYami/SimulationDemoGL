@@ -12,7 +12,6 @@
 #include <common/shader.cpp>
 
 #include "box3D/CollisionDetection.cpp"
-#include "demo.h"
 #include "controls.hpp"
 
 using namespace glm;
@@ -27,30 +26,6 @@ vector<Cylinder*> cylinder;
 vector<Plane*> plane;
 
 Grid grid;
-
-int lastkey[10];
-int lastKey1 = GLFW_RELEASE;
-int lastKey2 = GLFW_RELEASE;
-int lastKey3 = GLFW_RELEASE;
-int lastKey4 = GLFW_RELEASE;
-int lastKey5 = GLFW_RELEASE;
-int lastKey6 = GLFW_RELEASE;
-int lastKey7 = GLFW_RELEASE;
-int lastKey8 = GLFW_RELEASE;
-int lastKey9 = GLFW_RELEASE;
-int lastMouse = GLFW_RELEASE;
-int fixX = 0, fixY = 0;
-int showX = 0, showY = 0;
-int clickX1, clickY1 = 0;
-int clickX2, clickY2 = 0;
-int xposL, yposL;
-int pickObject = 0;
-int width = 512;
-int height = 384;
-int update = 1;
-int playFrame = 1;
-int playOneFrame = 0;
-int enGravity = 0;
 
 void addSphere() {
 	vec3 position = vec3(rand() % (gridSize - 5) - 2, begin_x + gridSize - 4, rand() % (gridSize - 5) - 2);
@@ -109,6 +84,30 @@ void transparentPlane() {
 		else plane[i]->color.a = 0.2f;
 	}
 }
+
+int lastkey[10];
+int lastKey1 = GLFW_RELEASE;
+int lastKey2 = GLFW_RELEASE;
+int lastKey3 = GLFW_RELEASE;
+int lastKey4 = GLFW_RELEASE;
+int lastKey5 = GLFW_RELEASE;
+int lastKey6 = GLFW_RELEASE;
+int lastKey7 = GLFW_RELEASE;
+int lastKey8 = GLFW_RELEASE;
+int lastKey9 = GLFW_RELEASE;
+int lastMouse = GLFW_RELEASE;
+int fixX = 0, fixY = 0;
+int showX = 0, showY = 0;
+int clickX1, clickY1 = 0;
+int clickX2, clickY2 = 0;
+int xposL, yposL;
+int pickObject = 0;
+int width = 512;
+int height = 384;
+int update = 1;
+int playFrame = 1;
+int playOneFrame = 0;
+int enGravity = 0;
 
 void pick(int mouse_x, int mouse_y) {
 	float x = (2.0f * mouse_x) / width - 1.0f;

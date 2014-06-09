@@ -84,9 +84,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="box3D\CollisionGlobalFunc.cpp" />
     <ClCompile Include="box3D\CollisionResponse.cpp" />
     <ClCompile Include="box3D\CollisionDetection.cpp" />
-    <ClCompile Include="box3D\CollsionGlobalFunc.cpp" />
     <ClCompile Include="box3D\Cone.cpp" />
     <ClCompile Include="box3D\Cube.cpp" />
     <ClCompile Include="box3D\Cylinder.cpp" />
