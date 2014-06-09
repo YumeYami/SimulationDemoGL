@@ -9,7 +9,9 @@
 float inline minn(float x, float y) {
 	return (x < y ? x : y);
 }
-
+void inline printv4(string name, vec4 &vec) {
+	cout << name << " :[" << vec.x << " " << vec.y << " " << vec.z << " " << length(vec) << "\n";
+}
 bool inline convergent_check(Rigidbody* rigid1, Rigidbody* rigid2) {
 	if ( Plane* plane = dynamic_cast<Plane*>(rigid1) ) {
 		return (projectSize(rigid2->velocity, plane->getNormal()) >= 0) ? false : true;
@@ -27,8 +29,11 @@ bool inline outOfBound_check(Rigidbody* rigid1, Rigidbody* rigid2) {
 }
 //
 void inline checkCollision_SphereCube(Sphere* sph1, Cube* cube2) {
-	if ( outOfBound_check(sph1, cube2) ) return;
 	//bounded sphere check
+	if ( outOfBound_check(sph1, cube2) ) return;
+	vec4 sph_CubeSpace = cube2->getInverseRatationMatrix()*(sph1->position - cube2->position);
+	float totalSize = cube2->size + sph1->size;
+	if ( abs(sph_CubeSpace.x) > totalSize || abs(sph_CubeSpace.y) > totalSize || abs(sph_CubeSpace.z) > totalSize ) return;
 	for ( int i = 0; i < 12; i++ ) {
 		vec4 start = (cube2->edgeSta[i]);
 		vec4 end = (cube2->edgeEnd[i]);
@@ -38,6 +43,24 @@ void inline checkCollision_SphereCube(Sphere* sph1, Cube* cube2) {
 			return;
 		}
 	}
+	vec4 colPoint_CubeSpace = vec4(0);
+	if ( 0 < sph_CubeSpace.x && sph_CubeSpace.x < totalSize && abs(sph_CubeSpace.y) < cube2->size && abs(sph_CubeSpace.z) < cube2->size )
+		colPoint_CubeSpace = sph_CubeSpace - vec4(sph1->size, 0, 0, 0);
+	else if ( 0 < sph_CubeSpace.y && sph_CubeSpace.y < totalSize  && abs(sph_CubeSpace.x) < cube2->size && abs(sph_CubeSpace.z) < cube2->size )
+		colPoint_CubeSpace = sph_CubeSpace - vec4(0, sph1->size, 0, 0);
+	else if ( 0 < sph_CubeSpace.z && sph_CubeSpace.z < totalSize  && abs(sph_CubeSpace.y) < cube2->size && abs(sph_CubeSpace.x)< cube2->size )
+		colPoint_CubeSpace = sph_CubeSpace - vec4(0, 0, sph1->size, 0);
+	else if ( 0 > sph_CubeSpace.x && sph_CubeSpace.x > totalSize  && abs(sph_CubeSpace.y) < cube2->size && abs(sph_CubeSpace.z)< cube2->size )
+		colPoint_CubeSpace = sph_CubeSpace + vec4(sph1->size, 0, 0, 0);
+	else if ( 0 > sph_CubeSpace.y && sph_CubeSpace.y > totalSize  && abs(sph_CubeSpace.x) < cube2->size && abs(sph_CubeSpace.z)< cube2->size )
+		colPoint_CubeSpace = sph_CubeSpace + vec4(0, sph1->size, 0, 0);
+	else if ( 0 > sph_CubeSpace.z && sph_CubeSpace.z > totalSize  && abs(sph_CubeSpace.y) < cube2->size && abs(sph_CubeSpace.x) < cube2->size )
+		colPoint_CubeSpace = sph_CubeSpace + vec4(0, 0, sph1->size, 0);
+	else
+		return;
+	vec4 vec = sph_CubeSpace;
+	vec4 colPoint_SphereSpace = cube2->getRotationMatrix()*colPoint_CubeSpace + (cube2->position - sph1->position);
+	colSphere_Cube(sph1, cube2, colPoint_SphereSpace);
 }
 void inline checkCollision_SphereCylinder(Sphere* sph1, Cylinder* cylinder2) {
 	if ( outOfBound_check(sph1, cylinder2) ) return;
@@ -50,7 +73,6 @@ void inline checkCollision_SphereCylinder(Sphere* sph1, Cylinder* cylinder2) {
 	if ( length(minDist) < cylinder2->radius ) {
 		if ( projectDist <= cylinder2->length + sph1->radius ) return;
 		else {
-
 			colSphere_Cylinder(sph1, cylinder2, min_dist_segment_to_point(cylinder2->getBasePoint(), cylinder2->getTopPoint(), sph1->position));
 		}
 	}
@@ -61,7 +83,7 @@ void inline checkCollision_SphereCylinder(Sphere* sph1, Cylinder* cylinder2) {
 		}
 	}
 }
-void inline checkCollision_SpherePlane(Sphere* sph1, Plane* plane2) {
+void inline checkCollision_SpherePlane(Sphere* sph1, Plane* plane2) {//completed with infinite plane
 	if ( outOfBound_check(sph1, plane2) ) return;
 	//bounded sphere check
 	vec4 spPos = sph1->position;

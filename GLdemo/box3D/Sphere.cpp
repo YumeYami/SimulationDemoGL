@@ -10,6 +10,7 @@ Sphere::Sphere(vec3 spherePosition, vec3 sphereRotation, vec3 sphereVelocity, fl
 	inertia = vec3(1.0f);
 
 	radius = sphereSize / 2;
+	size = radius;
 	boundedRadius = radius;
 
 	color = vec4(sphereColor, 0.8f);

@@ -3,10 +3,6 @@
 using namespace glm;
 using namespace std;
 
-void inline printVec4(std::string name, vec4 vec) {
-	cout << name << "\t: [ " << vec.x << "\t" << vec.y << "\t" << vec.z << "\t" << vec.w << "\t" << length(vec) << " ]\n";
-}
-
 Rigidbody::Rigidbody() {
 	position = vec4(0, 0, 0, 1);
 	velocity = vec4(0, 0, 0, 0);
@@ -41,11 +37,11 @@ void inline Rigidbody::addGravity(float gravity) {
 void inline Rigidbody::addMomentum(vec4 momentum) {
 	//printVec4("momentum",accuMomentum);
 	//accuMomentum += momentum;
-	velocity = velocity + momentum / mass;
+	velocity = velocity + (momentum / mass)*0.98f;
 	velocity *= 0.90;
-	if ( length(velocity) < 0.1f ) {
-		velocity = vec4(0);
-	}
+	//if ( length(velocity) < 0.1f ) {
+	//	velocity = vec4(0);
+	//}
 }
 void inline Rigidbody::addAngularMomentum(vec4 angularMomentum) {
 	//angularVelocity += vec3(angularMomentum);
@@ -108,4 +104,5 @@ void Rigidbody::renderObject(GLuint matrixIDs[], float aTimeStep, float aGravity
 	glUniformMatrix4fv(matrixIDs[4], 1, GL_FALSE, &RotateModel[0][0]);
 	render();
 	glPopMatrix();
+	color.a = transparent;
 }

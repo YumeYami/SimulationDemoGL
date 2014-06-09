@@ -26,7 +26,38 @@ vector<Cylinder*> cylinder;
 vector<Plane*> plane;
 
 Grid grid;
-
+void addSphereTest() {
+	vec3 position = vec3(0, begin_x + gridSize-2, 0);
+	vec3 velocity = vec3(0);
+	vec3 rotation = vec3(0, 0, 0);
+	float size = 2;
+	float mass = 1;
+	vec3 color = vec3(rand() % 11 / 10.0, rand() % 11 / 10.0, rand() % 11 / 10.0);
+	Sphere* sp = new Sphere(position, rotation, velocity, size, mass, color);
+	sphere.push_back(sp);
+}
+void addSphereTest2() {
+	vec3 position = vec3(0, begin_x + gridSize - 4, 0);
+	vec3 velocity = vec3(0);
+	vec3 rotation = vec3(0, 0, 0);
+	float size = 2;
+	float mass = 1;
+	vec3 color = vec3(rand() % 11 / 10.0, rand() % 11 / 10.0, rand() % 11 / 10.0);
+	Sphere* sp = new Sphere(position, rotation, velocity, size, mass, color);
+	sphere.push_back(sp);
+}
+void addCubeTest() {
+	vec3 position = vec3(0, begin_x + gridSize - 4, 0);
+	vec3 rotation = vec3(0, 0, 0);
+	//vec3 velocity = vec3(rand() % 4 / 15.0, -rand() % 4 / 15.0, rand() % 4 / 15.0);
+	vec3 velocity = vec3(0);
+	float size = 2;
+	float mass = 1;
+	vec3 color = vec3(rand() % 11 / 10.0, rand() % 11 / 10.0, rand() % 11 / 10.0);
+	Cube *cube = new Cube(position, rotation, velocity, size, mass, color);
+	//cube->angularVelocity = vec3(rand() % 4 / 10.0, -rand() % 4 / 10.0, rand() % 4 / 10.0);
+	c3.push_back(cube);
+}
 void addSphere() {
 	vec3 position = vec3(rand() % (gridSize - 5) - 2, begin_x + gridSize - 4, rand() % (gridSize - 5) - 2);
 	//vec3 position = vec3((gridSize - 5), begin_x + gridSize - 4, (gridSize - 5));
@@ -80,8 +111,8 @@ void addPlane() {
 void transparentPlane() {
 	//top,bottom,left,right,front, back
 	for ( int i = 0; i < 6; i++ ) {
-		if ( plane[i]->color.a == 0.2f ) plane[i]->color.a = 0.8f;
-		else plane[i]->color.a = 0.2f;
+		if ( plane[i]->transparent == 0.2f ) plane[i]->transparent = 0.8f;
+		else plane[i]->transparent = 0.2f;
 	}
 }
 
@@ -118,16 +149,14 @@ void pick(int mouse_x, int mouse_y) {
 	vec4 ray_eye = inverse(getProjectionMatrix()) * ray_clip;
 	ray_eye = vec4(ray_eye.x, ray_eye.y, -1.0, 0.0);
 	vec3 ray_wor = (vec3)(inverse(getViewMatrix()) * ray_eye);
-	// don't forget to normalise the vector at some point
+	// don't forget to normalize the vector at some point
 	ray_wor = normalize(ray_wor);
 	//cout<<"ray x= "<<ray_wor.x<<" y = "<<ray_wor.y<<" z = "<<ray_wor.z<<"\n";
 }
 void onPress() {
 	//sphere
 	if ( glfwGetKey('1') == GLFW_PRESS ) {
-		if ( lastKey1 == GLFW_RELEASE ) {
-			addSphere();
-		}
+		if ( lastKey1 == GLFW_RELEASE ) addSphere();
 		lastKey1 = GLFW_PRESS;
 
 	}
@@ -160,6 +189,14 @@ void onPress() {
 	}
 	else if ( glfwGetKey('4') == GLFW_RELEASE ) {
 		lastKey4 = GLFW_RELEASE;
+	}
+	//
+	if ( glfwGetKey('5') == GLFW_PRESS ) {
+		if ( lastKey3 == GLFW_RELEASE ) addSphereTest2();
+		lastKey3 = GLFW_PRESS;
+	}
+	else if ( glfwGetKey('5') == GLFW_RELEASE ) {
+		lastKey3 = GLFW_RELEASE;
 	}
 	if ( glfwGetKey('0') == GLFW_PRESS ) {
 		if ( lastKey5 == GLFW_RELEASE ) {
@@ -333,12 +370,13 @@ int main(void) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);// Clear the screen
 		glUseProgram(programID2);// Use our shader
 		grid.hashGrid(c3, cylinder, sphere);
+		onPress();
 		if ( update || playOneFrame ) {
 			grid.checkCollisionGrid();
 		}
 		computeMatricesFromInputs();// Compute the MVP matrix from keyboard and mouse input
 		grid.clearGrid();
-		onPress();
+		
 		glm::mat4 ModelMatrix = mat4(1.0f);
 		glm::mat4 ProjectionMatrix = getProjectionMatrix();
 		glm::mat4 ViewMatrix = getViewMatrix();

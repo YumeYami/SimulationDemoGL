@@ -114,8 +114,8 @@ vec4 inline min_dist_segment_to_segment(vec4 s1p1, vec4 s1p0, vec4 s2p1, vec4 s2
 		}
 	}
 	// finally do the division to get sc and tc
-	sc = (abs(sN) < SMALL_NUM ? 0.0 : sN / sD);
-	tc = (abs(tN) < SMALL_NUM ? 0.0 : tN / tD);
+	sc = (abs(sN) < SMALL_NUM ? 0.0f : sN / sD);
+	tc = (abs(tN) < SMALL_NUM ? 0.0f : tN / tD);
 
 	// get the difference of the two closest points
 	vec4   dP = w + (sc * u) - (tc * v);  // =  S1(sc) - S2(tc)
@@ -162,19 +162,20 @@ void inline colSphere_Plane(Sphere* sph1, Plane* plane2, vec4 height) {
 		sph1->addMomentum();*/
 	
 }
-void inline colSphere_Cube(Sphere* sph1, Cube* cube2, vec4 colPoint_ModelSphere) {
+void inline colSphere_Cube(Sphere* sph1, Cube* cube2, vec4 colPoint_SphereSpace) {
 	//cout<<"col sph1 cube: " <<"\n";
 
 	vec4 relatevelo = cube2->velocity - sph1->velocity;//ref from sph1
-	vec4 moment1 = -projectVec(relatevelo, normalize(colPoint_ModelSphere));
+	vec4 moment1 = -projectVec(relatevelo, normalize(colPoint_SphereSpace));
 	//printVec4("cube velo",cube2->velocity);
 	sph1->addMomentum(-moment1);
 	sph1->addAngularMomentum(-relatevelo - moment1);
-	vec4 colPoint_ModelCube = sph1->position - cube2->position + colPoint_ModelSphere;
+	vec4 colPoint_ModelCube = sph1->position - cube2->position + colPoint_SphereSpace;
 	vec4 moment2 = projectVec(relatevelo, -colPoint_ModelCube);
 	cube2->addMomentum(moment1);
 	cube2->addAngularMomentum(relatevelo - moment2);
-
+	sph1->color.a = 1.0f;
+	cube2->color.a = 1.0f;
 	//printVec4("cube ",-moment1);
 	//sph1->velocity=vec4(0,0,0,0);
 	//cube2->velocity=vec4(0,0,0,0);

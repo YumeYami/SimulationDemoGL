@@ -9,18 +9,18 @@ Cube::Cube(vec3 cubePosition, vec3 cubeRotation, vec3 cubeVelocity, float cubeSi
 	angularVelocity = vec3(0, 0, 0);
 	inertia = vec3(1.0f);
 
-	size = cubeSize;
+	size = cubeSize/2;
 	color = vec4(cubeColor, 0.8f);
 	boundedRadius = size*glm::sqrt(3.0f)*0.5;
 
-	vertex[0][0] = cubeVertex0.x*size / 2; vertex[0][1] = cubeVertex0.y*size / 2; vertex[0][2] = cubeVertex0.z*size / 2;
-	vertex[1][0] = cubeVertex1.x*size / 2; vertex[1][1] = cubeVertex1.y*size / 2; vertex[1][2] = cubeVertex1.z*size / 2;
-	vertex[2][0] = cubeVertex2.x*size / 2; vertex[2][1] = cubeVertex2.y*size / 2; vertex[2][2] = cubeVertex2.z*size / 2;
-	vertex[3][0] = cubeVertex3.x*size / 2; vertex[3][1] = cubeVertex3.y*size / 2; vertex[3][2] = cubeVertex3.z*size / 2;
-	vertex[4][0] = cubeVertex4.x*size / 2; vertex[4][1] = cubeVertex4.y*size / 2; vertex[4][2] = cubeVertex4.z*size / 2;
-	vertex[5][0] = cubeVertex5.x*size / 2; vertex[5][1] = cubeVertex5.y*size / 2; vertex[5][2] = cubeVertex5.z*size / 2;
-	vertex[6][0] = cubeVertex6.x*size / 2; vertex[6][1] = cubeVertex6.y*size / 2; vertex[6][2] = cubeVertex6.z*size / 2;
-	vertex[7][0] = cubeVertex7.x*size / 2; vertex[7][1] = cubeVertex7.y*size / 2; vertex[7][2] = cubeVertex7.z*size / 2;
+	vertex[0][0] = cubeVertex0.x*size; vertex[0][1] = cubeVertex0.y*size; vertex[0][2] = cubeVertex0.z*size;
+	vertex[1][0] = cubeVertex1.x*size; vertex[1][1] = cubeVertex1.y*size; vertex[1][2] = cubeVertex1.z*size;
+	vertex[2][0] = cubeVertex2.x*size; vertex[2][1] = cubeVertex2.y*size; vertex[2][2] = cubeVertex2.z*size;
+	vertex[3][0] = cubeVertex3.x*size; vertex[3][1] = cubeVertex3.y*size; vertex[3][2] = cubeVertex3.z*size;
+	vertex[4][0] = cubeVertex4.x*size; vertex[4][1] = cubeVertex4.y*size; vertex[4][2] = cubeVertex4.z*size;
+	vertex[5][0] = cubeVertex5.x*size; vertex[5][1] = cubeVertex5.y*size; vertex[5][2] = cubeVertex5.z*size;
+	vertex[6][0] = cubeVertex6.x*size; vertex[6][1] = cubeVertex6.y*size; vertex[6][2] = cubeVertex6.z*size;
+	vertex[7][0] = cubeVertex7.x*size; vertex[7][1] = cubeVertex7.y*size; vertex[7][2] = cubeVertex7.z*size;
 	//setEdge(&edgeStart,&edgeEnd,vertex);
 	edgeSta = new vec4[12];
 	edgeEnd = new vec4[12];
