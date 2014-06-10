@@ -45,7 +45,6 @@ public:
 	vec3 inertia;
 	vec3 accuAngularMomentum;
 
-	float size;
 	float boundedRadius;
 
 	vec4 color;

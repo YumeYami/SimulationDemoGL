@@ -15,6 +15,7 @@
 class Cube : public Rigidbody {
 public:
 	float vertex[8][3];
+	float size;
 	vec4* transformVertex;
 	vec4* edgeSta;
 	vec4* edgeEnd;

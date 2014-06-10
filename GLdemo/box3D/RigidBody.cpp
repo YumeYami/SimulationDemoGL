@@ -14,7 +14,6 @@ Rigidbody::Rigidbody() {
 	inertia = vec3(1.0f);
 	accuAngularMomentum = vec3(0);
 
-	size = 1;
 	boundedRadius = 1;
 
 	color = vec4(0, 0, 0, 0);

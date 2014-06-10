@@ -10,6 +10,7 @@
 
 class Plane : public Rigidbody {
 public:
+	float size;
 	float p0[3];
 	float p1[3];
 	float p2[3];

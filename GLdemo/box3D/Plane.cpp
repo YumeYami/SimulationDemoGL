@@ -10,7 +10,7 @@ Plane::Plane(vec3 planePosition, vec3 planeRotation, vec3 planeVelocity, float p
 	inertia = vec3(1.0f);
 
 	size = planeSize;
-	boundedRadius = size;
+	boundedRadius = pow(2.0f,0.5f)*size;
 
 	p0[0] = planeVertex0.x*size / 2; p0[1] = planeVertex0.y*size / 2; p0[2] = planeVertex0.z*size / 2;
 	p1[0] = planeVertex1.x*size / 2; p1[1] = planeVertex1.y*size / 2; p1[2] = planeVertex1.z*size / 2;

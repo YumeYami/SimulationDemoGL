@@ -70,11 +70,14 @@ bool inline checkCollision_SegmentCube(vec4 start, vec4 end, Cube* cube) {
 bool inline checkCOllision_TriangleTriangle(vec4* tri1, vec4* tri2) {
 
 }
+
+//collision detection for geometry objects
+//////////////////////////////////////////////////////////////////////////
 //completed
 void inline checkCollision_SphereCube(Sphere* sph1, Cube* cube2) {
 	if ( outOfBound_check(sph1, cube2) ) return;
 	vec4 sph_CubeSpace = cube2->getInverseRatationMatrix()*(sph1->position - cube2->position);
-	float totalSize = cube2->size + sph1->size;
+	float totalSize = cube2->size + sph1->radius;
 	if ( abs(sph_CubeSpace.x) > totalSize || abs(sph_CubeSpace.y) > totalSize || abs(sph_CubeSpace.z) > totalSize ) return;
 	for ( unsigned int i = 0; i < 12; i++ ) {
 		vec4 start = (cube2->edgeSta[i]);
@@ -87,23 +90,24 @@ void inline checkCollision_SphereCube(Sphere* sph1, Cube* cube2) {
 	}
 	vec4 colPoint_CubeSpace = vec4(0);
 	if ( 0 < sph_CubeSpace.x && sph_CubeSpace.x < totalSize && abs(sph_CubeSpace.y) < cube2->size && abs(sph_CubeSpace.z) < cube2->size )
-		colPoint_CubeSpace = sph_CubeSpace - vec4(sph1->size, 0, 0, 0);
+		colPoint_CubeSpace = sph_CubeSpace - vec4(sph1->radius, 0, 0, 0);
 	else if ( 0 < sph_CubeSpace.y && sph_CubeSpace.y < totalSize  && abs(sph_CubeSpace.x) < cube2->size && abs(sph_CubeSpace.z) < cube2->size )
-		colPoint_CubeSpace = sph_CubeSpace - vec4(0, sph1->size, 0, 0);
+		colPoint_CubeSpace = sph_CubeSpace - vec4(0, sph1->radius, 0, 0);
 	else if ( 0 < sph_CubeSpace.z && sph_CubeSpace.z < totalSize  && abs(sph_CubeSpace.y) < cube2->size && abs(sph_CubeSpace.x)< cube2->size )
-		colPoint_CubeSpace = sph_CubeSpace - vec4(0, 0, sph1->size, 0);
+		colPoint_CubeSpace = sph_CubeSpace - vec4(0, 0, sph1->radius, 0);
 	else if ( 0 > sph_CubeSpace.x && sph_CubeSpace.x > -totalSize  && abs(sph_CubeSpace.y) < cube2->size && abs(sph_CubeSpace.z)< cube2->size )
-		colPoint_CubeSpace = sph_CubeSpace + vec4(sph1->size, 0, 0, 0);
+		colPoint_CubeSpace = sph_CubeSpace + vec4(sph1->radius, 0, 0, 0);
 	else if ( 0 > sph_CubeSpace.y && sph_CubeSpace.y > -totalSize  && abs(sph_CubeSpace.x) < cube2->size && abs(sph_CubeSpace.z)< cube2->size )
-		colPoint_CubeSpace = sph_CubeSpace + vec4(0, sph1->size, 0, 0);
+		colPoint_CubeSpace = sph_CubeSpace + vec4(0, sph1->radius, 0, 0);
 	else if ( 0 > sph_CubeSpace.z && sph_CubeSpace.z > -totalSize  && abs(sph_CubeSpace.y) < cube2->size && abs(sph_CubeSpace.x) < cube2->size )
-		colPoint_CubeSpace = sph_CubeSpace + vec4(0, 0, sph1->size, 0);
+		colPoint_CubeSpace = sph_CubeSpace + vec4(0, 0, sph1->radius, 0);
 	else
 		return;
 	vec4 vec = sph_CubeSpace;
 	vec4 colPoint_SphereSpace = cube2->getRotationMatrix()*colPoint_CubeSpace + (cube2->position - sph1->position);
 	colSphere_Cube(sph1, cube2, colPoint_SphereSpace);
 }
+
 void inline checkCollision_SphereCylinder(Sphere* sph1, Cylinder* cylinder2) {
 	if ( outOfBound_check(sph1, cylinder2) ) return;
 	vec4 spherePos = cylinder2->getInverseRatationMatrix()*(sph1->position - cylinder2->position);
@@ -138,9 +142,7 @@ void inline checkCollision_SpherePlane(Sphere* sph1, Plane* plane2) {
 //completed
 void inline checkCollision_SphereSphere(Sphere* sph1, Sphere* sph2) {
 	if ( outOfBound_check(sph1, sph2) ) return;
-
 	else colSphere_Sphere(sph1, sph2);
-	//
 }
 //completed
 void inline checkCollision_PlaneCube(Plane* plane1, Cube* cube2) {
@@ -169,11 +171,10 @@ void inline checkCollision_PlaneCylinder(Plane* plane1, Cylinder* cylinder2) {
 	vec4 baseheight = projectVec(lowestPos, planeNormal);
 	if ( length(bodyheight) + length(baseheight) >= length(posheight) ) {
 		vec4 colPoint(0, 0, 0, 0);
-
 		colPlane_Cylinder(cylinder2, plane1, lowestPos);
 	}
 }
-//completed only the case that corner in cube
+//completed code, waiting collision response for testing
 void inline checkCollision_CubeCube(Cube* cube1, Cube* cube2) {
 	if ( outOfBound_check(cube1, cube2) ) return;
 	vector<vec4> colPoint_Cube1Space;
@@ -233,7 +234,7 @@ void inline checkCollision_CylinderCylinder(Cylinder* cyl1, Cylinder* cyl2) {
 		return;
 	}
 	vec4 sphPos = cyl1->position;
-	float radius = cyl1->size;
+	float radius = cyl1->radius;
 	vec4 d = sphPos - cyl2->position;
 	float distance = length(d);
 	float sumR = (radius + cyl2->radius) / 2;
