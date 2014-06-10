@@ -127,16 +127,16 @@ void inline checkCollision_SphereCylinder(Sphere* sph1, Cylinder* cylinder2) {
 	if ( length(minDist) < cylinder2->radius ) {
 		if ( projectDist <= cylinder2->length + sph1->radius ) return;
 		else {
-			sph1->freeze = 1;
-			cylinder2->freeze = 1;
+			sph1->color.a = 1;
+			cylinder2->color.a = 1;
 			colSphere_Cylinder(sph1, cylinder2, min_dist_segment_to_point(cylinder2->getBasePoint(), cylinder2->getTopPoint(), sph1->position));
 		}
 	}
 	else {
 		if ( length(projectDist*cylNormal + vec4(cylinder2->radius, 0, 0, 0) - spherePos) >= sph1->radius ) return;
 		else {
-			sph1->freeze = 1;
-			cylinder2->freeze = 1;
+			sph1->color.a = 1;
+			cylinder2->color.a = 1;
 			colSphere_Cylinder(sph1, cylinder2, min_dist_segment_to_point(cylinder2->getBasePoint(), cylinder2->getTopPoint(), sph1->position));
 		}
 	}

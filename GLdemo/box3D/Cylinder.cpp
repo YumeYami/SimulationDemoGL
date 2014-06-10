@@ -9,9 +9,9 @@ Cylinder::Cylinder(vec3 cylinderPosition, vec3 cylinderRotation, vec3 cylinderVe
 	angularVelocity = vec3(0);
 	inertia = vec3(1.0f);
 
-	boundedRadius = glm::sqrt(pow(radius, 2) + pow(length / 2, 2));
 	radius = cylinderRadius;
 	length = cylinderLength;
+	boundedRadius = glm::sqrt(pow(radius, 2) + pow(length / 2, 2));
 
 	color = vec4(cylinderColor, 0.8f);
 }

@@ -18,7 +18,7 @@ Rigidbody::Rigidbody() {
 	freeze = 0;
 
 	color = vec4(0, 0, 0, 0);
-	transparent = 0.8f;
+	transparent = 0.6f;
 }
 Rigidbody::~Rigidbody() {}
 
