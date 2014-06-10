@@ -63,6 +63,9 @@ public:
 	virtual mat4 inline getRotationMatrix();
 	virtual mat4 inline getInverseRatationMatrix();
 	virtual mat4 inline getTranslationMatrix();
+	virtual mat4 inline getRotationMatrixRender();
+	virtual mat4 inline getInverseRatationMatrixRender();
+	virtual mat4 inline getTranslationMatrixRender();
 	virtual void inline updatePosition(vec4 addPosision);
 	virtual void inline updatePosition(float time, float gravity);
 	virtual void inline render() = 0;

@@ -158,10 +158,10 @@ void inline checkCollision_PlaneCube(Plane* plane1, Cube* cube2) {
 	if ( colPoint.size() != 0 )
 		colCube_Plane(cube2, plane1, colPoint);
 }
+//////////////////////////////////////////////////////////////////////////
 void inline checkCollision_PlaneCylinder(Plane* plane1, Cylinder* cylinder2) {
 	if ( outOfBound_check(plane1, cylinder2) ) return;
 	vec4 planeNormal = plane1->getNormal();
-	if ( projectSize(cylinder2->velocity, planeNormal) >= 0 ) return;
 	vec4 dist = cylinder2->position - plane1->position;
 	vec4 cylNormal = cylinder2->getNormal();
 	vec4 posheight = projectVec(cylinder2->position - plane1->position, planeNormal);

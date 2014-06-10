@@ -58,6 +58,17 @@ void addCubeTest() {
 	//cube->angularVelocity = vec3(rand() % 4 / 10.0, -rand() % 4 / 10.0, rand() % 4 / 10.0);
 	c3.push_back(cube);
 }
+void addCylinderTest() {
+	vec3 position = vec3(0, 4, 0);
+	vec3 rotation = vec3(rand() % 20 / 2, rand() % 20 / 2, rand() % 20 / 2);
+	vec3 velocity = vec3(rand() % 4 / 10.0, -rand() % 4 / 10.0, rand() % 4 / 10.0);
+	float radius = 1;
+	float length = 2;
+	float mass = 1;
+	vec3 color = vec3(rand() % 11 / 10.0, rand() % 11 / 10.0, rand() % 11 / 10.0);
+	Cylinder *cy = new Cylinder(position, rotation, velocity, radius, length, mass, color);
+	cylinder.push_back(cy);
+}
 void addSphere() {
 	vec3 position = vec3(rand() % (gridSize - 5) - 2, begin_x + gridSize - 4, rand() % (gridSize - 5) - 2);
 	//vec3 position = vec3((gridSize - 5), begin_x + gridSize - 4, (gridSize - 5));
@@ -129,6 +140,8 @@ int lastKey9 = GLFW_RELEASE;
 int lastKey0 = GLFW_RELEASE;
 int lastMouse = GLFW_RELEASE;
 int lastKeyZ = GLFW_RELEASE;
+int lastKeyX = GLFW_RELEASE;
+int lastKeyC = GLFW_RELEASE;
 int fixX = 0, fixY = 0;
 int showX = 0, showY = 0;
 int clickX1, clickY1 = 0;
@@ -193,7 +206,8 @@ void onPress() {
 	else if ( glfwGetKey('4') == GLFW_RELEASE ) {
 		lastKey4 = GLFW_RELEASE;
 	}
-	//
+	//////////////////////////////////////////////////////////////////////////
+	//test
 	if ( glfwGetKey('5') == GLFW_PRESS ) {
 		if ( lastKey5 == GLFW_RELEASE ) addSphereTest();
 		lastKey5 = GLFW_PRESS;
@@ -201,7 +215,6 @@ void onPress() {
 	else if ( glfwGetKey('5') == GLFW_RELEASE ) {
 		lastKey5 = GLFW_RELEASE;
 	}
-	//
 	if ( glfwGetKey('6') == GLFW_PRESS ) {
 		if ( lastKey6 == GLFW_RELEASE ) addCubeTest();
 		lastKey6 = GLFW_PRESS;
@@ -210,6 +223,15 @@ void onPress() {
 	else if ( glfwGetKey('6') == GLFW_RELEASE ) {
 		lastKey6 = GLFW_RELEASE;
 	}
+	if ( glfwGetKey('7') == GLFW_PRESS ) {
+		if ( lastKey7 == GLFW_RELEASE ) addCylinderTest();
+		lastKey7 = GLFW_PRESS;
+
+	}
+	else if ( glfwGetKey('7') == GLFW_RELEASE ) {
+		lastKey7 = GLFW_RELEASE;
+	}
+
 
 	if ( glfwGetKey('0') == GLFW_PRESS ) {
 		if ( lastKey0 == GLFW_RELEASE ) {
@@ -239,25 +261,25 @@ void onPress() {
 
 	}
 	if ( glfwGetKey('X') == GLFW_PRESS && !update ) {
-		if ( lastKey7 == GLFW_RELEASE ) {
+		if ( lastKeyX == GLFW_RELEASE ) {
 			playFrame = 0;
 			playOneFrame = 1;
 		}
-		lastKey7 = GLFW_PRESS;
+		lastKeyX = GLFW_PRESS;
 	}
 	else if ( glfwGetKey('X') == GLFW_RELEASE ) {
-		lastKey7 = GLFW_RELEASE;
+		lastKeyX = GLFW_RELEASE;
 	}
 	if ( glfwGetKey('C') == GLFW_PRESS ) {
-		if ( lastKey8 == GLFW_RELEASE ) {
+		if ( lastKeyC == GLFW_RELEASE ) {
 			sphere.clear();
 			c3.clear();
 			cylinder.clear();
 		}
-		lastKey8 = GLFW_PRESS;
+		lastKeyC = GLFW_PRESS;
 	}
 	else if ( glfwGetKey('C') == GLFW_RELEASE ) {
-		lastKey8 = GLFW_RELEASE;
+		lastKeyC = GLFW_RELEASE;
 	}
 	if ( glfwGetKey('G') == GLFW_PRESS ) {
 		if ( lastKey9 == GLFW_RELEASE ) {

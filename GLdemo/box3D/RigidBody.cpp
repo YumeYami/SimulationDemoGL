@@ -69,6 +69,15 @@ mat4 inline Rigidbody::getTranslationMatrix() {
 				0.0f, 0.0f, 1.0f, 0.0f,
 				position.x, position.y, position.z, 1.0f);
 }
+mat4 inline Rigidbody::getRotationMatrixRender() {
+	return mat4(1);
+}
+mat4 inline Rigidbody::getInverseRatationMatrixRender() {
+	return mat4(1);
+}
+mat4 inline Rigidbody::getTranslationMatrixRender() {
+	return mat4(1);
+}
 void inline Rigidbody::updatePosition(vec4 addPosision) {
 	position += addPosision;
 }
@@ -93,8 +102,8 @@ void Rigidbody::renderObject(GLuint matrixIDs[], float aTimeStep, float aGravity
 	glm::mat4 ScaleMatrix = mat4();
 	glm::mat4 RotateMatrix = getRotationMatrix();
 	glm::mat4 TranslateMatrix = getTranslationMatrix();
-	glm::mat4 RotateModel = mat4(1);
-	glm::mat4 TranslateModel = mat4(1);
+	glm::mat4 RotateModel = getRotationMatrixRender();
+	glm::mat4 TranslateModel = getTranslationMatrixRender();
 	glPushMatrix();
 	glUniformMatrix4fv(matrixIDs[0], 1, GL_FALSE, &ScaleMatrix[0][0]);
 	glUniformMatrix4fv(matrixIDs[1], 1, GL_FALSE, &RotateMatrix[0][0]);
