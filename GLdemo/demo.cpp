@@ -60,7 +60,8 @@ void addCubeTest() {
 }
 void addCylinderTest() {
 	vec3 position = vec3(0, 4, 0);
-	vec3 rotation = vec3(rand() % 20 / 2, rand() % 20 / 2, rand() % 20 / 2);
+	vec3 rotation = vec3(0);
+	// vec3(rand() % 20 / 2, rand() % 20 / 2, rand() % 20 / 2);
 	vec3 velocity = vec3(rand() % 4 / 10.0, -rand() % 4 / 10.0, rand() % 4 / 10.0);
 	float radius = 1;
 	float length = 2;

@@ -46,6 +46,7 @@ public:
 	vec3 accuAngularMomentum;
 
 	float boundedRadius;
+	int freeze;
 
 	vec4 color;
 	float transparent;
@@ -61,7 +62,7 @@ public:
 	virtual void inline addAngularMomentum(vec3 angularMomentum);
 	virtual vec4 inline getNormal();
 	virtual mat4 inline getRotationMatrix();
-	virtual mat4 inline getInverseRatationMatrix();
+	virtual mat4 inline getInverseRotationMatrix();
 	virtual mat4 inline getTranslationMatrix();
 	virtual mat4 inline getRotationMatrixRender();
 	virtual mat4 inline getInverseRatationMatrixRender();

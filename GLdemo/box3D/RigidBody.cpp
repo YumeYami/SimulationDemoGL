@@ -15,6 +15,7 @@ Rigidbody::Rigidbody() {
 	accuAngularMomentum = vec3(0);
 
 	boundedRadius = 1;
+	freeze = 0;
 
 	color = vec4(0, 0, 0, 0);
 	transparent = 0.8f;
@@ -60,7 +61,7 @@ vec4 inline Rigidbody::getNormal() {
 mat4 inline Rigidbody::getRotationMatrix() {
 	return eulerAngleYXZ(orientation.y, orientation.x, orientation.z);
 }
-mat4 inline Rigidbody::getInverseRatationMatrix() {
+mat4 inline Rigidbody::getInverseRotationMatrix() {
 	return eulerAngleYXZ(-orientation.y, -orientation.x, -orientation.z);
 }
 mat4 inline Rigidbody::getTranslationMatrix() {
@@ -84,6 +85,7 @@ void inline Rigidbody::updatePosition(vec4 addPosision) {
 void inline Rigidbody::updatePosition(float time, float gravity) {
 	//velocity += (accuMomentum / mass)*0.9f;
 	//if ( length(velocity) < 0.25 ) velocity = vec4(0);
+	if ( freeze == 1 )return;
 	position += (velocity)*time;
 	orientation += angularVelocity*time;
 	addGravity(gravity);

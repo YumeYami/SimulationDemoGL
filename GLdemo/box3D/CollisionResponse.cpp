@@ -146,8 +146,8 @@ void inline colSphere_Sphere(Sphere* sph1, Sphere* sph2) {
 	sph1->addMomentum(normalize(dist)*lineMomentum);
 	sph2->addMomentum(normalize(dist)*-lineMomentum);
 	vec3 angularMomentum = cross(vec3(relatevelo), normalize(vec3(dist)));
-	//sph1->addAngularMomentum(sph1->getInverseRatationMatrix()*vec4(angularMomentum, 0));
-	//sph2->addAngularMomentum(sph2->getInverseRatationMatrix()*vec4(-angularMomentum, 0));
+	//sph1->addAngularMomentum(sph1->getInverseRotationMatrix()*vec4(angularMomentum, 0));
+	//sph2->addAngularMomentum(sph2->getInverseRotationMatrix()*vec4(-angularMomentum, 0));
 }
 void inline colSphere_Plane(Sphere* sph1, Plane* plane2, vec4 height) {
 	//printVec4("velo", sph1->velocity);
@@ -282,6 +282,6 @@ void inline colCylinder_Cylinder(Cylinder* cy1, Cylinder* cy2, vec4 colPoint_Mod
 	cy1->addMomentum(normalize(dist)*lineMomentum);
 	cy2->addMomentum(normalize(dist)*-lineMomentum);
 	vec3 angularMomentum = cross(vec3(relatevelo), normalize(vec3(dist)));
-	cy1->addAngularMomentum(cy1->getInverseRatationMatrix()*vec4(angularMomentum, 0));
-	cy2->addAngularMomentum(cy2->getInverseRatationMatrix()*vec4(-angularMomentum, 0));
+	cy1->addAngularMomentum(cy1->getInverseRotationMatrix()*vec4(angularMomentum, 0));
+	cy2->addAngularMomentum(cy2->getInverseRotationMatrix()*vec4(-angularMomentum, 0));
 }
