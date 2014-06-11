@@ -50,12 +50,12 @@ void addCubeTest() {
 	vec3 position = vec3(0, begin_x + gridSize - 4, 0);
 	vec3 rotation = vec3(0, 0, 0);
 	//vec3 velocity = vec3(rand() % 4 / 15.0, -rand() % 4 / 15.0, rand() % 4 / 15.0);
-	vec3 velocity = vec3(0);
+	vec3 velocity = vec3(rand() % 4 / 10.0, -rand() % 4 / 10.0, rand() % 4 / 10.0);
 	float size = 2;
 	float mass = 1;
 	vec3 color = vec3(rand() % 11 / 10.0, rand() % 11 / 10.0, rand() % 11 / 10.0);
 	Cube *cube = new Cube(position, rotation, velocity, size, mass, color);
-	//cube->angularVelocity = vec3(rand() % 4 / 10.0, -rand() % 4 / 10.0, rand() % 4 / 10.0);
+	cube->angularVelocity = vec3(rand() % 4 / 10.0, -rand() % 4 / 10.0, rand() % 4 / 10.0);
 	c3.push_back(cube);
 }
 void addCylinderTest() {

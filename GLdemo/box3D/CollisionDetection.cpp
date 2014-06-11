@@ -116,7 +116,7 @@ void inline checkCollision_SphereCube(Sphere* sph1, Cube* cube2) {
 	vec4 colPoint_SphereSpace = cube2->getRotationMatrix()*colPoint_CubeSpace + (cube2->position - sph1->position);
 	colSphere_Cube(sph1, cube2, colPoint_SphereSpace);
 }
-//has bug yet
+//bug
 void inline checkCollision_SphereCylinder(Sphere* sph1, Cylinder* cylinder2) {
 	if ( outOfBound_check(sph1, cylinder2) ) return;
 	vec4 spherePos = cylinder2->getInverseRotationMatrix()*(sph1->position - cylinder2->position);
@@ -204,13 +204,19 @@ void inline checkCollision_CubeCube(Cube* cube1, Cube* cube2) {
 	}
 	if ( colPoint_Cube1Space.size() != 0 || colPoint_Cube2Space.size() != 0 ) {
 		colCube_Cube(cube1, cube2, colPoint_Cube1Space, colPoint_Cube2Space);
+		cube1->freeze = 1;
+		cube2->freeze = 1;
+		cout << "collision vertex\n";
 		return;
 	}
 	vec4* start = cube2->edgeSta;
 	vec4* end = cube2->edgeEnd;
-	for ( unsigned i = 0; i < 8; i++ ) {
+	for ( unsigned i = 0; i < 12; i++ ) {
 		if ( checkCollision_SegmentCube(start[i], end[i], cube1) ) {
 			colCube_Cube(cube1, cube2, (start[i] + end[i])*0.5f);
+			cube2->freeze = 1;
+			cube1->freeze = 1;
+			cout << "collision edge\n";
 			return;
 		}
 	}
