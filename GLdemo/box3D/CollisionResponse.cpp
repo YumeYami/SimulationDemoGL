@@ -14,7 +14,7 @@ vec3 inline projectVec(vec3 vec, vec3 base) {
 	return normalize(base)*dot(vec, base) / length(base);
 }
 //return size of project vector = project vec to base
-float inline projectSize(vec4 vec, vec4 base) {
+float inline projectVecSize(vec4 vec, vec4 base) {
 	return dot(vec, base) / length(base);
 }
 vec3 inline projectVecCross_vec3(vec3 vec, vec3 base) {
@@ -146,7 +146,7 @@ void inline colSphere_Sphere(Sphere* sph1, Sphere* sph2) {
 	vec4 velo1 = sph1->velocity;
 	vec4 velo2 = sph2->velocity;
 	vec4 relatevelo = velo2 - velo1;//ref from sph1
-	float lineMomentum = projectSize(relatevelo, normalize(dist));
+	float lineMomentum = projectVecSize(relatevelo, normalize(dist));
 	sph1->addMomentum(normalize(dist)*lineMomentum);
 	sph2->addMomentum(normalize(dist)*-lineMomentum);
 	vec3 angularMomentum = cross(vec3(relatevelo), normalize(vec3(dist)));
@@ -192,7 +192,7 @@ void inline colSphere_Cylinder(Sphere* sph1, Cylinder* cy2, vec4 colPoint_ModelS
 	vec4 velo1 = sph1->velocity;
 	vec4 velo2 = cy2->velocity;
 	vec4 relatevelo = velo2 - velo1;//ref from sph1
-	float exchangeMomentum = projectSize(relatevelo, normalize(dist));
+	float exchangeMomentum = projectVecSize(relatevelo, normalize(dist));
 	sph1->addMomentum(normalize(dist)*exchangeMomentum);
 	cy2->addMomentum(normalize(dist)*-exchangeMomentum);
 
@@ -282,7 +282,7 @@ void inline colCylinder_Cylinder(Cylinder* cy1, Cylinder* cy2, vec4 colPoint_Mod
 	vec4 velo1 = cy1->velocity;
 	vec4 velo2 = cy2->velocity;
 	vec4 relatevelo = velo2 - velo1;//ref from sph1
-	float lineMomentum = projectSize(relatevelo, normalize(dist));
+	float lineMomentum = projectVecSize(relatevelo, normalize(dist));
 	cy1->addMomentum(normalize(dist)*lineMomentum);
 	cy2->addMomentum(normalize(dist)*-lineMomentum);
 	vec3 angularMomentum = cross(vec3(relatevelo), normalize(vec3(dist)));

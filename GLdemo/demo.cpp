@@ -143,7 +143,7 @@ void addCube() {
 }
 void addCylinder() {
 	vec3 position = vec3(rand() % (gridSize - 5) - 2, begin_x + gridSize - 4, rand() % (gridSize - 5) - 2);
-	vec3 rotation = vec3(rand() % (gridSize - 5) - 2, begin_x + gridSize - 4, rand() % (gridSize - 5) - 2);
+	vec3 rotation = vec3(rand() % 10, rand() % 10, rand() % 10);
 	vec3 velocity = vec3(rand() % 4 / 10.0, -rand() % 4 / 10.0, rand() % 4 / 10.0);
 	float radius = rand() % 20 / 20.0f + 0.5f;
 	float length = rand() % 20 / 10.0f + 1.5f;
