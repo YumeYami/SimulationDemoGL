@@ -10,7 +10,7 @@ float inline minn(float x, float y) {
 	return (x < y ? x : y);
 }
 void inline printv4(string name, vec4 &vec) {
-	cout << name << " :[" << vec.x << " " << vec.y << " " << vec.z << " " << length(vec) << "\n";
+	cout << name << " :[" << vec.x << " " << vec.y << " " << vec.z << " " << length(vec) << "]\n";
 }
 bool inline convergent_check(Rigidbody* rigid1, Rigidbody* rigid2) {
 	if ( Plane* plane = dynamic_cast<Plane*>(rigid1) ) {
@@ -19,13 +19,23 @@ bool inline convergent_check(Rigidbody* rigid1, Rigidbody* rigid2) {
 	else  if ( Plane* plane = dynamic_cast<Plane*>(rigid2) ) {
 		return (projectSize(rigid1->velocity, plane->getNormal()) >= 0) ? false : true;
 	}
+	//cout << "check->";
+	if ( dot(rigid1->velocity - rigid2->velocity, rigid1->position - rigid2->position) >= 0 ) {
+		//cout << "Div\n";
+		return false;
+	}
+	else {
+		//cout << "Con\n";
+		return true;
+	}
 	return (dot(rigid1->velocity - rigid2->velocity, rigid1->position - rigid2->position) >= 0) ? false : true;
 }
 bool inline outOfBound_check(Rigidbody* rigid1, Rigidbody* rigid2) {
+	if ( rigid1->freeze == 1 && rigid2->freeze == 1 )return true;
 	float dist = length(rigid1->position - rigid2->position);
 	if ( dist > rigid1->boundedRadius + rigid2->boundedRadius ) return true;
-	else if ( !convergent_check(rigid1, rigid2) )return true;
-	else return false;
+	if ( !convergent_check(rigid1, rigid2) )return true;
+	return false;
 }
 bool inline checkCollision_ParticleCube(vec4 point, Cube* cube) {
 	vec4 particle_CubeSpace = cube->getInverseRotationMatrix()*(point - cube->position);
@@ -40,8 +50,9 @@ bool inline checkCollision_SegmentPlaneAlignY(vec4 start, vec4 end, float planeP
 	vec4 dir = end - start;
 	float crossMul = (planePosition - start.y) / dir.y;
 	vec4 colPos = start + dir*crossMul;
-	if ( abs(colPos.x) <= planeSize && abs(colPos.y) <= planeSize )
+	if ( abs(colPos.x) <= planeSize && abs(colPos.z) <= planeSize ) {
 		return true;
+	}
 	else
 		return false;
 }
@@ -52,19 +63,19 @@ bool inline checkCollision_SegmentPlaneAlignZ(vec4 start, vec4 end, float planeP
 	return checkCollision_SegmentPlaneAlignY(eulerAngleX(-PI / 2)*start, eulerAngleX(-PI / 2)*end, planePosition, planeSize);
 }
 bool inline checkCollision_SegmentCube(vec4 start, vec4 end, Cube* cube) {
-	vec4 startPoint = cube->getInverseRotationMatrix()*start;
-	vec4 endPoint = cube->getInverseRotationMatrix()*end;
+	vec4 startPoint = cube->getInverseRotationMatrix()*(start - cube->position);
+	vec4 endPoint = cube->getInverseRotationMatrix()*(end - cube->position);
 	float cubeSize = cube->size;
 	vec4 line = endPoint - startPoint;
-	//x-axis' cube face
-	if ( checkCollision_SegmentPlaneAlignX(start, end, cubeSize, cubeSize) ) return true;
-	else if ( checkCollision_SegmentPlaneAlignX(start, end, -cubeSize, cubeSize) ) return true;
+	////x-axis' cube face
+	if ( checkCollision_SegmentPlaneAlignX(startPoint, endPoint, cubeSize, cubeSize) ) return true;
+	else if ( checkCollision_SegmentPlaneAlignX(startPoint, endPoint, -cubeSize, cubeSize) ) return true;
 	//y-axis' cube face
-	if ( checkCollision_SegmentPlaneAlignY(start, end, cubeSize, cubeSize) ) return true;
-	else if ( checkCollision_SegmentPlaneAlignY(start, end, -cubeSize, cubeSize) ) return true;
-	//z-axis' cube face
-	if ( checkCollision_SegmentPlaneAlignZ(start, end, cubeSize, cubeSize) ) return true;
-	else if ( checkCollision_SegmentPlaneAlignZ(start, end, -cubeSize, cubeSize) ) return true;
+	if ( checkCollision_SegmentPlaneAlignY(startPoint, endPoint, cubeSize, cubeSize) ) return true;
+	else if ( checkCollision_SegmentPlaneAlignY(startPoint, endPoint, -cubeSize, cubeSize) ) return true;
+	////z-axis' cube face
+	if ( checkCollision_SegmentPlaneAlignZ(startPoint, endPoint, cubeSize, cubeSize) ) return true;
+	else if ( checkCollision_SegmentPlaneAlignZ(startPoint, endPoint, -cubeSize, cubeSize) ) return true;
 	return false;
 }
 bool inline checkCollision_SegmentCylinder(vec4 start, vec4 end, Cylinder* cylinder) {
@@ -171,7 +182,7 @@ void inline checkCollision_PlaneCube(Plane* plane1, Cube* cube2) {
 	if ( colPoint.size() != 0 )
 		colCube_Plane(cube2, plane1, colPoint);
 }
-//completed
+//bug
 void inline checkCollision_PlaneCylinder(Plane* plane1, Cylinder* cylinder2) {
 	if ( outOfBound_check(plane1, cylinder2) ) return;
 	vec4 planeNormal = plane1->getNormal();
@@ -187,7 +198,7 @@ void inline checkCollision_PlaneCylinder(Plane* plane1, Cylinder* cylinder2) {
 		colPlane_Cylinder(cylinder2, plane1, lowestPos);
 	}
 }
-//completed code, waiting for collision response to test
+//completed
 void inline checkCollision_CubeCube(Cube* cube1, Cube* cube2) {
 	if ( outOfBound_check(cube1, cube2) ) return;
 	vector<vec4> colPoint_Cube1Space;
@@ -200,23 +211,23 @@ void inline checkCollision_CubeCube(Cube* cube1, Cube* cube2) {
 	vertex = cube1->transformVertex;
 	for ( unsigned int i = 0; i < 8; i++ ) {
 		if ( checkCollision_ParticleCube(vertex[i], cube2) )
-			colPoint_Cube1Space.push_back(vertex[i]);
+			colPoint_Cube2Space.push_back(vertex[i]);
 	}
 	if ( colPoint_Cube1Space.size() != 0 || colPoint_Cube2Space.size() != 0 ) {
 		colCube_Cube(cube1, cube2, colPoint_Cube1Space, colPoint_Cube2Space);
-		cube1->freeze = 1;
-		cube2->freeze = 1;
-		cout << "collision vertex\n";
+		//cube1->freeze = 1;
+		//cube2->freeze = 1;
+		//cout << "collision vertex\n";
 		return;
 	}
 	vec4* start = cube2->edgeSta;
 	vec4* end = cube2->edgeEnd;
 	for ( unsigned i = 0; i < 12; i++ ) {
 		if ( checkCollision_SegmentCube(start[i], end[i], cube1) ) {
-			colCube_Cube(cube1, cube2, (start[i] + end[i])*0.5f);
-			cube2->freeze = 1;
-			cube1->freeze = 1;
-			cout << "collision edge\n";
+			//colCube_Cube(cube1, cube2, (start[i] + end[i])*0.5f);
+			//cube2->freeze = 1;
+			//cube1->freeze = 1;
+			//cout << "collision edge\n";
 			return;
 		}
 	}

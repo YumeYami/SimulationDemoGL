@@ -55,7 +55,31 @@ void addCubeTest() {
 	float mass = 1;
 	vec3 color = vec3(rand() % 11 / 10.0, rand() % 11 / 10.0, rand() % 11 / 10.0);
 	Cube *cube = new Cube(position, rotation, velocity, size, mass, color);
-	cube->angularVelocity = vec3(rand() % 4 / 10.0, -rand() % 4 / 10.0, rand() % 4 / 10.0);
+	//cube->angularVelocity = vec3(rand() % 4 / 10.0, -rand() % 4 / 10.0, rand() % 4 / 10.0);
+	c3.push_back(cube);
+}
+void addCubeTest2() {
+	vec3 position = vec3(0, begin_x + gridSize - 4, 0);
+	vec3 rotation = vec3(0, 0, 0);
+	//vec3 velocity = vec3(rand() % 4 / 15.0, -rand() % 4 / 15.0, rand() % 4 / 15.0);
+	vec3 velocity = vec3(0);
+	float size = 2;
+	float mass = 1;
+	vec3 color = vec3(rand() % 11 / 10.0, rand() % 11 / 10.0, rand() % 11 / 10.0);
+	Cube *cube = new Cube(position, rotation, velocity, size, mass, color);
+	//cube->angularVelocity = vec3(rand() % 4 / 10.0, -rand() % 4 / 10.0, rand() % 4 / 10.0);
+	c3.push_back(cube);
+}
+void addCubeTest3() {
+	vec3 position = vec3(0.5, begin_x + gridSize - 4, 0);
+	vec3 rotation = vec3(0);
+	vec3 velocity = vec3(0);
+	//vec3 velocity = vec3(rand() % 4 / 10.0, -rand() % 4 / 10.0, rand() % 4 / 10.0);
+	float size = 2;
+	float mass = 1;
+	vec3 color = vec3(rand() % 11 / 10.0, rand() % 11 / 10.0, rand() % 11 / 10.0);
+	Cube *cube = new Cube(position, rotation, velocity, size, mass, color);
+	//cube->angularVelocity = vec3(rand() % 4 / 10.0, -rand() % 4 / 10.0, rand() % 4 / 10.0);
 	c3.push_back(cube);
 }
 void addCylinderTest() {
@@ -63,6 +87,30 @@ void addCylinderTest() {
 	vec3 rotation = vec3(0);
 	// vec3(rand() % 20 / 2, rand() % 20 / 2, rand() % 20 / 2);
 	vec3 velocity = vec3(rand() % 4 / 10.0, -rand() % 4 / 10.0, rand() % 4 / 10.0);
+	float radius = 1;
+	float length = 2;
+	float mass = 1;
+	vec3 color = vec3(rand() % 11 / 10.0, rand() % 11 / 10.0, rand() % 11 / 10.0);
+	Cylinder *cy = new Cylinder(position, rotation, velocity, radius, length, mass, color);
+	cylinder.push_back(cy);
+}
+void addCylinderTest2() {
+	vec3 position = vec3(0, 4, 0);
+	vec3 rotation = vec3(0);
+	// vec3(rand() % 20 / 2, rand() % 20 / 2, rand() % 20 / 2);
+	vec3 velocity = vec3(rand() % 4 / 10.0, -rand() % 4 / 10.0, rand() % 4 / 10.0);
+	float radius = 1;
+	float length = 2;
+	float mass = 1;
+	vec3 color = vec3(rand() % 11 / 10.0, rand() % 11 / 10.0, rand() % 11 / 10.0);
+	Cylinder *cy = new Cylinder(position, rotation, velocity, radius, length, mass, color);
+	cylinder.push_back(cy);
+}
+void addCylinderTest3() {
+	vec3 position = vec3(0, 4, 0);
+	//vec3 rotation = vec3(0);
+	vec3 rotation = vec3(rand() % 20 / 10.0f, rand() % 20 / 10.0f, rand() % 20 / 10.0f);
+	vec3 velocity = vec3(0);
 	float radius = 1;
 	float length = 2;
 	float mass = 1;
@@ -86,7 +134,7 @@ void addCube() {
 	//vec3 position = vec3(0, begin_x + gridSize - 4, 0 );
 	vec3 rotation = vec3(0, 0, 1);
 	vec3 velocity = vec3(rand() % 4 / 15.0, -rand() % 4 / 15.0, rand() % 4 / 15.0);
-	float size = rand() % 20 / 10 + 0.5f;
+	float size = rand() % 20 / 10.0f + 0.5f;
 	float mass = 1;
 	vec3 color = vec3(rand() % 11 / 10.0, rand() % 11 / 10.0, rand() % 11 / 10.0);
 	Cube *cube = new Cube(position, rotation, velocity, size, mass, color);
@@ -97,8 +145,8 @@ void addCylinder() {
 	vec3 position = vec3(rand() % (gridSize - 5) - 2, begin_x + gridSize - 4, rand() % (gridSize - 5) - 2);
 	vec3 rotation = vec3(rand() % (gridSize - 5) - 2, begin_x + gridSize - 4, rand() % (gridSize - 5) - 2);
 	vec3 velocity = vec3(rand() % 4 / 10.0, -rand() % 4 / 10.0, rand() % 4 / 10.0);
-	float radius = 0.25;
-	float length = 0.5f;
+	float radius = rand() % 20 / 20.0f + 0.5f;
+	float length = rand() % 20 / 10.0f + 1.5f;
 	float mass = 1;
 	vec3 color = vec3(rand() % 11 / 10.0, rand() % 11 / 10.0, rand() % 11 / 10.0);
 	Cylinder *cy = new Cylinder(position, rotation, velocity, radius, length, mass, color);
@@ -210,14 +258,14 @@ void onPress() {
 	//////////////////////////////////////////////////////////////////////////
 	//test
 	if ( glfwGetKey('5') == GLFW_PRESS ) {
-		if ( lastKey5 == GLFW_RELEASE ) addSphereTest();
+		if ( lastKey5 == GLFW_RELEASE ) addCylinderTest();
 		lastKey5 = GLFW_PRESS;
 	}
 	else if ( glfwGetKey('5') == GLFW_RELEASE ) {
 		lastKey5 = GLFW_RELEASE;
 	}
 	if ( glfwGetKey('6') == GLFW_PRESS ) {
-		if ( lastKey6 == GLFW_RELEASE ) addCubeTest();
+		if ( lastKey6 == GLFW_RELEASE ) addCylinderTest2();
 		lastKey6 = GLFW_PRESS;
 
 	}
@@ -225,7 +273,7 @@ void onPress() {
 		lastKey6 = GLFW_RELEASE;
 	}
 	if ( glfwGetKey('7') == GLFW_PRESS ) {
-		if ( lastKey7 == GLFW_RELEASE ) addCylinderTest();
+		if ( lastKey7 == GLFW_RELEASE ) addCylinderTest3();
 		lastKey7 = GLFW_PRESS;
 
 	}
@@ -395,13 +443,13 @@ int main(void) {
 
 	do {
 		// Measure speed
-		float currentTime = glfwGetTime();
+		double currentTime = glfwGetTime();
 		nbFrames++;
 		if ( currentTime - lastTime >= 1.0 ) { // If last prinf() was more than 1sec ago
 			// printf and reset
 			printf("%f ms/frame\n", 1000.0 / float(nbFrames));
 			nbFrames = 0;
-			lastTime += 1.0;
+			lastTime = currentTime;
 		}
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);// Clear the screen
 		glUseProgram(programID2);// Use our shader
@@ -424,7 +472,6 @@ int main(void) {
 		for ( unsigned int i = 0; i < c3.size(); i++ ) {
 			Rigidbody* cubeObject = dynamic_cast<Rigidbody*>(c3[i]);
 			cubeObject->renderObject(matrixIDs, timeStep, GRAVITY*enGravity, update, playOneFrame);
-			//cubeObject->updatePosition(1,1);
 		}
 		for ( unsigned int i = 0; i < sphere.size(); i++ ) {
 			Rigidbody* sphereObject = dynamic_cast<Rigidbody*>(sphere[i]);

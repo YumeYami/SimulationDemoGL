@@ -136,6 +136,10 @@ vec4 inline min_dist_segment_to_point(vec4 line_start, vec4 line_end, vec4 point
 	if ( length(proj) >= length(lineVec) ) return -pointPos + lineVec;
 	return -pointPos + proj;
 }
+void inline freezeRigid(Rigidbody* rigid1,Rigidbody* rigid2) {
+	rigid1->freeze = 1;
+	rigid2->freeze = 1;
+}
 //===================================================================
 void inline colSphere_Sphere(Sphere* sph1, Sphere* sph2) {
 	vec4 dist = sph2->position - sph1->position;

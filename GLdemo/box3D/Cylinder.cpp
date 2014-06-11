@@ -13,7 +13,7 @@ Cylinder::Cylinder(vec3 cylinderPosition, vec3 cylinderRotation, vec3 cylinderVe
 	length = cylinderLength;
 	boundedRadius = glm::sqrt(pow(radius, 2) + pow(length / 2, 2));
 
-	color = vec4(cylinderColor, 0.8f);
+	color = vec4(cylinderColor, 0.6f);
 }
 Cylinder::~Cylinder() {}
 vec3 inline Cylinder::getSkin() {
